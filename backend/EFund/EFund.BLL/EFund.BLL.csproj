@@ -6,4 +6,16 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\EFund.Common\EFund.Common.csproj" />
+      <ProjectReference Include="..\EFund.DAL\EFund.DAL.csproj" />
+      <ProjectReference Include="..\EFund.Email\EFund.Email.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="AutoMapper" Version="12.0.1" />
+      <PackageReference Include="Google.Apis.Auth" Version="1.64.0" />
+      <PackageReference Include="LanguageExt.Core" Version="4.4.7" />
+    </ItemGroup>
+
 </Project>

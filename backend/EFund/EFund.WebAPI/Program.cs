@@ -3,6 +3,7 @@ using EFund.BLL.Services;
 using EFund.BLL.Services.Auth.Auth;
 using EFund.BLL.Services.Auth.Interfaces;
 using EFund.BLL.Services.Interfaces;
+using EFund.Client.Monobank;
 using EFund.Common.Models.Configs;
 using EFund.DAL.Contexts;
 using EFund.DAL.Entities;
@@ -72,6 +73,13 @@ builder.Services.AddScoped<IRefreshTokenService, RefreshTokenService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRegistrationService, UserRegistrationService>();
 builder.Services.AddScoped<IUserCleanerService, UserCleanerService>();
+builder.Services.AddScoped<IEncryptionService, EncryptionService>();
+builder.Services.AddScoped<IMonobankService, MonobankService>();
+
+//ApiClients
+builder.Services.AddHttpClient(monobankConfig.HttpClientName,
+    client => client.BaseAddress = new Uri(monobankConfig.BaseAddress));
+builder.Services.AddScoped<IMonobankClient, MonobankClient>();
 
 //Email
 builder.Services.AddFluentEmail(emailConfig.DefaultEmail)

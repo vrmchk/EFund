@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="ISO.4217.CurrencyCodes" Version="1.0.10" />
+      <PackageReference Include="LanguageExt.Core" Version="4.4.7" />
+      <PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0" />
+      <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.1" />
+      <PackageReference Include="RestSharp" Version="110.2.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\EFund.Common\EFund.Common.csproj" />
+    </ItemGroup>
+
+</Project>

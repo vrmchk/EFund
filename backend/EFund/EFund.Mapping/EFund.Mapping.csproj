@@ -12,6 +12,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\EFund.Client.Monobank\EFund.Client.Monobank.csproj" />
       <ProjectReference Include="..\EFund.Common\EFund.Common.csproj" />
       <ProjectReference Include="..\EFund.DAL\EFund.DAL.csproj" />
     </ItemGroup>

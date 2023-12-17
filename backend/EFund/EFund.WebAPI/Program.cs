@@ -75,6 +75,7 @@ builder.Services.AddScoped<IUserRegistrationService, UserRegistrationService>();
 builder.Services.AddScoped<IUserCleanerService, UserCleanerService>();
 builder.Services.AddScoped<IEncryptionService, EncryptionService>();
 builder.Services.AddScoped<IMonobankService, MonobankService>();
+builder.Services.AddScoped<ITagService, TagService>();
 
 //ApiClients
 builder.Services.AddHttpClient(monobankConfig.HttpClientName,

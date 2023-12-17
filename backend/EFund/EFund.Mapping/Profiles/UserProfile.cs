@@ -24,6 +24,7 @@ public class UserProfile : Profile
 
         CreateMap<User, UserDTO>()
             .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.DisplayName))
-            .ForMember(dest => dest.HasPassword, opt => opt.MapFrom(src => src.PasswordHash != null));
+            .ForMember(dest => dest.HasPassword, opt => opt.MapFrom(src => src.PasswordHash != null))
+            .ForMember(dest => dest.AvatarUrl, opt => opt.MapFrom(src => src.AvatarPath));
     }
 }

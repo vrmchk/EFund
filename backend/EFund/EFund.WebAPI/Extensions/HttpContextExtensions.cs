@@ -6,4 +6,9 @@ public static class HttpContextExtensions
     {
         return Guid.Parse(httpContext.User.Claims.Single(c => c.Type == "id").Value);
     }
+
+    public static string GetApiUrl(this HttpContext httpContext)
+    {
+        return $"{httpContext.Request.Scheme}://{httpContext.Request.Host}";
+    }
 }

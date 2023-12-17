@@ -13,6 +13,7 @@ public class User : IdentityUser<Guid>
     public string DisplayName { get; set; } = null!;
     public string? RefreshToken { get; set; }
     public DateTimeOffset? RefreshTokenExpiresAt { get; set; }
+    public string? AvatarPath { get; set; }
 
     public List<UserRegistration> UserRegistrations { get; set; }
     public List<UserMonobank> UserMonobanks { get; set; }

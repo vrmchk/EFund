@@ -1,7 +1,4 @@
-﻿using System.Linq.Expressions;
-using System.Reflection;
-using EFund.Common.Models.Configs.Abstract;
-using EFund.WebAPI.Extensions;
+﻿using EFund.Common.Models.Configs.Abstract;
 
 namespace EFund.WebAPI.Utility;
 
@@ -17,22 +14,22 @@ public class ConfigurationServiceBuilder
     }
 
     public ConfigurationServiceBuilder AddConfig<T>(string? sectionName = null,
-        params Expression<Func<T, string>>[] pathProperties)
+        Action<T>? configureOptions = null)
         where T : ConfigBase, new()
     {
-        CreateAndAddConfig(sectionName, pathProperties);
+        CreateAndAddConfig(sectionName, configureOptions);
         return this;
     }
 
     public ConfigurationServiceBuilder AddConfig<T>(out T config, string? sectionName = null,
-        params Expression<Func<T, string>>[] pathProperties)
+        Action<T>? configureOptions = null)
         where T : ConfigBase, new()
     {
-        config = CreateAndAddConfig(sectionName, pathProperties);
+        config = CreateAndAddConfig(sectionName, configureOptions);
         return this;
     }
 
-    private T CreateAndAddConfig<T>(string? sectionName, params Expression<Func<T, string>>[] pathProperties)
+    private T CreateAndAddConfig<T>(string? sectionName, Action<T>? configureOptions)
         where T : ConfigBase, new()
     {
         var config = new T();
@@ -47,17 +44,7 @@ public class ConfigurationServiceBuilder
 
         configSection.Bind(config);
 
-        if (pathProperties.Length > 0)
-        {
-            foreach (var propertyExpression in pathProperties)
-            {
-                if ((propertyExpression.Body as MemberExpression)?.Member is not PropertyInfo propertyInfo)
-                    throw new ArgumentException("Invalid property expression.");
-
-                var value = (string)propertyInfo.GetValue(config)!;
-                propertyInfo.SetValue(config, value.ToAbsolutePath());
-            }
-        }
+        configureOptions?.Invoke(config);
 
         _services.AddSingleton(config);
 

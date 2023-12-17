@@ -39,9 +39,14 @@ var hangfireConfig = new HangfireConfig();
 var monobankConfig = new MonobankConfig();
 
 builder.Services.AddConfigs(builder.Configuration, opt =>
-    opt.AddConfig<AppDataConfig>(out appDataConfig, pathProperties: config => config.AppDataPath)
+    opt.AddConfig<AppDataConfig>(out appDataConfig, configureOptions: config =>
+        {
+            config.AppDataPath = config.AppDataPath.ToAbsolutePath();
+            config.WebRootPath = builder.Environment.WebRootPath;
+        })
         .AddConfig<JwtConfig>(out jwtConfig)
-        .AddConfig<EmailConfig>(out emailConfig, pathProperties: config => config.TemplatesPath)
+        .AddConfig<EmailConfig>(out emailConfig,
+            configureOptions: config => config.TemplatesPath = config.TemplatesPath.ToAbsolutePath())
         .AddConfig<AuthConfig>()
         .AddConfig<GoogleConfig>(out googleConfig)
         .AddConfig<HangfireConfig>(out hangfireConfig)
@@ -213,6 +218,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseStaticFiles();
 app.UseCors(x => x.AllowAnyHeader()
     .AllowAnyOrigin()
     .AllowAnyMethod());

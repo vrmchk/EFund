@@ -6,8 +6,9 @@ namespace EFund.BLL.Services.Interfaces;
 
 public interface IUserService
 {
-    Task<Either<ErrorDTO, UserDTO>> GetByIdAsync(Guid id);
-    Task<Either<ErrorDTO, UserDTO>> UpdateUserAsync(Guid userId, UpdateUserDTO dto);
+    Task<Either<ErrorDTO, UserDTO>> GetByIdAsync(Guid id, string apiUrl);
+    Task<Either<ErrorDTO, UserDTO>> UpdateUserAsync(Guid userId, UpdateUserDTO dto, string apiUrl);
     Task<Option<ErrorDTO>> SendChangeEmailCodeAsync(Guid userId, ChangeEmailDTO dto);
     Task<Option<ErrorDTO>> ChangeEmailAsync(Guid userId, ConfirmChangeEmailDTO dto);
+    Task<Option<ErrorDTO>> UploadAvatarAsync(Guid userId, Stream stream, string fileContentType);
 }

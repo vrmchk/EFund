@@ -30,7 +30,7 @@ public class UserController : ControllerBase
     public async Task<IActionResult> GetById()
     {
         var userId = HttpContext.GetUserId();
-        var result = await _userService.GetByIdAsync(userId);
+        var result = await _userService.GetByIdAsync(userId, HttpContext.GetApiUrl());
         return result.ToActionResult();
     }
 
@@ -42,7 +42,7 @@ public class UserController : ControllerBase
             return BadRequest(validationResult.ToErrorDTO());
 
         var userId = HttpContext.GetUserId();
-        var result = await _userService.UpdateUserAsync(userId, dto);
+        var result = await _userService.UpdateUserAsync(userId, dto, HttpContext.GetApiUrl());
         return result.ToActionResult();
     }
 
@@ -91,6 +91,15 @@ public class UserController : ControllerBase
 
         var userId = HttpContext.GetUserId();
         var result = await _userService.ChangeEmailAsync(userId, dto);
+        return result.ToActionResult();
+    }
+    
+    [HttpPost("upload-avatar")]
+    public async Task<IActionResult> UploadAvatar(IFormFile file)
+    {
+        var userId = HttpContext.GetUserId();
+        await using var stream = file.OpenReadStream();
+        var result = await _userService.UploadAvatarAsync(userId, stream, file.ContentType);
         return result.ToActionResult();
     }
 }

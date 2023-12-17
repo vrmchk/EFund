@@ -44,7 +44,7 @@ public class UserService : IUserService
         if (user is null)
             return new NotFoundErrorDTO("User with this id does not exist");
 
-        user.AvatarPath = (user.AvatarPath ?? GetDefaultAvatarPath()).PathToUrl(apiUrl);
+        user.AvatarPath = (user.AvatarPath ?? _appDataConfig.DefaultAvatarPath).PathToUrl(apiUrl);
         return _mapper.Map<UserDTO>(user);
     }
 
@@ -64,7 +64,7 @@ public class UserService : IUserService
 
         _logger.LogInformation("User updated: {0}", user.Id);
 
-        user.AvatarPath = (user.AvatarPath ?? GetDefaultAvatarPath()).PathToUrl(apiUrl);
+        user.AvatarPath = (user.AvatarPath ?? _appDataConfig.DefaultAvatarPath).PathToUrl(apiUrl);
         return _mapper.Map<UserDTO>(user);
     }
 
@@ -151,7 +151,7 @@ public class UserService : IUserService
             Directory.CreateDirectory(directory);
 
         user.AvatarPath = Path.Combine(directory,
-            $"{_appDataConfig.DefaultAvatarFileName}{fileContentType.MimeTypeToFileExtension()}");
+            $"{_appDataConfig.AvatarFileName}{fileContentType.MimeTypeToFileExtension()}");
 
         await using var fileStream = File.Create(user.AvatarPath);
         await stream.CopyToAsync(fileStream);
@@ -164,11 +164,5 @@ public class UserService : IUserService
         }
 
         return None;
-    }
-
-    private string GetDefaultAvatarPath()
-    {
-        return Path.Combine(_appDataConfig.UserAvatarDirectory,
-            $"{_appDataConfig.DefaultAvatarFileName}.{_appDataConfig.DefaultAvatarFileExtension}");
     }
 }

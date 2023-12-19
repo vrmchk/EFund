@@ -3,6 +3,7 @@ using AutoMapper;
 using EFund.BLL.Extensions;
 using EFund.BLL.Services.Interfaces;
 using EFund.Common.Constants;
+using EFund.Common.Enums;
 using EFund.Common.Models.Configs;
 using EFund.Common.Models.DTO.Error;
 using EFund.Common.Models.DTO.User;
@@ -250,16 +251,16 @@ public class UserService : IUserService
             });
     }
 
-    public async Task<Option<ErrorDTO>> BlockUserAsync(BlockUserDTO dto)
+    public async Task<Option<ErrorDTO>> PerformUserActionAsync(UserAction userAction, UserActionDTO actionDTO)
     {
-        var user = await _userManager.FindByIdAsync(dto.UserId.ToString());
+        var user = await _userManager.FindByIdAsync(actionDTO.UserId.ToString());
         if (user is null)
             return new NotFoundErrorDTO("User with this id does not exist");
 
-        if (user.IsBlocked)
+        if (user.IsBlocked && userAction == UserAction.Block || !user.IsBlocked && userAction == UserAction.Unblock)
             return None;
 
-        user.IsBlocked = true;
+        user.IsBlocked = userAction == UserAction.Block;
         var userUpdated = await _userManager.UpdateAsync(user);
         if (!userUpdated.Succeeded)
         {

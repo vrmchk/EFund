@@ -1,6 +1,8 @@
-﻿using EFund.BLL.Services.Auth.Interfaces;
+﻿using EFund.BLL.Extensions;
+using EFund.BLL.Services.Auth.Interfaces;
 using EFund.BLL.Services.Interfaces;
 using EFund.Common.Constants;
+using EFund.Common.Enums;
 using EFund.Common.Models.DTO.User;
 using EFund.Validation;
 using EFund.Validation.Extensions;
@@ -123,15 +125,15 @@ public class UserController : ControllerBase
         return result.ToActionResult();
     }
 
-    [HttpPost("block-user")]
+    [HttpPost("{action}")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = Policies.Admin)]
-    public async Task<IActionResult> BlockUser(BlockUserDTO dto)
+    public async Task<IActionResult> BlockUser(string action, UserActionDTO actionDTO)
     {
-        var validationResult = await _validator.ValidateAsync(dto);
+        var validationResult = await _validator.ValidateAsync(actionDTO);
         if (!validationResult.IsValid)
             return BadRequest(validationResult.ToErrorDTO());
 
-        var result = await _userService.BlockUserAsync(dto);
+        var result = await _userService.PerformUserActionAsync(action.ToEnum<UserAction>(), actionDTO);
         return result.ToActionResult();
     }
 }

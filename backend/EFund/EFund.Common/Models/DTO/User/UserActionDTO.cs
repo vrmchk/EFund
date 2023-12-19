@@ -1,6 +1,6 @@
 namespace EFund.Common.Models.DTO.User;
 
-public class BlockUserDTO
+public class UserActionDTO
 {
     public Guid UserId { get; set; }
 }

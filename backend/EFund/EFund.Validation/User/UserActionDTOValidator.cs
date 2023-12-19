@@ -3,9 +3,9 @@ using FluentValidation;
 
 namespace EFund.Validation.User;
 
-public class BlockUserDTOValidator : AbstractValidator<BlockUserDTO>
+public class UserActionDTOValidator : AbstractValidator<UserActionDTO>
 {
-    public BlockUserDTOValidator()
+    public UserActionDTOValidator()
     {
         RuleFor(x => x.UserId)
             .NotEmpty();

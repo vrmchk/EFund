@@ -7,6 +7,7 @@ using EFund.DAL.Entities;
 using EFund.DAL.Repositories.Interfaces;
 using LanguageExt;
 using Microsoft.EntityFrameworkCore;
+using static LanguageExt.Prelude; 
 
 namespace EFund.BLL.Services;
 
@@ -64,5 +65,15 @@ public class TagService : ITagService
             .ToListAsync();
 
         return _mapper.Map<List<TagDTO>>(tags);
+    }
+
+    public async Task<Option<ErrorDTO>> DeleteAsync(string name)
+    {
+        var tag = await _repository.FirstOrDefaultAsync(x => x.Name == name);
+        if (tag is null)
+            return new NotFoundErrorDTO("Tag with this name does not exist");
+
+        await _repository.DeleteAsync(tag);
+        return None;
     }
 }

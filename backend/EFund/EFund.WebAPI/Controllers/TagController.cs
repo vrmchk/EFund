@@ -4,6 +4,7 @@ using EFund.Common.Models.DTO;
 using EFund.Common.Models.DTO.Tag;
 using EFund.Validation;
 using EFund.Validation.Extensions;
+using EFund.WebAPI.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -58,5 +59,13 @@ public class TagController : ControllerBase
 
         var result = await _tagService.GetByNameAsync(name, pagination);
         return Ok(result);
+    }
+    
+    [HttpDelete("{name}")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = Policies.Admin)]
+    public async Task<IActionResult> Delete(string name)
+    {
+        var result = await _tagService.DeleteAsync(name);
+        return result.ToActionResult();
     }
 }

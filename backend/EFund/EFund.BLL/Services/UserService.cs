@@ -146,7 +146,7 @@ public class UserService : IUserService
         if (user is null)
             return new NotFoundErrorDTO("User with this id does not exist");
 
-        if (!_appDataConfig.AllowedImageFileTypes.Contains(file.ContentType))
+        if (!_appDataConfig.AllowedImages.ContainsKey(file.ContentType))
             return new IncorrectParametersErrorDTO("This type of files is not allowed");
 
         if (user.AvatarPath != null)
@@ -158,7 +158,7 @@ public class UserService : IUserService
             Directory.CreateDirectory(directory);
 
         user.AvatarPath = Path.Combine(directory,
-            $"{_appDataConfig.AvatarFileName}{file.ContentType.MimeTypeToFileExtension()}");
+            $"{_appDataConfig.AvatarFileName}{_appDataConfig.AllowedImages[file.ContentType]}");
 
         await using var outputStream = File.Create(user.AvatarPath);
         await using var inputStream = file.OpenReadStream();
@@ -251,12 +251,13 @@ public class UserService : IUserService
             });
     }
 
-    public async Task<Option<ErrorDTO>> PerformUserActionAsync(UserAction userAction, UserActionDTO actionDTO)
+    public async Task<Option<ErrorDTO>> PerformUserActionAsync(UserActionDTO dto)
     {
-        var user = await _userManager.FindByIdAsync(actionDTO.UserId.ToString());
+        var user = await _userManager.FindByIdAsync(dto.UserId.ToString());
         if (user is null)
             return new NotFoundErrorDTO("User with this id does not exist");
 
+        var userAction = dto.Action.ToEnum<UserAction>();
         if (user.IsBlocked && userAction == UserAction.Block || !user.IsBlocked && userAction == UserAction.Unblock)
             return None;
 

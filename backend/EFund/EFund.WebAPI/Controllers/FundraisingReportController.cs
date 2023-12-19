@@ -45,22 +45,22 @@ public class FundraisingReportController : ControllerBase
         var result = await _fundraisingReportService.UpdateAsync(id, HttpContext.GetUserId(), dto);
         return result.ToActionResult();
     }
-    
+
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteReport(Guid id)
     {
         var result = await _fundraisingReportService.DeleteAsync(id, HttpContext.GetUserId());
         return result.ToActionResult();
     }
-    
-    [HttpPost("{id}/attachments")]
-    public async Task<IActionResult> AddAttachment(Guid id, [FromForm] IFormFileCollection files)
+
+    [HttpPost("{id}/upload-attachments")]
+    public async Task<IActionResult> AddAttachment(Guid id, IFormFileCollection files)
     {
         var result = await _fundraisingReportService.AddAttachmentsAsync(id, HttpContext.GetUserId(), files);
         return result.ToActionResult();
     }
 
-    [HttpDelete("{id}/attachments")]
+    [HttpPost("{id}/delete-attachments")]
     public async Task<IActionResult> DeleteAttachments(Guid id, [FromBody] DeleteAttachmentsDTO dto)
     {
         var validationResult = await _validator.ValidateAsync(dto);

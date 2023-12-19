@@ -11,7 +11,7 @@ public interface IFundraisingService
     Task<Either<ErrorDTO, List<FundraisingDTO>>> Search(SearchFundraisingDTO dto, PaginationDTO pagination,
         string apiUrl);
     Task<Either<ErrorDTO, FundraisingDTO>> GetByIdAsync(Guid id, string apiUrl);
-    Task<Either<ErrorDTO, FundraisingDTO>> AddAsync(Guid userId, CreateFundraisingDTO dto);
+    Task<Either<ErrorDTO, FundraisingDTO>> AddAsync(Guid userId, CreateFundraisingDTO dto, string apiUrl);
     Task<Either<ErrorDTO, FundraisingDTO>> UpdateAsync(Guid id, Guid userId, UpdateFundraisingDTO dto, string apiUrl);
     Task<Option<ErrorDTO>> DeleteAsync(Guid id);
     Task<Option<ErrorDTO>> DeleteAsync(Guid id, Guid userId);

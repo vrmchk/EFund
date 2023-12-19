@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace EFund.WebAPI.Controllers;
 
 [ApiController]
-[Route("api/fundraising")]
+[Route("api/fundraisings")]
 public class FundraisingController : ControllerBase
 {
     private readonly IFundraisingService _fundraisingService;
@@ -32,7 +32,7 @@ public class FundraisingController : ControllerBase
             return BadRequest(validationResult.ToErrorDTO());
 
         var result = await _fundraisingService.Search(dto, pagination, HttpContext.GetApiUrl());
-        return Ok(result);
+        return result.ToActionResult();
     }
 
     [HttpGet("{id}")]
@@ -50,7 +50,7 @@ public class FundraisingController : ControllerBase
         if (!validationResult.IsValid)
             return BadRequest(validationResult.ToErrorDTO());
 
-        var result = await _fundraisingService.AddAsync(HttpContext.GetUserId(), dto);
+        var result = await _fundraisingService.AddAsync(HttpContext.GetUserId(), dto, HttpContext.GetApiUrl());
         return result.Match<IActionResult>(
             Right: fundraising => CreatedAtAction(nameof(GetById), new { id = fundraising.Id }, fundraising),
             Left: BadRequest
@@ -82,13 +82,13 @@ public class FundraisingController : ControllerBase
 
     [HttpPost("{id}/upload-avatar")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = Policies.User)]
-    public async Task<IActionResult> UploadAvatar(Guid id, [FromForm] IFormFile file)
+    public async Task<IActionResult> UploadAvatar(Guid id, IFormFile file)
     {
         var result = await _fundraisingService.UploadAvatarAsync(id, HttpContext.GetUserId(), file);
         return result.ToActionResult();
     }
 
-    [HttpDelete("{id}/delete-avatar")]
+    [HttpPost("{id}/delete-avatar")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = Policies.User)]
     public async Task<IActionResult> DeleteAvatar(Guid id)
     {

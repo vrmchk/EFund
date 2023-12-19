@@ -167,7 +167,7 @@ builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy(Policies.Admin, policy => policy.RequireRole(Roles.Admin));
     options.AddPolicy(Policies.User,
-        policy => policy.RequireRole(Roles.User).RequireClaim(Claims.Blocked, "false"));
+        policy => policy.RequireRole(Roles.User).RequireClaim(Claims.Blocked, "False"));
     options.AddPolicy(Policies.Shared,
         policy => policy.RequireRole(Roles.Admin, Roles.User).RequireClaim(Claims.Blocked, "False"));
 });

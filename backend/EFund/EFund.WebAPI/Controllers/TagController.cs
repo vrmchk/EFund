@@ -50,7 +50,7 @@ public class TagController : ControllerBase
         );
     }
 
-    [HttpPost("{name}")]
+    [HttpGet("{name}")]
     public async Task<IActionResult> GetByName(string name, [FromQuery] PaginationDTO pagination)
     {
         var validationResult = await _validator.ValidateAsync(pagination);

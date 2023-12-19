@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Web;
+using AutoMapper;
 using EFund.BLL.Extensions;
 using EFund.BLL.Services.Auth.Interfaces;
 using EFund.BLL.Services.Interfaces;
@@ -42,21 +43,20 @@ public class AuthService : AuthServiceBase, IAuthService
 
         if (user != null)
         {
-            _mapper.Map(dto, user);
-            user.CreatedByAdmin = false;
-            if (dto.AdminToken == null || !await _userManager.CanMakeAdminAsync(user, dto.AdminToken))
-                return new IncorrectParametersErrorDTO("Invalid admin token");
+            var error = await UpdateUserCreateByAdmin(user, dto);
+            if (error != null)
+                return error;
         }
         else
         {
             user = _mapper.Map<User>(dto);
-        }
-
-        var createdUser = await _userManager.CreateAsync(user, dto.Password);
-        if (!createdUser.Succeeded)
-        {
-            _logger.LogIdentityErrors(user, createdUser);
-            return new IdentityErrorDTO("Unable to create a user. Please try again later or use another email address");
+            var createdUser = await _userManager.CreateAsync(user, dto.Password);
+            if (!createdUser.Succeeded)
+            {
+                _logger.LogIdentityErrors(user, createdUser);
+                return new IdentityErrorDTO(
+                    "Unable to create a user. Please try again later or use another email address");
+            }
         }
 
         var role = dto.AdminToken != null ? Roles.Admin : Roles.User;
@@ -111,5 +111,30 @@ public class AuthService : AuthServiceBase, IAuthService
             return new IncorrectParametersErrorDTO("Email or password is incorrect");
 
         return await GenerateAuthResultAsync(user);
+    }
+
+    private async Task<ErrorDTO?> UpdateUserCreateByAdmin(User user, SignUpDTO dto)
+    {
+        _mapper.Map(dto, user);
+        user.CreatedByAdmin = false;
+        var decodedToken = HttpUtility.UrlDecode(dto.AdminToken);
+        if (dto.AdminToken == null || !await _userManager.CanMakeAdminAsync(user, decodedToken!))
+            return new IncorrectParametersErrorDTO("Invalid admin token");
+
+        var updatedUser = await _userManager.UpdateAsync(user);
+        if (!updatedUser.Succeeded)
+        {
+            _logger.LogIdentityErrors(user, updatedUser);
+            return new IdentityErrorDTO("Unable to create a user. Please try again later or use another email address");
+        }
+
+        var passwordAdded = await _userManager.AddPasswordAsync(user, dto.Password);
+        if (!passwordAdded.Succeeded)
+        {
+            _logger.LogIdentityErrors(user, passwordAdded);
+            return new IdentityErrorDTO("Unable to create a user. Please try again later or use another email address");
+        }
+
+        return null;
     }
 }

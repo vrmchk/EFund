@@ -11,6 +11,7 @@ public class FundraisingDTO
     public string AvatarUrl { get; set; } = string.Empty;
     public Guid UserId { get; set; }
     public string MonobankJarId { get; set; } = string.Empty;
+    public bool IsClosed { get; set; }
     public List<string> Tags { get; set; } = new();
     public List<FundraisingReportDTO> Reports { get; set; } = new();
     public JarDTO? MonobankJar { get; set; }

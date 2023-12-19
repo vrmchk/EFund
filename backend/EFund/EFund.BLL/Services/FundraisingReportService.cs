@@ -71,10 +71,16 @@ public class FundraisingReportService : IFundraisingReportService
     {
         var report = await _reportRepository
             .Include(r => r.Fundraising)
+            .Include(r => r.Attachments)
             .FirstOrDefaultAsync(r => r.Id == id && r.Fundraising.UserId == userId);
 
         if (report == null)
             return new NotFoundErrorDTO("Report with this id does not exist");
+
+        foreach (var attachment in report.Attachments)
+        {
+            File.Delete(attachment.FilePath);
+        }
 
         await _reportRepository.DeleteAsync(report);
         return None;
@@ -89,6 +95,9 @@ public class FundraisingReportService : IFundraisingReportService
         if (report == null)
             return new NotFoundErrorDTO("Report with this id does not exist");
 
+        if (files.Any(f => !_appDataConfig.AllowedFiles.ContainsKey(f.ContentType)))
+            return new IncorrectParametersErrorDTO("Some files have invalid format");
+
         var directory = Path.Combine(_appDataConfig.WebRootPath,
             _appDataConfig.UploadsDirectory,
             _appDataConfig.ReportsDirectory,
@@ -101,7 +110,7 @@ public class FundraisingReportService : IFundraisingReportService
         var attachments = files.ToDictionary(f => new ReportAttachment
         {
             FundraisingReportId = reportId,
-            FilePath = Path.Combine(directory, $"{Guid.NewGuid():N)}.{f.ContentType.MimeTypeToFileExtension()}")
+            FilePath = Path.Combine(directory, $"{Guid.NewGuid():N}{_appDataConfig.AllowedFiles[f.ContentType]}")
         });
 
         await Task.WhenAll(attachments.Select(async pair =>

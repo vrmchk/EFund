@@ -16,5 +16,5 @@ public interface IUserService
     Task<Option<ErrorDTO>> DeleteAvatarAsync(Guid userId);
     Task<Option<ErrorDTO>> MakeAdminAsync(MakeAdminDTO dto);
     Task<Option<ErrorDTO>> InviteAdminAsync(InviteAdminDTO dto);
-    Task<Option<ErrorDTO>> PerformUserActionAsync(UserAction userAction, UserActionDTO actionDTO);
+    Task<Option<ErrorDTO>> PerformUserActionAsync(UserActionDTO dto);
 }

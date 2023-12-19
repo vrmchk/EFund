@@ -125,15 +125,15 @@ public class UserController : ControllerBase
         return result.ToActionResult();
     }
 
-    [HttpPost("{action}")]
+    [HttpPost("action")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = Policies.Admin)]
-    public async Task<IActionResult> BlockUser(string action, UserActionDTO actionDTO)
+    public async Task<IActionResult> BlockUser(UserActionDTO actionDTO)
     {
         var validationResult = await _validator.ValidateAsync(actionDTO);
         if (!validationResult.IsValid)
             return BadRequest(validationResult.ToErrorDTO());
 
-        var result = await _userService.PerformUserActionAsync(action.ToEnum<UserAction>(), actionDTO);
+        var result = await _userService.PerformUserActionAsync(actionDTO);
         return result.ToActionResult();
     }
 }

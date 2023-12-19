@@ -10,7 +10,8 @@ public class AppDataConfig : ConfigBase
     public string UploadsDirectory { get; set; } = string.Empty;
     public string UsersDirectory { get; set; } = string.Empty;
     public string DefaultDirectory { get; set; } = string.Empty;
-    public List<string> AllowedImageFileTypes { get; set; } = new();
+    public Dictionary<string, string> AllowedFiles { get; set; } = new();
+    public Dictionary<string, string> AllowedImages { get; set; } = new();
     public string AvatarFileName { get; set; } = string.Empty;
     public string DefaultAvatarFileExtension { get; set; } = string.Empty;
     public string FundraisingsDirectory { get; set; } = string.Empty;

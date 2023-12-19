@@ -28,6 +28,7 @@
       <ProjectReference Include="..\EFund.BLL\EFund.BLL.csproj" />
       <ProjectReference Include="..\EFund.Hangfire\EFund.Hangfire.csproj" />
       <ProjectReference Include="..\EFund.Mapping\EFund.Mapping.csproj" />
+      <ProjectReference Include="..\EFund.Seeding\EFund.Seeding.csproj" />
       <ProjectReference Include="..\EFund.Validation\EFund.Validation.csproj" />
     </ItemGroup>
 

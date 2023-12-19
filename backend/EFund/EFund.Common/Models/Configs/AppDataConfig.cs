@@ -10,10 +10,15 @@ public class AppDataConfig : ConfigBase
     public string UploadsDirectory { get; set; } = string.Empty;
     public string UsersDirectory { get; set; } = string.Empty;
     public string DefaultDirectory { get; set; } = string.Empty;
-    public List<string> AllowedFileTypes { get; set; } = new();
+    public List<string> AllowedImageFileTypes { get; set; } = new();
     public string AvatarFileName { get; set; } = string.Empty;
     public string DefaultAvatarFileExtension { get; set; } = string.Empty;
+    public string FundraisingsDirectory { get; set; } = string.Empty;
+    public string ReportsDirectory { get; set; } = string.Empty;
+    public string AttachmentsDirectory { get; set; } = string.Empty;
 
-    public string UserAvatarDirectory => Path.Combine(WebRootPath, UploadsDirectory, UsersDirectory);
-    public string DefaultAvatarPath => Path.Combine(WebRootPath, UploadsDirectory, DefaultDirectory, UsersDirectory, AvatarFileName + DefaultAvatarFileExtension);
+    public string UserAvatarDirectoryPath => Path.Combine(WebRootPath, UploadsDirectory, UsersDirectory);
+    public string FundraisingsDirectoryPath => Path.Combine(WebRootPath, UploadsDirectory, FundraisingsDirectory);
+    public string DefaultUserAvatarPath => Path.Combine(WebRootPath, UploadsDirectory, DefaultDirectory, UsersDirectory, AvatarFileName + DefaultAvatarFileExtension);
+    public string DefaultFundraisingAvatarPath => Path.Combine(WebRootPath, UploadsDirectory, DefaultDirectory, FundraisingsDirectory, AvatarFileName + DefaultAvatarFileExtension);
 }

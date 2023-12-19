@@ -1,4 +1,5 @@
 using EFund.BLL.Services.Interfaces;
+using EFund.Common.Constants;
 using EFund.WebAPI.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -8,7 +9,7 @@ namespace EFund.WebAPI.Controllers;
 
 [ApiController]
 [Route("api/monobank")]
-[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = Policies.Shared)]
 public class MonobankController : ControllerBase
 {
     private readonly IMonobankService _monobankService;
@@ -21,20 +22,14 @@ public class MonobankController : ControllerBase
     [HttpPost("link-token")]
     public async Task<IActionResult> AddToken([FromHeader] string token)
     {
-        var userId = HttpContext.GetUserId();
-
-        var result = await _monobankService.AddOrUpdateMonobankTokenAsync(userId, token);
-
+        var result = await _monobankService.AddOrUpdateMonobankTokenAsync(HttpContext.GetUserId(), token);
         return result.ToActionResult();
     }
 
     [HttpGet("jars")]
     public async Task<IActionResult> GetJars()
     {
-        var userId = HttpContext.GetUserId();
-
-        var result = await _monobankService.GetJarsAsync(userId);
-
+        var result = await _monobankService.GetJarsAsync(HttpContext.GetUserId());
         return result.ToActionResult();
     }
 }

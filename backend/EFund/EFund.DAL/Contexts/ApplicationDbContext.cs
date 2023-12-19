@@ -14,6 +14,8 @@ public partial class ApplicationDbContext : IdentityDbContext<User, IdentityRole
     public virtual DbSet<Fundraising> Fundraisings { get; set; } = null!;
     public virtual DbSet<MonobankFundraising> MonobankFundraisings { get; set; } = null!;
     public virtual DbSet<Tag> Tags { get; set; } = null!;
+    public virtual DbSet<FundraisingReport> FundraisingReports { get; set; } = null!;
+    public virtual DbSet<ReportAttachment> ReportAttachments { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

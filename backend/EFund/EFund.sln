@@ -20,6 +20,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "clients", "clients", "{6FD4
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EFund.Client.Monobank", "EFund.Client.Monobank\EFund.Client.Monobank.csproj", "{3BE40D8E-F0E8-4B8B-8078-8D1AB357795F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EFund.Seeding", "EFund.Seeding\EFund.Seeding.csproj", "{1DA2E532-7CB3-456C-A57A-31E265F96211}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -62,6 +64,10 @@ Global
 		{3BE40D8E-F0E8-4B8B-8078-8D1AB357795F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3BE40D8E-F0E8-4B8B-8078-8D1AB357795F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3BE40D8E-F0E8-4B8B-8078-8D1AB357795F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1DA2E532-7CB3-456C-A57A-31E265F96211}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1DA2E532-7CB3-456C-A57A-31E265F96211}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1DA2E532-7CB3-456C-A57A-31E265F96211}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1DA2E532-7CB3-456C-A57A-31E265F96211}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{3BE40D8E-F0E8-4B8B-8078-8D1AB357795F} = {6FD42D02-F5C2-400F-B6AF-F3B6DFE48D90}

@@ -9,18 +9,22 @@ public class Fundraising : BaseEntity<Guid>
     public Fundraising()
     {
         Tags = new List<Tag>();
+        Reports = new List<FundraisingReport>();
     }
 
     public FundraisingProvider Provider { get; set; }
+    public bool IsClosed { get; set; }
     public string Title { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
-    
+    public string? AvatarPath { get; set; }
+
     public Guid UserId { get; set; }
-    
+
     [ForeignKey(nameof(UserId))]
     public User User { get; set; } = null!;
 
     public MonobankFundraising MonobankFundraising { get; set; } = null!;
 
-    public List<Tag> Tags { get; set; } 
+    public List<Tag> Tags { get; set; }
+    public List<FundraisingReport> Reports { get; set; }
 }

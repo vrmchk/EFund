@@ -14,6 +14,8 @@ public class User : IdentityUser<Guid>
     public string? RefreshToken { get; set; }
     public DateTimeOffset? RefreshTokenExpiresAt { get; set; }
     public string? AvatarPath { get; set; }
+    public bool CreatedByAdmin { get; set; }
+    public bool IsBlocked { get; set; }
 
     public List<UserRegistration> UserRegistrations { get; set; }
     public List<UserMonobank> UserMonobanks { get; set; }

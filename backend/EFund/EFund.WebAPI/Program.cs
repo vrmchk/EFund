@@ -4,6 +4,7 @@ using EFund.BLL.Services.Auth.Auth;
 using EFund.BLL.Services.Auth.Interfaces;
 using EFund.BLL.Services.Interfaces;
 using EFund.Client.Monobank;
+using EFund.Common.Constants;
 using EFund.Common.Models.Configs;
 using EFund.DAL.Contexts;
 using EFund.DAL.Entities;
@@ -14,6 +15,7 @@ using EFund.Email.Services.Interfaces;
 using EFund.Hangfire;
 using EFund.Hangfire.Abstractions;
 using EFund.Mapping.Profiles;
+using EFund.Seeding;
 using EFund.Validation.Auth;
 using EFund.Validation.Extensions;
 using EFund.WebAPI.Extensions;
@@ -51,7 +53,8 @@ builder.Services.AddConfigs(builder.Configuration, opt =>
         .AddConfig<GoogleConfig>(out googleConfig)
         .AddConfig<HangfireConfig>(out hangfireConfig)
         .AddConfig<EncryptionConfig>()
-        .AddConfig<MonobankConfig>(out monobankConfig, "ApiClients:Monobank"));
+        .AddConfig<MonobankConfig>(out monobankConfig, "ApiClients:Monobank")
+        .AddConfig<CallbackUrisConfig>());
 
 //DbContext
 var dbContextLoggerFactory = LoggerFactory.Create(cfg => cfg.AddConsole());
@@ -75,12 +78,14 @@ builder.Services.AddScoped<IEmailConfirmationService, EmailConfirmationService>(
 builder.Services.AddScoped<IGoogleAuthService, GoogleAuthService>();
 builder.Services.AddScoped<IPasswordService, PasswordService>();
 builder.Services.AddScoped<IRefreshTokenService, RefreshTokenService>();
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IUserRegistrationService, UserRegistrationService>();
-builder.Services.AddScoped<IUserCleanerService, UserCleanerService>();
 builder.Services.AddScoped<IEncryptionService, EncryptionService>();
+builder.Services.AddScoped<IFundraisingReportService, FundraisingReportService>();
+builder.Services.AddScoped<IFundraisingService, FundraisingService>();
 builder.Services.AddScoped<IMonobankService, MonobankService>();
 builder.Services.AddScoped<ITagService, TagService>();
+builder.Services.AddScoped<IUserCleanerService, UserCleanerService>();
+builder.Services.AddScoped<IUserRegistrationService, UserRegistrationService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 //ApiClients
 builder.Services.AddHttpClient(monobankConfig.HttpClientName,
@@ -103,6 +108,7 @@ builder.Services.AddFluentEmail(emailConfig.DefaultEmail)
 builder.Services.AddScoped<IEmailSender, EmailSender>();
 
 //Utility
+builder.Services.AddSeeding();
 builder.Services.AddCors();
 
 //Mapper
@@ -157,6 +163,15 @@ builder.Services.AddAuthentication(options =>
         opt.ClientSecret = googleConfig.ClientSecret;
     });
 
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy(Policies.Admin, policy => policy.RequireRole(Roles.Admin));
+    options.AddPolicy(Policies.User,
+        policy => policy.RequireRole(Roles.User).RequireClaim(Claims.Blocked, "false"));
+    options.AddPolicy(Policies.Shared,
+        policy => policy.RequireRole(Roles.Admin, Roles.User).RequireClaim(Claims.Blocked, "False"));
+});
+
 //Swagger
 builder.Services.AddSwaggerGen(c =>
 {
@@ -190,6 +205,7 @@ builder.Services.AddEndpointsApiExplorer();
 var app = builder.Build();
 
 app.MigrateDatabase();
+await app.SeedDataAsync();
 
 await app.ValidateConfigsAsync();
 

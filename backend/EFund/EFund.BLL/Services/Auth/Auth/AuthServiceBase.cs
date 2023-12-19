@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Text;
 using EFund.BLL.Extensions;
 using EFund.BLL.Utility;
+using EFund.Common.Constants;
 using EFund.Common.Enums;
 using EFund.Common.Models.Configs;
 using EFund.Common.Models.DTO.Auth;
@@ -31,29 +32,36 @@ public abstract class AuthServiceBase
     protected async Task<Either<ErrorDTO, AuthSuccessDTO>> GenerateAuthResultAsync(User user)
     {
         var option = await GenerateRefreshTokenAsync(user);
+        var accessToken = await GenerateJwtToken(user);
         return option.Match<Either<ErrorDTO, AuthSuccessDTO>>(
             Right: refreshToken => new AuthSuccessDTO
             {
-                AccessToken = GenerateJwtToken(user),
+                AccessToken = accessToken,
                 RefreshToken = refreshToken
             },
             Left: errorCode => new ErrorDTO(errorCode, "Unable to generate refresh token")
         );
     }
 
-    private string GenerateJwtToken(User user)
+    private async Task<string> GenerateJwtToken(User user)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.UTF8.GetBytes(_jwtConfig.Secret);
+        var claims = new List<Claim>
+        {
+            new Claim(Claims.Id, user.Id.ToString()),
+            new Claim(JwtRegisteredClaimNames.Email, user.Email!),
+            new Claim(JwtRegisteredClaimNames.Sub, user.Email!),
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            new Claim(Claims.Blocked, user.IsBlocked.ToString())
+        };
+
+        var roles = await _userManager.GetRolesAsync(user);
+        claims.AddRange(roles.Select(r => new Claim(ClaimTypes.Role, r)));
+
         var tokenDescriptor = new SecurityTokenDescriptor
         {
-            Subject = new ClaimsIdentity(new[]
-            {
-                new Claim("id", user.Id.ToString()),
-                new Claim(JwtRegisteredClaimNames.Email, user.Email!),
-                new Claim(JwtRegisteredClaimNames.Sub, user.Email!),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-            }),
+            Subject = new ClaimsIdentity(claims),
             Expires = DateTime.UtcNow.Add(_jwtConfig.AccessTokenLifetime),
             SigningCredentials =
                 new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),

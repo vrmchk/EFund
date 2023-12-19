@@ -2,6 +2,7 @@
 using EFund.BLL.Extensions;
 using EFund.BLL.Services.Auth.Interfaces;
 using EFund.BLL.Services.Interfaces;
+using EFund.Common.Constants;
 using EFund.Common.Models.Configs;
 using EFund.Common.Models.DTO.Auth;
 using EFund.Common.Models.DTO.Error;
@@ -36,15 +37,34 @@ public class AuthService : AuthServiceBase, IAuthService
     public async Task<Either<ErrorDTO, SignUpResponseDTO>> SignUpAsync(SignUpDTO dto)
     {
         var user = await _userManager.FindByEmailAsync(dto.Email);
-        if (user is not null)
+        if (user is { CreatedByAdmin: false })
             return new AlreadyExistsErrorDTO("User with this email already exists");
 
-        user = _mapper.Map<User>(dto);
+        if (user != null)
+        {
+            _mapper.Map(dto, user);
+            user.CreatedByAdmin = false;
+            if (dto.AdminToken == null || !await _userManager.CanMakeAdminAsync(user, dto.AdminToken))
+                return new IncorrectParametersErrorDTO("Invalid admin token");
+        }
+        else
+        {
+            user = _mapper.Map<User>(dto);
+        }
+
         var createdUser = await _userManager.CreateAsync(user, dto.Password);
         if (!createdUser.Succeeded)
         {
             _logger.LogIdentityErrors(user, createdUser);
             return new IdentityErrorDTO("Unable to create a user. Please try again later or use another email address");
+        }
+
+        var role = dto.AdminToken != null ? Roles.Admin : Roles.User;
+        var roleAdded = await _userManager.AddToRoleAsync(user, role);
+        if (!roleAdded.Succeeded)
+        {
+            _logger.LogIdentityErrors(user, roleAdded);
+            return new IdentityErrorDTO("Unable to create a user. Please try again later");
         }
 
         var generatedCode = await _userRegistrationService.GenerateEmailConfirmationCodeAsync(user.Id);

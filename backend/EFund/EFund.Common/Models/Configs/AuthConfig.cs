@@ -6,5 +6,4 @@ public class AuthConfig : ConfigBase
 {
     public int ConfirmationCodeLenght { get; set; }
     public TimeSpan ConfirmationCodeLifetime { get; set; }
-    public string ResetPasswordUriTemplate { get; set; } = string.Empty;
 }

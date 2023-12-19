@@ -6,8 +6,7 @@ namespace EFund.DAL.Entities;
 public class MonobankFundraising : BaseEntity<Guid>
 {
     public string JarId { get; set; } = string.Empty;
-    public string SendId { get; set; } = string.Empty;
-    
+
     public Guid FundraisingId { get; set; }
 
     [ForeignKey(nameof(FundraisingId))]

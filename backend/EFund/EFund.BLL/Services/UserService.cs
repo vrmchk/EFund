@@ -1,6 +1,8 @@
-﻿using AutoMapper;
+﻿using System.Web;
+using AutoMapper;
 using EFund.BLL.Extensions;
 using EFund.BLL.Services.Interfaces;
+using EFund.Common.Constants;
 using EFund.Common.Models.Configs;
 using EFund.Common.Models.DTO.Error;
 using EFund.Common.Models.DTO.User;
@@ -8,6 +10,7 @@ using EFund.DAL.Entities;
 using EFund.Email.Models;
 using EFund.Email.Services.Interfaces;
 using LanguageExt;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using static LanguageExt.Prelude;
@@ -22,19 +25,22 @@ public class UserService : IUserService
     private readonly IUserRegistrationService _userRegistrationService;
     private readonly IEmailSender _emailSender;
     private readonly AppDataConfig _appDataConfig;
+    private readonly CallbackUrisConfig _callbackUrisConfig;
 
     public UserService(IMapper mapper,
         ILogger<UserService> logger,
         UserManager<User> userManager,
         IUserRegistrationService userRegistrationService,
         IEmailSender emailSender,
-        AppDataConfig appDataConfig)
+        AppDataConfig appDataConfig,
+        CallbackUrisConfig callbackUrisConfig)
     {
         _mapper = mapper;
         _userManager = userManager;
         _userRegistrationService = userRegistrationService;
         _emailSender = emailSender;
         _appDataConfig = appDataConfig;
+        _callbackUrisConfig = callbackUrisConfig;
         _logger = logger;
     }
 
@@ -44,7 +50,7 @@ public class UserService : IUserService
         if (user is null)
             return new NotFoundErrorDTO("User with this id does not exist");
 
-        user.AvatarPath = (user.AvatarPath ?? _appDataConfig.DefaultAvatarPath).PathToUrl(apiUrl);
+        user.AvatarPath = (user.AvatarPath ?? _appDataConfig.DefaultUserAvatarPath).PathToUrl(apiUrl);
         return _mapper.Map<UserDTO>(user);
     }
 
@@ -64,7 +70,7 @@ public class UserService : IUserService
 
         _logger.LogInformation("User updated: {0}", user.Id);
 
-        user.AvatarPath = (user.AvatarPath ?? _appDataConfig.DefaultAvatarPath).PathToUrl(apiUrl);
+        user.AvatarPath = (user.AvatarPath ?? _appDataConfig.DefaultUserAvatarPath).PathToUrl(apiUrl);
         return _mapper.Map<UserDTO>(user);
     }
 
@@ -133,34 +139,132 @@ public class UserService : IUserService
         );
     }
 
-    public async Task<Option<ErrorDTO>> UploadAvatarAsync(Guid userId, Stream stream, string fileContentType)
+    public async Task<Option<ErrorDTO>> UploadAvatarAsync(Guid userId, IFormFile file)
     {
         var user = await _userManager.FindByIdAsync(userId.ToString());
         if (user is null)
             return new NotFoundErrorDTO("User with this id does not exist");
 
-        if (!_appDataConfig.AllowedFileTypes.Contains(fileContentType))
+        if (!_appDataConfig.AllowedImageFileTypes.Contains(file.ContentType))
             return new IncorrectParametersErrorDTO("This type of files is not allowed");
 
         if (user.AvatarPath != null)
             File.Delete(user.AvatarPath);
 
-        var directory = Path.Combine(_appDataConfig.UserAvatarDirectory, user.Id.ToString());
+        var directory = Path.Combine(_appDataConfig.UserAvatarDirectoryPath, user.Id.ToString("N"));
 
         if (!Directory.Exists(directory))
             Directory.CreateDirectory(directory);
 
         user.AvatarPath = Path.Combine(directory,
-            $"{_appDataConfig.AvatarFileName}{fileContentType.MimeTypeToFileExtension()}");
+            $"{_appDataConfig.AvatarFileName}{file.ContentType.MimeTypeToFileExtension()}");
 
-        await using var fileStream = File.Create(user.AvatarPath);
-        await stream.CopyToAsync(fileStream);
+        await using var outputStream = File.Create(user.AvatarPath);
+        await using var inputStream = file.OpenReadStream();
+        await inputStream.CopyToAsync(outputStream);
 
         var userUpdated = await _userManager.UpdateAsync(user);
         if (!userUpdated.Succeeded)
         {
             _logger.LogIdentityErrors(user, userUpdated);
             return new IdentityErrorDTO("Unable to update user. Please try again later");
+        }
+
+        return None;
+    }
+
+    public async Task<Option<ErrorDTO>> DeleteAvatarAsync(Guid userId)
+    {
+        var user = await _userManager.FindByIdAsync(userId.ToString());
+        if (user is null)
+            return new NotFoundErrorDTO("User with this id does not exist");
+
+        if (user.AvatarPath is null)
+            return None;
+
+        File.Delete(user.AvatarPath);
+        user.AvatarPath = null;
+        var userUpdated = await _userManager.UpdateAsync(user);
+        if (!userUpdated.Succeeded)
+        {
+            _logger.LogIdentityErrors(user, userUpdated);
+            return new IdentityErrorDTO("Unable to update user. Please try again later");
+        }
+
+        return None;
+    }
+
+    public async Task<Option<ErrorDTO>> MakeAdminAsync(MakeAdminDTO dto)
+    {
+        var user = await _userManager.FindByIdAsync(dto.UserId.ToString());
+        if (user is null)
+            return new NotFoundErrorDTO("User with this id does not exist");
+
+        if (await _userManager.IsInRoleAsync(user, Roles.Admin))
+            return None;
+
+        var roleAdded = await _userManager.AddToRoleAsync(user, Roles.Admin);
+        if (!roleAdded.Succeeded)
+        {
+            _logger.LogIdentityErrors(user, roleAdded);
+            return new IdentityErrorDTO("Unable to make user admin. Please try again later");
+        }
+
+        return None;
+    }
+
+    public async Task<Option<ErrorDTO>> InviteAdminAsync(InviteAdminDTO dto)
+    {
+        var user = await _userManager.FindByEmailAsync(dto.Email);
+        if (user != null)
+            return new NotFoundErrorDTO("User with this email already exists");
+
+        user = _mapper.Map<User>(dto);
+        user.CreatedByAdmin = true;
+        user.DisplayName = "Invited by admin";
+
+        var userCreated = await _userManager.CreateAsync(user);
+        if (!userCreated.Succeeded)
+        {
+            _logger.LogIdentityErrors(user, userCreated);
+            return new IdentityErrorDTO("Unable to create user. Please try again later");
+        }
+
+        var token = await _userManager.GenerateAdminInvitationTokenAsync(user);
+        var encodedToken = HttpUtility.UrlEncode(token);
+        var callbackUri = string.Format(_callbackUrisConfig.InviteUserUriTemplate, user.Email, encodedToken);
+
+        var emailSent = await _emailSender.SendEmailAsync(dto.Email,
+            new AdminInvitationMessage { InvitationUri = callbackUri });
+
+        return emailSent.Match<Option<ErrorDTO>>(
+            None: () =>
+            {
+                _logger.LogInformation("Admin invitation sent to email {0}", user.Email);
+                return None;
+            },
+            Some: error =>
+            {
+                _logger.LogError("Unable to send admin invitation to email {0}", user.Email);
+                return new ExternalErrorDTO(error.Message);
+            });
+    }
+
+    public async Task<Option<ErrorDTO>> BlockUserAsync(BlockUserDTO dto)
+    {
+        var user = await _userManager.FindByIdAsync(dto.UserId.ToString());
+        if (user is null)
+            return new NotFoundErrorDTO("User with this id does not exist");
+
+        if (user.IsBlocked)
+            return None;
+
+        user.IsBlocked = true;
+        var userUpdated = await _userManager.UpdateAsync(user);
+        if (!userUpdated.Succeeded)
+        {
+            _logger.LogIdentityErrors(user, userUpdated);
+            return new IdentityErrorDTO("Unable to block user. Please try again later");
         }
 
         return None;

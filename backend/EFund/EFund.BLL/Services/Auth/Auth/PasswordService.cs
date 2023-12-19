@@ -18,17 +18,17 @@ namespace EFund.BLL.Services.Auth.Auth;
 public class PasswordService : AuthServiceBase, IPasswordService
 {
     private readonly IEmailSender _emailSender;
-    private readonly AuthConfig _authConfig;
+    private readonly CallbackUrisConfig _callbackUrisConfig;
 
     public PasswordService(UserManager<User> userManager,
         JwtConfig jwtConfig,
         ILogger<AuthServiceBase> logger,
         IEmailSender emailSender,
-        AuthConfig authConfig)
+        CallbackUrisConfig callbackUrisConfig)
         : base(userManager, jwtConfig, logger)
     {
         _emailSender = emailSender;
-        _authConfig = authConfig;
+        _callbackUrisConfig = callbackUrisConfig;
     }
 
     public async Task<Option<ErrorDTO>> ChangePasswordAsync(Guid userId, ChangePasswordDTO dto)
@@ -80,7 +80,7 @@ public class PasswordService : AuthServiceBase, IPasswordService
 
         var token = await _userManager.GeneratePasswordResetTokenAsync(user);
         var encodedToken = HttpUtility.UrlEncode(token);
-        var callbackUri = string.Format(_authConfig.ResetPasswordUriTemplate, user.Email, encodedToken);
+        var callbackUri = string.Format(_callbackUrisConfig.ResetPasswordUriTemplate, user.Email, encodedToken);
 
         var emailSent = await _emailSender.SendEmailAsync(user.Email!,
             new ResetPasswordMessage { UserName = user.DisplayName, ResetPasswordUri = callbackUri });

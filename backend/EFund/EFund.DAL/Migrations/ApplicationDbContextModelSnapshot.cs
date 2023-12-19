@@ -28,9 +28,15 @@ namespace EFund.DAL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("AvatarPath")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsClosed")
+                        .HasColumnType("bit");
 
                     b.Property<int>("Provider")
                         .HasColumnType("int");
@@ -49,6 +55,30 @@ namespace EFund.DAL.Migrations
                     b.ToTable("Fundraisings");
                 });
 
+            modelBuilder.Entity("EFund.DAL.Entities.FundraisingReport", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("FundraisingId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FundraisingId");
+
+                    b.ToTable("FundraisingReports");
+                });
+
             modelBuilder.Entity("EFund.DAL.Entities.MonobankFundraising", b =>
                 {
                     b.Property<Guid>("Id")
@@ -62,16 +92,32 @@ namespace EFund.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("SendId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("FundraisingId")
                         .IsUnique();
 
                     b.ToTable("MonobankFundraisings");
+                });
+
+            modelBuilder.Entity("EFund.DAL.Entities.ReportAttachment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("FilePath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("FundraisingReportId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FundraisingReportId");
+
+                    b.ToTable("ReportAttachments");
                 });
 
             modelBuilder.Entity("EFund.DAL.Entities.Tag", b =>
@@ -100,6 +146,9 @@ namespace EFund.DAL.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("CreatedByAdmin")
+                        .HasColumnType("bit");
+
                     b.Property<string>("DisplayName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -109,6 +158,9 @@ namespace EFund.DAL.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsBlocked")
                         .HasColumnType("bit");
 
                     b.Property<bool>("LockoutEnabled")
@@ -368,6 +420,17 @@ namespace EFund.DAL.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("EFund.DAL.Entities.FundraisingReport", b =>
+                {
+                    b.HasOne("EFund.DAL.Entities.Fundraising", "Fundraising")
+                        .WithMany("Reports")
+                        .HasForeignKey("FundraisingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Fundraising");
+                });
+
             modelBuilder.Entity("EFund.DAL.Entities.MonobankFundraising", b =>
                 {
                     b.HasOne("EFund.DAL.Entities.Fundraising", "Fundraising")
@@ -377,6 +440,17 @@ namespace EFund.DAL.Migrations
                         .IsRequired();
 
                     b.Navigation("Fundraising");
+                });
+
+            modelBuilder.Entity("EFund.DAL.Entities.ReportAttachment", b =>
+                {
+                    b.HasOne("EFund.DAL.Entities.FundraisingReport", "FundraisingReport")
+                        .WithMany("Attachments")
+                        .HasForeignKey("FundraisingReportId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("FundraisingReport");
                 });
 
             modelBuilder.Entity("EFund.DAL.Entities.UserMonobank", b =>
@@ -471,6 +545,13 @@ namespace EFund.DAL.Migrations
                 {
                     b.Navigation("MonobankFundraising")
                         .IsRequired();
+
+                    b.Navigation("Reports");
+                });
+
+            modelBuilder.Entity("EFund.DAL.Entities.FundraisingReport", b =>
+                {
+                    b.Navigation("Attachments");
                 });
 
             modelBuilder.Entity("EFund.DAL.Entities.User", b =>

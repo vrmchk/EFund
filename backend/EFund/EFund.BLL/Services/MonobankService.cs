@@ -75,11 +75,48 @@ public class MonobankService : IMonobankService
         if (monobank == null)
             return new NotFoundErrorDTO("Specified user has not authorized from Monobank yet");
 
-        var clientInfoResult = await _monobankClient.GetClientInfoAsync(new ClientInfoRequest(_encryptionService.Decrypt(monobank.MonobankToken)));
+        var clientInfoResult =
+            await _monobankClient.GetClientInfoAsync(
+                new ClientInfoRequest(_encryptionService.Decrypt(monobank.MonobankToken)));
 
         return clientInfoResult.Match<Either<ErrorDTO, List<JarDTO>>>(
             Right: clientInfo => _mapper.Map<List<JarDTO>>(clientInfo.Jars),
             Left: code => new ErrorDTO(code, "Unable to get info about accounts"));
+    }
+
+    public async Task<Either<ErrorDTO, List<JarDTO>>> GetJarsAsync(List<Guid> userIds)
+    {
+        var tasks = userIds.Select(GetJarsAsync).ToList();
+        var results = await Task.WhenAll(tasks);
+        var jars = new List<List<JarDTO>>();
+        ErrorDTO? error = null;
+        foreach (var result in results)
+        {
+            if (error != null)
+                return error;
+
+            result.Match(
+                Right: jarsList => jars.Add(jarsList),
+                Left: err => error = err
+            );
+        }
+
+        return jars.SelectMany(j => j).ToList();
+    }
+
+    public async Task<Either<ErrorDTO, JarDTO>> GetJarByIdAsync(Guid userId, string jarId)
+    {
+        return (await GetJarsAsync(userId)).Match<Either<ErrorDTO, JarDTO>>(
+            Right: jars =>
+            {
+                var jar = jars.FirstOrDefault(j => j.Id == jarId);
+                if (jar == null)
+                    return new NotFoundErrorDTO("Specified jar does not exist");
+
+                return jar;
+            },
+            Left: error => error
+        );
     }
 
     private async Task<Either<ErrorDTO, UserMonobank>> IsUserTokenValidAsync(Guid userId)

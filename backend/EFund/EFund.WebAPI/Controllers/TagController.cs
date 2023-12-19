@@ -1,4 +1,5 @@
 ﻿using EFund.BLL.Services.Interfaces;
+using EFund.Common.Constants;
 using EFund.Common.Models.DTO;
 using EFund.Common.Models.DTO.Tag;
 using EFund.Validation;
@@ -34,7 +35,7 @@ public class TagController : ControllerBase
     }
 
     [HttpPost]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = Policies.Shared)]
     public async Task<IActionResult> Add([FromBody] CreateTagDTO dto)
     {
         var validationResult = await _validator.ValidateAsync(dto);
@@ -47,7 +48,7 @@ public class TagController : ControllerBase
             Left: BadRequest
         );
     }
-    
+
     [HttpPost("{name}")]
     public async Task<IActionResult> GetByName(string name, [FromQuery] PaginationDTO pagination)
     {

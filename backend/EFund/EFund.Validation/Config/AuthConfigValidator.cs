@@ -1,5 +1,4 @@
 ﻿using EFund.Common.Models.Configs;
-using EFund.Validation.Extensions;
 using EFund.Validation.Utility;
 using FluentValidation;
 
@@ -16,9 +15,5 @@ public class AuthConfigValidator : ConfigValidatorBase<AuthConfig>
         RuleFor(x => x.ConfirmationCodeLifetime)
             .NotEmpty()
             .GreaterThan(TimeSpan.Zero);
-
-        RuleFor(x => x.ResetPasswordUriTemplate)
-            .NotEmpty()
-            .HasFormatParams(2);
     }
 }

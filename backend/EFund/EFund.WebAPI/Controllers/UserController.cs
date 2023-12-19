@@ -1,5 +1,6 @@
 ﻿using EFund.BLL.Services.Auth.Interfaces;
 using EFund.BLL.Services.Interfaces;
+using EFund.Common.Constants;
 using EFund.Common.Models.DTO.User;
 using EFund.Validation;
 using EFund.Validation.Extensions;
@@ -12,7 +13,7 @@ namespace EFund.WebAPI.Controllers;
 
 [ApiController]
 [Route("api/users")]
-[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = Policies.Shared)]
 public class UserController : ControllerBase
 {
     private readonly IUserService _userService;
@@ -29,8 +30,7 @@ public class UserController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetById()
     {
-        var userId = HttpContext.GetUserId();
-        var result = await _userService.GetByIdAsync(userId, HttpContext.GetApiUrl());
+        var result = await _userService.GetByIdAsync(HttpContext.GetUserId(), HttpContext.GetApiUrl());
         return result.ToActionResult();
     }
 
@@ -41,8 +41,7 @@ public class UserController : ControllerBase
         if (!validationResult.IsValid)
             return BadRequest(validationResult.ToErrorDTO());
 
-        var userId = HttpContext.GetUserId();
-        var result = await _userService.UpdateUserAsync(userId, dto, HttpContext.GetApiUrl());
+        var result = await _userService.UpdateUserAsync(HttpContext.GetUserId(), dto, HttpContext.GetApiUrl());
         return result.ToActionResult();
     }
 
@@ -53,8 +52,7 @@ public class UserController : ControllerBase
         if (!validationResult.IsValid)
             return BadRequest(validationResult.ToErrorDTO());
 
-        var userId = HttpContext.GetUserId();
-        var result = await _passwordService.ChangePasswordAsync(userId, dto);
+        var result = await _passwordService.ChangePasswordAsync(HttpContext.GetUserId(), dto);
         return result.ToActionResult();
     }
 
@@ -65,8 +63,7 @@ public class UserController : ControllerBase
         if (!validationResult.IsValid)
             return BadRequest(validationResult.ToErrorDTO());
 
-        var userId = HttpContext.GetUserId();
-        var result = await _passwordService.AddPasswordAsync(userId, dto);
+        var result = await _passwordService.AddPasswordAsync(HttpContext.GetUserId(), dto);
         return result.ToActionResult();
     }
 
@@ -77,8 +74,7 @@ public class UserController : ControllerBase
         if (!validationResult.IsValid)
             return BadRequest(validationResult.ToErrorDTO());
 
-        var userId = HttpContext.GetUserId();
-        var result = await _userService.SendChangeEmailCodeAsync(userId, dto);
+        var result = await _userService.SendChangeEmailCodeAsync(HttpContext.GetUserId(), dto);
         return result.ToActionResult();
     }
 
@@ -89,17 +85,53 @@ public class UserController : ControllerBase
         if (!validationResult.IsValid)
             return BadRequest(validationResult.ToErrorDTO());
 
-        var userId = HttpContext.GetUserId();
-        var result = await _userService.ChangeEmailAsync(userId, dto);
+        var result = await _userService.ChangeEmailAsync(HttpContext.GetUserId(), dto);
         return result.ToActionResult();
     }
-    
+
     [HttpPost("upload-avatar")]
     public async Task<IActionResult> UploadAvatar(IFormFile file)
     {
-        var userId = HttpContext.GetUserId();
-        await using var stream = file.OpenReadStream();
-        var result = await _userService.UploadAvatarAsync(userId, stream, file.ContentType);
+        var result = await _userService.UploadAvatarAsync(HttpContext.GetUserId(), file);
+        return result.ToActionResult();
+    }
+
+    [HttpPost("delete-avatar")]
+    public async Task<IActionResult> DeleteAvatar()
+    {
+        var result = await _userService.DeleteAvatarAsync(HttpContext.GetUserId());
+        return result.ToActionResult();
+    }
+
+    [HttpPost("make-admin")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = Policies.Admin)]
+    public async Task<IActionResult> MakeAdmin(MakeAdminDTO dto)
+    {
+        var result = await _userService.MakeAdminAsync(dto);
+        return result.ToActionResult();
+    }
+
+    [HttpPost("invite-admin")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = Policies.Admin)]
+    public async Task<IActionResult> Invite(InviteAdminDTO dto)
+    {
+        var validationResult = await _validator.ValidateAsync(dto);
+        if (!validationResult.IsValid)
+            return BadRequest(validationResult.ToErrorDTO());
+
+        var result = await _userService.InviteAdminAsync(dto);
+        return result.ToActionResult();
+    }
+
+    [HttpPost("block-user")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = Policies.Admin)]
+    public async Task<IActionResult> BlockUser(BlockUserDTO dto)
+    {
+        var validationResult = await _validator.ValidateAsync(dto);
+        if (!validationResult.IsValid)
+            return BadRequest(validationResult.ToErrorDTO());
+
+        var result = await _userService.BlockUserAsync(dto);
         return result.ToActionResult();
     }
 }

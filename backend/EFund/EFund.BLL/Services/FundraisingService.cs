@@ -2,7 +2,7 @@
 using EFund.BLL.Extensions;
 using EFund.BLL.Services.Interfaces;
 using EFund.Common.Models.Configs;
-using EFund.Common.Models.DTO;
+using EFund.Common.Models.DTO.Common;
 using EFund.Common.Models.DTO.Error;
 using EFund.Common.Models.DTO.Fundraising;
 using EFund.DAL.Entities;
@@ -37,7 +37,8 @@ public class FundraisingService : IFundraisingService
         _monobankFundraisings = monobankFundraisings;
     }
 
-    public async Task<Either<ErrorDTO, List<FundraisingDTO>>> Search(SearchFundraisingDTO dto, PaginationDTO pagination,
+    public async Task<Either<ErrorDTO, PagedResponseDTO<FundraisingDTO>>> Search(SearchFundraisingDTO dto,
+        PaginationDTO pagination,
         string apiUrl)
     {
         IQueryable<Fundraising> queryable = IncludeRelations(_fundraisingRepository);
@@ -68,11 +69,11 @@ public class FundraisingService : IFundraisingService
         var userIds = dtos.Select(f => f.UserId).Distinct().ToList();
 
         var result = await _monobankService.GetJarsAsync(userIds);
-        return result.Match<Either<ErrorDTO, List<FundraisingDTO>>>(
+        return result.Match<Either<ErrorDTO, PagedResponseDTO<FundraisingDTO>>>(
             Right: jars =>
             {
                 dtos.ForEach(f => f.MonobankJar = jars.FirstOrDefault(j => j.Id == f.MonobankJarId));
-                return dtos;
+                return new PagedResponseDTO<FundraisingDTO>(dtos);
             },
             Left: error => error
         );

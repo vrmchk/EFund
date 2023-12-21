@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using EFund.BLL.Services.Interfaces;
-using EFund.Common.Models.DTO;
+using EFund.Common.Models.DTO.Common;
 using EFund.Common.Models.DTO.Error;
 using EFund.Common.Models.DTO.Tag;
 using EFund.DAL.Entities;

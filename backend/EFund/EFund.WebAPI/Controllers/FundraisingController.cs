@@ -1,6 +1,6 @@
 ﻿using EFund.BLL.Services.Interfaces;
 using EFund.Common.Constants;
-using EFund.Common.Models.DTO;
+using EFund.Common.Models.DTO.Common;
 using EFund.Common.Models.DTO.Fundraising;
 using EFund.Validation;
 using EFund.Validation.Extensions;

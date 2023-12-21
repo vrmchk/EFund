@@ -1,4 +1,4 @@
-﻿namespace EFund.Common.Models.DTO;
+﻿namespace EFund.Common.Models.DTO.Common;
 
 public class PaginationDTO
 {

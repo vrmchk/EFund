@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EFund.BLL.Extensions;
 
-public static class EnumerableExtensions
+public static class PaginationExtensions
 {
     public static PagedList<T> ToPagedList<T>(this ICollection<T> source, int pageNumber, int pageSize)
     {

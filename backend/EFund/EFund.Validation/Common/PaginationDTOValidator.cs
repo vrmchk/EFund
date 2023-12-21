@@ -1,4 +1,4 @@
-﻿using EFund.Common.Models.DTO;
+﻿using EFund.Common.Models.DTO.Common;
 using FluentValidation;
 
 namespace EFund.Validation.Common;

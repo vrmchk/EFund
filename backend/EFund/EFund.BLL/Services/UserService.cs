@@ -5,7 +5,7 @@ using EFund.BLL.Services.Interfaces;
 using EFund.Common.Constants;
 using EFund.Common.Enums;
 using EFund.Common.Models.Configs;
-using EFund.Common.Models.DTO;
+using EFund.Common.Models.DTO.Common;
 using EFund.Common.Models.DTO.Error;
 using EFund.Common.Models.DTO.User;
 using EFund.DAL.Entities;
@@ -271,7 +271,8 @@ public class UserService : IUserService
         return None;
     }
 
-    public async Task<Either<ErrorDTO, List<UserExtendedDTO>>> SearchAsync(SearchUserDTO dto, PaginationDTO pagination,
+    public async Task<Either<ErrorDTO, PagedResponseDTO<UserExtendedDTO>>> SearchAsync(SearchUserDTO dto,
+        PaginationDTO pagination,
         string apiUrl)
     {
         IQueryable<User> queryable = _userManager.Users;
@@ -301,7 +302,7 @@ public class UserService : IUserService
             userDto.Roles = (await _userManager.GetRolesAsync(user)).ToList();
         }
 
-        return usersWithDtos.Values.ToList();
+        return new PagedResponseDTO<UserExtendedDTO>(usersWithDtos.Values);
     }
 
     private T ToDto<T>(User user, string apiUrl)

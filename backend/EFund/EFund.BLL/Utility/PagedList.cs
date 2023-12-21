@@ -2,24 +2,24 @@
 
 public class PagedList<T> : List<T>
 {
-    public PagedList(IEnumerable<T> items, int totalPages, int pageNumber, int pageSize)
+    public PagedList(IEnumerable<T> items, int totalItems, int pageNumber, int pageSize)
     {
-        TotalTotalPages = totalPages;
+        TotalItems = totalItems;
         PageSize = pageSize;
-        CurrentPage = pageNumber;
-        TotalPages = (int)Math.Ceiling(totalPages / (double)pageSize);
+        PageNumber = pageNumber;
+        TotalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
         AddRange(items);
     }
 
-    public int CurrentPage { get; private set; }
+    public int PageNumber { get; private set; }
 
     public int TotalPages { get; private set; }
 
     public int PageSize { get; private set; }
 
-    public int TotalTotalPages { get; private set; }
+    public int TotalItems { get; private set; }
 
-    public bool HasPrevious => CurrentPage > 1;
+    public bool HasPrevious => PageNumber > 1;
 
-    public bool HasNext => CurrentPage < TotalPages;
+    public bool HasNext => PageNumber < TotalPages;
 }

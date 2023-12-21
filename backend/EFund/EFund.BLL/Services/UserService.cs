@@ -271,7 +271,7 @@ public class UserService : IUserService
         return None;
     }
 
-    public async Task<Either<ErrorDTO, PagedResponseDTO<UserExtendedDTO>>> SearchAsync(SearchUserDTO dto,
+    public async Task<Either<ErrorDTO, PagedListDTO<UserExtendedDTO>>> SearchAsync(SearchUserDTO dto,
         PaginationDTO pagination,
         string apiUrl)
     {
@@ -294,15 +294,18 @@ public class UserService : IUserService
         if (dto.EmailConfirmed != null)
             queryable = queryable.Where(u => u.EmailConfirmed == dto.EmailConfirmed);
 
-        var usersWithDtos = (await queryable.ToPagedListAsync(pagination.PageNumber, pagination.PageSize))
-            .ToDictionary(u => u, u => ToDto<UserExtendedDTO>(u, apiUrl));
+        var users = await queryable.ToPagedListAsync(pagination.PageNumber, pagination.PageSize);
+        var dtos = _mapper.Map<PagedListDTO<UserExtendedDTO>>(users);
+        var usersWithDtos = users
+            .Zip(dtos.Items, (user, userDto) => (user, userDto));
 
         foreach (var (user, userDto) in usersWithDtos)
         {
+            user.AvatarPath = (user.AvatarPath ?? _appDataConfig.DefaultUserAvatarPath).PathToUrl(apiUrl);
             userDto.Roles = (await _userManager.GetRolesAsync(user)).ToList();
         }
 
-        return new PagedResponseDTO<UserExtendedDTO>(usersWithDtos.Values);
+        return dtos;
     }
 
     private T ToDto<T>(User user, string apiUrl)

@@ -2,12 +2,12 @@
 
 public class PagedList<T> : List<T>
 {
-    public PagedList(IEnumerable<T> items, int totalItems, int pageNumber, int pageSize)
+    public PagedList(IEnumerable<T> items, int totalCount, int pageNumber, int pageSize)
     {
-        TotalItems = totalItems;
+        TotalCount = totalCount;
         PageSize = pageSize;
         PageNumber = pageNumber;
-        TotalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
+        TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
         AddRange(items);
     }
 
@@ -17,7 +17,7 @@ public class PagedList<T> : List<T>
 
     public int PageSize { get; private set; }
 
-    public int TotalItems { get; private set; }
+    public int TotalCount { get; private set; }
 
     public bool HasPrevious => PageNumber > 1;
 

@@ -37,7 +37,7 @@ public class FundraisingService : IFundraisingService
         _monobankFundraisings = monobankFundraisings;
     }
 
-    public async Task<Either<ErrorDTO, PagedResponseDTO<FundraisingDTO>>> Search(SearchFundraisingDTO dto,
+    public async Task<Either<ErrorDTO, PagedListDTO<FundraisingDTO>>> Search(SearchFundraisingDTO dto,
         PaginationDTO pagination,
         string apiUrl)
     {
@@ -64,16 +64,16 @@ public class FundraisingService : IFundraisingService
             }
         }
 
-        var dtos = _mapper.Map<List<FundraisingDTO>>(fundraisings);
+        var dtos = _mapper.Map<PagedListDTO<FundraisingDTO>>(fundraisings);
 
-        var userIds = dtos.Select(f => f.UserId).Distinct().ToList();
+        var userIds = dtos.Items.Select(f => f.UserId).Distinct().ToList();
 
         var result = await _monobankService.GetJarsAsync(userIds);
-        return result.Match<Either<ErrorDTO, PagedResponseDTO<FundraisingDTO>>>(
+        return result.Match<Either<ErrorDTO, PagedListDTO<FundraisingDTO>>>(
             Right: jars =>
             {
-                dtos.ForEach(f => f.MonobankJar = jars.FirstOrDefault(j => j.Id == f.MonobankJarId));
-                return new PagedResponseDTO<FundraisingDTO>(dtos);
+                dtos.Items.ForEach(f => f.MonobankJar = jars.FirstOrDefault(j => j.Id == f.MonobankJarId));
+                return dtos;
             },
             Left: error => error
         );

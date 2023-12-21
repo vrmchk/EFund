@@ -17,6 +17,6 @@ public interface IUserService
     Task<Option<ErrorDTO>> MakeAdminAsync(MakeAdminDTO dto);
     Task<Option<ErrorDTO>> InviteAdminAsync(InviteAdminDTO dto);
     Task<Option<ErrorDTO>> PerformUserActionAsync(UserActionDTO dto);
-    Task<Either<ErrorDTO, PagedResponseDTO<UserExtendedDTO>>> SearchAsync(SearchUserDTO dto, PaginationDTO pagination,
+    Task<Either<ErrorDTO, PagedListDTO<UserExtendedDTO>>> SearchAsync(SearchUserDTO dto, PaginationDTO pagination,
         string apiUrl);
 }

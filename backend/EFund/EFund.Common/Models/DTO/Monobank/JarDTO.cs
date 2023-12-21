@@ -4,7 +4,7 @@ public class JarDTO
 {
     public string Id { get; set; } = string.Empty;
 
-    public string SendId { get; set; } = string.Empty;
+    public string SendUrl { get; set; } = string.Empty;
 
     public string Title { get; set; } = string.Empty;
 

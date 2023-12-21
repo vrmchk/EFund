@@ -2,6 +2,7 @@
 using EFund.BLL.Services.Interfaces;
 using EFund.Client.Monobank;
 using EFund.Client.Monobank.Models.Requests;
+using EFund.Common.Models.Configs;
 using EFund.Common.Models.DTO.Error;
 using EFund.Common.Models.DTO.Monobank;
 using EFund.DAL.Entities;
@@ -20,25 +21,27 @@ public class MonobankService : IMonobankService
     private readonly IRepository<UserMonobank> _monobankRepository;
     private readonly IEncryptionService _encryptionService;
     private readonly IMapper _mapper;
+    private readonly MonobankConfig _monobankConfig;
 
     public MonobankService(
         IMonobankClient monobankClient,
         UserManager<User> userManager,
         IRepository<UserMonobank> monobankRepository,
         IEncryptionService encryptionService,
-        IMapper mapper)
+        IMapper mapper,
+        MonobankConfig monobankConfig)
     {
         _monobankClient = monobankClient;
         _userManager = userManager;
         _monobankRepository = monobankRepository;
         _encryptionService = encryptionService;
         _mapper = mapper;
+        _monobankConfig = monobankConfig;
     }
 
     public async Task<Option<ErrorDTO>> AddOrUpdateMonobankTokenAsync(Guid userId, string monobankToken)
     {
         var user = await _userManager.FindByIdAsync(userId.ToString());
-
         if (user == null)
             return new NotFoundErrorDTO("User with this id does not exist");
 
@@ -71,7 +74,6 @@ public class MonobankService : IMonobankService
     public async Task<Either<ErrorDTO, List<JarDTO>>> GetJarsAsync(Guid userId)
     {
         var monobank = await _monobankRepository.FirstOrDefaultAsync(m => m.UserId == userId);
-
         if (monobank == null)
             return new NotFoundErrorDTO("Specified user has not authorized from Monobank yet");
 
@@ -80,7 +82,11 @@ public class MonobankService : IMonobankService
                 new ClientInfoRequest(_encryptionService.Decrypt(monobank.MonobankToken)));
 
         return clientInfoResult.Match<Either<ErrorDTO, List<JarDTO>>>(
-            Right: clientInfo => _mapper.Map<List<JarDTO>>(clientInfo.Jars),
+            Right: clientInfo =>
+            {
+                clientInfo.Jars.ForEach(j => j.SendId = $"{_monobankConfig.SendAddress}/{j.SendId}");
+                return _mapper.Map<List<JarDTO>>(clientInfo.Jars);
+            },
             Left: code => new ErrorDTO(code, "Unable to get info about accounts"));
     }
 
@@ -122,7 +128,6 @@ public class MonobankService : IMonobankService
     private async Task<Either<ErrorDTO, UserMonobank>> IsUserTokenValidAsync(Guid userId)
     {
         var monobank = await _monobankRepository.FirstOrDefaultAsync(m => m.UserId == userId);
-
         if (monobank == null)
             return new NotFoundErrorDTO("Specified user has not authorized from Monobank yet");
 

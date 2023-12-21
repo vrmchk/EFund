@@ -3,6 +3,7 @@ using EFund.BLL.Services.Auth.Interfaces;
 using EFund.BLL.Services.Interfaces;
 using EFund.Common.Constants;
 using EFund.Common.Enums;
+using EFund.Common.Models.DTO;
 using EFund.Common.Models.DTO.User;
 using EFund.Validation;
 using EFund.Validation.Extensions;
@@ -33,6 +34,18 @@ public class UserController : ControllerBase
     public async Task<IActionResult> GetById()
     {
         var result = await _userService.GetByIdAsync(HttpContext.GetUserId(), HttpContext.GetApiUrl());
+        return result.ToActionResult();
+    }
+
+    [HttpPost("search")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = Policies.Admin)]
+    public async Task<IActionResult> Search([FromBody] SearchUserDTO dto, [FromQuery] PaginationDTO pagination)
+    {
+        var validationResult = await _validator.ValidateAsync(pagination);
+        if (!validationResult.IsValid)
+            return BadRequest(validationResult.ToErrorDTO());
+
+        var result = await _userService.SearchAsync(dto, pagination, HttpContext.GetApiUrl());
         return result.ToActionResult();
     }
 

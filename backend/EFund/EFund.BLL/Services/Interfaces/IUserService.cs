@@ -1,6 +1,9 @@
-﻿using EFund.Common.Enums;
+﻿using EFund.BLL.Utility;
+using EFund.Common.Enums;
+using EFund.Common.Models.DTO;
 using EFund.Common.Models.DTO.Error;
 using EFund.Common.Models.DTO.User;
+using EFund.DAL.Entities;
 using LanguageExt;
 using Microsoft.AspNetCore.Http;
 
@@ -17,4 +20,6 @@ public interface IUserService
     Task<Option<ErrorDTO>> MakeAdminAsync(MakeAdminDTO dto);
     Task<Option<ErrorDTO>> InviteAdminAsync(InviteAdminDTO dto);
     Task<Option<ErrorDTO>> PerformUserActionAsync(UserActionDTO dto);
+    Task<Either<ErrorDTO, List<UserExtendedDTO>>> SearchAsync(SearchUserDTO dto, PaginationDTO pagination,
+        string getApiUrl);
 }

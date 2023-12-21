@@ -5,6 +5,7 @@ using EFund.BLL.Services.Interfaces;
 using EFund.Common.Constants;
 using EFund.Common.Enums;
 using EFund.Common.Models.Configs;
+using EFund.Common.Models.DTO;
 using EFund.Common.Models.DTO.Error;
 using EFund.Common.Models.DTO.User;
 using EFund.DAL.Entities;
@@ -51,8 +52,7 @@ public class UserService : IUserService
         if (user is null)
             return new NotFoundErrorDTO("User with this id does not exist");
 
-        user.AvatarPath = (user.AvatarPath ?? _appDataConfig.DefaultUserAvatarPath).PathToUrl(apiUrl);
-        return _mapper.Map<UserDTO>(user);
+        return ToDto<UserDTO>(user, apiUrl);
     }
 
     public async Task<Either<ErrorDTO, UserDTO>> UpdateUserAsync(Guid userId, UpdateUserDTO dto, string apiUrl)
@@ -71,8 +71,7 @@ public class UserService : IUserService
 
         _logger.LogInformation("User updated: {0}", user.Id);
 
-        user.AvatarPath = (user.AvatarPath ?? _appDataConfig.DefaultUserAvatarPath).PathToUrl(apiUrl);
-        return _mapper.Map<UserDTO>(user);
+        return ToDto<UserDTO>(user, apiUrl);
     }
 
     public async Task<Option<ErrorDTO>> SendChangeEmailCodeAsync(Guid userId, ChangeEmailDTO dto)
@@ -270,5 +269,44 @@ public class UserService : IUserService
         }
 
         return None;
+    }
+
+    public async Task<Either<ErrorDTO, List<UserExtendedDTO>>> SearchAsync(SearchUserDTO dto, PaginationDTO pagination,
+        string apiUrl)
+    {
+        IQueryable<User> queryable = _userManager.Users;
+        if (dto.UserIds?.Count > 0)
+            queryable = queryable.Where(u => dto.UserIds.Contains(u.Id));
+
+        if (dto.Emails?.Count > 0)
+            queryable = queryable.Where(u => dto.Emails.Contains(u.Email!));
+
+        if (dto.UserNames?.Count > 0)
+            queryable = queryable.Where(u => dto.UserNames.Contains(u.DisplayName));
+
+        if (dto.CreatedByAdmin != null)
+            queryable = queryable.Where(u => u.CreatedByAdmin == dto.CreatedByAdmin);
+
+        if (dto.IsBlocked != null)
+            queryable = queryable.Where(u => u.IsBlocked == dto.IsBlocked);
+
+        if (dto.EmailConfirmed != null)
+            queryable = queryable.Where(u => u.EmailConfirmed == dto.EmailConfirmed);
+
+        var usersWithDtos = (await queryable.ToPagedListAsync(pagination.PageNumber, pagination.PageSize))
+            .ToDictionary(u => u, u => ToDto<UserExtendedDTO>(u, apiUrl));
+
+        foreach (var (user, userDto) in usersWithDtos)
+        {
+            userDto.Roles = (await _userManager.GetRolesAsync(user)).ToList();
+        }
+
+        return usersWithDtos.Values.ToList();
+    }
+
+    private T ToDto<T>(User user, string apiUrl)
+    {
+        user.AvatarPath = (user.AvatarPath ?? _appDataConfig.DefaultUserAvatarPath).PathToUrl(apiUrl);
+        return _mapper.Map<T>(user);
     }
 }

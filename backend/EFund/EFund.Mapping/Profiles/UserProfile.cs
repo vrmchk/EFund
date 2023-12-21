@@ -29,5 +29,10 @@ public class UserProfile : Profile
             .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.DisplayName))
             .ForMember(dest => dest.HasPassword, opt => opt.MapFrom(src => src.PasswordHash != null))
             .ForMember(dest => dest.AvatarUrl, opt => opt.MapFrom(src => src.AvatarPath));
+
+        CreateMap<User, UserExtendedDTO>()
+            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.DisplayName))
+            .ForMember(dest => dest.HasPassword, opt => opt.MapFrom(src => src.PasswordHash != null))
+            .ForMember(dest => dest.AvatarUrl, opt => opt.MapFrom(src => src.AvatarPath));
     }
 }

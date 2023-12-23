@@ -22,6 +22,7 @@ public class FundraisingProfile : Profile
             .AfterMap<CreateFundraisingDTOToFundraisingMappingAction>();
 
         CreateMap<UpdateFundraisingDTO, Fundraising>()
+            .ForMember(dest => dest.Tags, opt => opt.Ignore())
             .AfterMap<UpdateFundraisingDTOToFundraisingMappingAction>();
     }
 }

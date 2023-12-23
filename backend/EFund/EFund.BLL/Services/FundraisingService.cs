@@ -27,7 +27,8 @@ public class FundraisingService : IFundraisingService
         IRepository<Fundraising> fundraisingRepository,
         IMonobankService monobankService,
         AppDataConfig appDataConfig,
-        IRepository<Tag> tagRepository, IRepository<MonobankFundraising> monobankFundraisings)
+        IRepository<Tag> tagRepository,
+        IRepository<MonobankFundraising> monobankFundraisings)
     {
         _mapper = mapper;
         _fundraisingRepository = fundraisingRepository;
@@ -95,7 +96,7 @@ public class FundraisingService : IFundraisingService
         var fundraising = _mapper.Map<Fundraising>(dto);
         fundraising.UserId = userId;
 
-        fundraising.Tags = await _tagRepository.Where(t => dto.Tags.Contains(t.Name)).ToListAsync();
+        fundraising.Tags = await GetTags(dto.Tags);
 
         await _monobankFundraisings.InsertAsync(fundraising.MonobankFundraising, persist: false);
         await _fundraisingRepository.InsertAsync(fundraising);
@@ -112,6 +113,7 @@ public class FundraisingService : IFundraisingService
             return new NotFoundErrorDTO("Fundraising with this id does not exist");
 
         _mapper.Map(dto, fundraising);
+        fundraising.Tags = await GetTags(dto.Tags);
 
         await _fundraisingRepository.UpdateAsync(fundraising);
 
@@ -228,5 +230,18 @@ public class FundraisingService : IFundraisingService
             .Include(f => f.MonobankFundraising)
             .Include(f => f.Reports)
             .ThenInclude(r => r.Attachments);
+    }
+
+    private async Task<List<Tag>> GetTags(List<string> tags)
+    {
+        var existingTags = _tagRepository.Where(t => tags.Contains(t.Name)).ToList();
+        var newTags = tags
+            .Where(t => existingTags.All(et => et.Name != t))
+            .Select(t => new Tag { Name = t })
+            .ToList();
+
+        await _tagRepository.InsertManyAsync(newTags);
+
+        return existingTags.Union(newTags).ToList();
     }
 }

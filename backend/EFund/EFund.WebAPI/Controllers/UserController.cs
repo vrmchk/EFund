@@ -28,7 +28,7 @@ public class UserController : ControllerBase
         _validator = validator;
     }
 
-    [HttpGet]
+    [HttpGet("me")]
     public async Task<IActionResult> GetById()
     {
         var result = await _userService.GetByIdAsync(HttpContext.GetUserId(), HttpContext.GetApiUrl());
@@ -47,7 +47,7 @@ public class UserController : ControllerBase
         return result.ToActionResult();
     }
 
-    [HttpPut]
+    [HttpPut("me")]
     public async Task<IActionResult> UpdateUser(UpdateUserDTO dto)
     {
         var validationResult = await _validator.ValidateAsync(dto);

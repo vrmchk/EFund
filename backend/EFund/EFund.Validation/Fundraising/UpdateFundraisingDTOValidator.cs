@@ -9,5 +9,11 @@ public class UpdateFundraisingDTOValidator : AbstractValidator<UpdateFundraising
     {
         RuleFor(x => x.Title)
             .NotEmpty();
+
+        RuleFor(x => x.Tags)
+            .NotEmpty();
+
+        RuleForEach(x => x.Tags)
+            .NotEmpty();
     }
 }

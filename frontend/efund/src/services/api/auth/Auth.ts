@@ -1,26 +1,90 @@
 import API from '../repository/API';
-import { ConfirmEmailRequest, SignUpRequest } from '../../../models/api/request/AuthRequests';
+import { ConfirmEmailRequest, RefreshTokenRequest, SignInRequest, SignUpRequest } from '../../../models/api/request/AuthRequests';
 import { AuthSuccessResponse, SignUpResponse } from '../../../models/api/response/AuthResponses';
+import { ErrorModel } from '../../../models/api/response/base/ErrorModel';
+import User from '../../../models/user/User';
 
 const Auth = {
-    signUp: async (request: SignUpRequest) : Promise<SignUpResponse> => {
+    signUp: async (request: SignUpRequest): Promise<SignUpResponse> => {
         const response = await API.post<SignUpRequest, SignUpResponse>('/auth/sign-up', request);
-        
+
         if (response.success) {
+
             return response.data as SignUpResponse;
         }
 
         throw new Error(response.error?.message ?? 'Unknown error');
     },
 
-    confirmEmail: async (request: ConfirmEmailRequest): Promise<AuthSuccessResponse> => {
+    signIn: async (request: SignInRequest): Promise<ErrorModel | undefined> => {
+        const response = await API.post<SignInRequest, AuthSuccessResponse>('/auth/sign-in', request);
+
+        if (response.success) {
+            const tokens = response.data as AuthSuccessResponse;
+            localStorage.setItem('accessToken', tokens.accessToken ?? '');
+            localStorage.setItem('refreshToken', tokens.refreshToken ?? '');
+
+            Auth.startSilentRefresh();
+            return undefined;
+        }
+
+        return response.error;
+    },
+
+    confirmEmail: async (request: ConfirmEmailRequest): Promise<ErrorModel | undefined> => {
         const response = await API.post<ConfirmEmailRequest, AuthSuccessResponse>('/auth/confirm-email', request);
 
         if (response.success) {
-            return response.data as AuthSuccessResponse;
+            const tokens = response.data as AuthSuccessResponse;
+            localStorage.setItem('accessToken', tokens.accessToken ?? '');
+            localStorage.setItem('refreshToken', tokens.refreshToken ?? '');
+
+            Auth.startSilentRefresh();
+            return undefined;
         }
 
-        throw new Error(response.error?.message ?? 'Unknown error');
+        return response.error;
+    },
+
+    silentRefresh: async (request: RefreshTokenRequest): Promise<ErrorModel | undefined> => {
+        const response = await API.post<RefreshTokenRequest, AuthSuccessResponse>('/auth/refresh-token', request);
+
+        if (response.success) {
+            const tokens = response.data as AuthSuccessResponse;
+            localStorage.setItem('accessToken', tokens.accessToken ?? '');
+            localStorage.setItem('refreshToken', tokens.refreshToken ?? '');
+
+            return undefined;
+        }
+
+        return response.error;
+    },
+
+    me: async (retry: boolean = true): Promise<User | undefined> => {
+        const response = await API.get<User>('/users/me');
+
+        if (response.success) {
+            return response.data as User;
+        }
+
+        if (retry) {
+            Auth.silentRefresh({ accessToken: localStorage.getItem('accessToken') ?? '', refreshToken: localStorage.getItem('refreshToken') ?? '' });
+            return Auth.me(false);
+        }
+
+        return undefined;
+    },
+
+    startSilentRefresh: () => {
+        setInterval(async () => {
+            const accessToken = localStorage.getItem('accessToken') ?? '';
+            const refreshToken = localStorage.getItem('refreshToken') ?? '';
+
+            const result = await Auth.silentRefresh({ accessToken, refreshToken });
+            if (!result) {
+                console.log('Silent refresh failed');
+            }
+        }, 600000); // Set the interval in milliseconds
     }
 };
 

@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form';
 import { Box, TextField, Button } from "@mui/material";
 import { yupResolver } from '@hookform/resolvers/yup';
-import SignUpFormFields from '../../../models/form/auth/SignUpFormFields';
+import { SignUpFormFields } from '../../../models/form/auth/AuthFormFields';
 import signUpFormValidation from '../../../validation/forms/SignUpFormFieldsValidation';
 
 interface SignUpFormProps {
@@ -24,7 +24,7 @@ const SignUpForm = (props: SignUpFormProps) => {
             <Box
                 display={'flex'}
                 flexDirection={'column'}
-                sx={{ gap: 3, margin: 5, mt: 3, mb: 10 }}
+                sx={{ gap: 3, margin: 5, mt: 10, mb: 10 }}
                 component="form"
                 onSubmit={handleSubmit(props.onSubmit)}>
                 <TextField

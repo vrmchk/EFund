@@ -1,5 +1,5 @@
 import * as yup from 'yup';
-import SignUpFormFields from '../../models/form/auth/SignUpFormFields';
+import { SignUpFormFields } from '../../models/form/auth/AuthFormFields';
 
 const signUpFormValidation = yup.object<SignUpFormFields>().shape({
     name: yup.string()

@@ -1,53 +1,62 @@
 import React, { useEffect } from "react";
 import Auth from "../services/api/auth/Auth";
 import SignUpForm from "../components/auth/sign-up/SignUpForm";
-import { ConfirmEmailRequest, SignUpRequest } from '../models/api/request/AuthRequests';
-import Stepper from '@mui/material/Stepper';
 import { Box, Paper, Step, StepLabel, Typography } from "@mui/material";
+import { ConfirmEmailRequest, SignUpRequest } from '../models/api/request/AuthRequests';
+import { useNavigate } from 'react-router-dom';
+import Stepper from '@mui/material/Stepper';
 import EmailConfirmForm from "../components/auth/sign-up/EmailConfirmForm";
-import { redirect } from "react-router-dom";
-import '../styles/sign-up.css';
 import useNotification from "../hooks/useNotification";
+import '../styles/sign-up.css';
+import useUser from "../hooks/useUser";
 
 const SignUpPage = () => {
+    const { updateUser } = useUser();
+    const navigate = useNavigate();
 
-    const { notifySuccess, Notification } = useNotification();
+    const {
+        notifySuccess,
+        notifyError,
+        Notification } = useNotification();
 
     const signUp = async (request: SignUpRequest) => {
-        setUserId("123");
-        notifySuccess("Success!");
-        // Auth.signUp(request)
-        //     .then((response) => {
-        //         setUserId(response.userId);
-        //     })
-        //     .catch((error) => {
-        //         console.error("Error during signUp:", error);
-        //     });
+        Auth.signUp(request)
+            .then((response) => {
+                setUserId(response.userId);
+            })
+            .catch(() => {
+                notifyError("Error during signing up");
+            });
     }
 
     const confirmEmail = async (request: ConfirmEmailRequest) => {
         notifySuccess("Success!");
-        // Auth.confirmEmail(request)
-        //     .then((response) => {
-        //         console.log("Email confirmed:", response);
-        //         localStorage.setItem("accessToken", response.accessToken);
-        //         localStorage.setItem("refreshToken", response.refreshToken);
-        //         redirect("/");
-        //     })
-        //     .catch((error) => {
-        //         console.error("Error during confirmEmail:", error);
-        //     });
+        Auth.confirmEmail(request)
+            .then((response) => {
+                navigate("/");
+            })
+            .catch((error) => {
+                notifyError("Error during confirming email");
+            });
     }
 
     const [userId, setUserId] = React.useState<string | undefined>(undefined);
     const [activeStep, setActiveStep] = React.useState(0);
 
     useEffect(() => {
-        if (userId) {
-            console.log("userId:", userId);
-            setActiveStep(1)
+        const fetchData = async () => {
+            const user = await Auth.me();
+            if (user)
+                updateUser(user);
         }
-    }, [userId]);
+
+        if (userId) {
+            fetchData()
+                .then(() => {
+                    setActiveStep(1);
+                });
+        }
+    }, [updateUser, userId]);
 
     const steps = [
         {

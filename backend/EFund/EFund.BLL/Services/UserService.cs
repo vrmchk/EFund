@@ -301,7 +301,7 @@ public class UserService : IUserService
 
         foreach (var (user, userDto) in usersWithDtos)
         {
-            user.AvatarPath = (user.AvatarPath ?? _appDataConfig.DefaultUserAvatarPath).PathToUrl(apiUrl);
+            userDto.AvatarUrl = (user.AvatarPath ?? _appDataConfig.DefaultUserAvatarPath).PathToUrl(apiUrl);
             userDto.Roles = (await _userManager.GetRolesAsync(user)).ToList();
         }
 

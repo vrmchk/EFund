@@ -3,9 +3,10 @@ import useNotification from "../hooks/useNotification";
 import '../styles/sign-in.css';
 import SignInForm from "../components/auth/sign-in/SignInForm";
 import { SignInFormFields } from "../models/form/auth/AuthFormFields";
-import Auth from "../services/api/auth/Auth";
+import Auth from "../services/api/Auth";
 import { useNavigate } from "react-router-dom";
 import useUser from "../hooks/useUser";
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 const SignInPage = () => {
     const { updateUser } = useUser();
@@ -13,8 +14,8 @@ const SignInPage = () => {
     const navigate = useNavigate();
 
     const onSubmit = async (fields: SignInFormFields) => {
-        const result = await Auth.signIn({ ...fields });
-        if (!result) {
+        const error = await Auth.signIn({ ...fields });
+        if (!error) {
             const user = await Auth.me();
             if (user)
                 updateUser(user);
@@ -23,13 +24,27 @@ const SignInPage = () => {
             navigate('/');
         }
 
-        notifyError(result?.message ?? 'Error during signing in');
+        notifyError(error?.message ?? 'Error during signing in');
     };
     return (
         <>
             <Paper
                 elevation={3}
                 className="sign-in-paper">
+                <Box
+                    sx={{
+                        position: 'absolute',
+                        top: '15px',
+                        left: '15px',
+                        display: 'flex',
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        gap: '10px',
+                        cursor: 'pointer'
+                    }}
+                    onClick={() => navigate('/')}>
+                    <ArrowBackIcon />
+                </Box>
                 <Box>
                     <Box className="sign-in-header">
                         <Typography

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import User from '../models/user/User';
-import Auth from '../services/api/auth/Auth';
+import Auth from '../services/api/Auth';
 
 const useUser = () => {
     const [user, setUser] = useState<User | null>(null);
@@ -10,21 +10,13 @@ const useUser = () => {
         setLoading(true);
 
         const fetchUser = async () => {
-            try {
-                const user = await Auth.me();
-                if (user) {
-                    setUser(user);
-                }
-            } catch (error) {
-                console.log("Error logout:", error);
-                logout();
-            }
-            finally {
-                setLoading(false);
-            }
+            const user = await Auth.me();
+            user ? setUser(user) : logout();
         };
 
         fetchUser();
+        
+        setLoading(false);
     }, []);
 
     const updateUser = (newUser: User) => {

@@ -1,6 +1,6 @@
 import Logout from "@mui/icons-material/Logout";
 import Settings from "@mui/icons-material/Settings";
-import { Avatar, ListItemIcon, Divider, Menu, MenuItem } from "@mui/material";
+import { Avatar, ListItemIcon, Divider, Menu, MenuItem, Typography } from '@mui/material';
 import { useState } from "react";
 import Person2Icon from '@mui/icons-material/Person2';
 import useUser from "../../hooks/useUser";
@@ -9,6 +9,7 @@ import { stringAvatar } from "../../services/utils/convert";
 interface MenuAvatarProps {
     onSignOut: () => void;
     onSettings: () => void;
+    onProfile: () => void;
 }
 
 const MenuAvatar = (props: MenuAvatarProps) => {
@@ -26,6 +27,7 @@ const MenuAvatar = (props: MenuAvatarProps) => {
 
     return (
         <>
+            <Typography mr={-1} variant="h6">{user?.name}</Typography>
             <Avatar
                 onClick={handleClick}
                 {...stringAvatar(user?.name)}
@@ -36,7 +38,7 @@ const MenuAvatar = (props: MenuAvatarProps) => {
                 id="account-menu"
                 open={open}
                 onClose={handleClose}
-                onClick={handleClose}
+                sx={{ width: '220px !important' }}
                 PaperProps={{
                     elevation: 0,
                     sx: {
@@ -66,12 +68,7 @@ const MenuAvatar = (props: MenuAvatarProps) => {
                 transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
             >
-                <MenuItem>
-                    <Avatar {...stringAvatar(user?.name)} />
-                    {user?.name}
-                </MenuItem>
-                <Divider />
-                <MenuItem onClick={handleClose}>
+                <MenuItem onClick={props.onProfile}>
                     <ListItemIcon>
                         <Person2Icon fontSize="small" />
                     </ListItemIcon>
@@ -90,7 +87,7 @@ const MenuAvatar = (props: MenuAvatarProps) => {
                     </ListItemIcon>
                     Logout
                 </MenuItem>
-            </Menu>
+            </Menu >
         </>
     );
 };

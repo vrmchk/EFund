@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import Auth from "../services/api/auth/Auth";
+import Auth from "../services/api/Auth";
 import SignUpForm from "../components/auth/sign-up/SignUpForm";
 import { Box, Paper, Step, StepLabel, Typography } from "@mui/material";
 import { ConfirmEmailRequest, SignUpRequest } from '../models/api/request/AuthRequests';
@@ -9,35 +9,30 @@ import EmailConfirmForm from "../components/auth/sign-up/EmailConfirmForm";
 import useNotification from "../hooks/useNotification";
 import '../styles/sign-up.css';
 import useUser from "../hooks/useUser";
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 const SignUpPage = () => {
     const { updateUser } = useUser();
     const navigate = useNavigate();
 
-    const {
-        notifySuccess,
-        notifyError,
-        Notification } = useNotification();
+    const { notifyError, Notification } = useNotification();
 
     const signUp = async (request: SignUpRequest) => {
-        Auth.signUp(request)
-            .then((response) => {
-                setUserId(response.userId);
-            })
-            .catch(() => {
-                notifyError("Error during signing up");
-            });
+        const response = await Auth.signUp(request);
+
+        if (response !== undefined)
+            setUserId(response.userId);
+        else
+            notifyError("Error during signing up");
     }
 
     const confirmEmail = async (request: ConfirmEmailRequest) => {
-        notifySuccess("Success!");
-        Auth.confirmEmail(request)
-            .then((response) => {
-                navigate("/");
-            })
-            .catch((error) => {
-                notifyError("Error during confirming email");
-            });
+        const response = await Auth.confirmEmail(request);
+
+        if (response !== undefined)
+            navigate("/");
+        else
+            notifyError("Error during confirming email");
     }
 
     const [userId, setUserId] = React.useState<string | undefined>(undefined);
@@ -84,6 +79,20 @@ const SignUpPage = () => {
             <Paper
                 elevation={3}
                 className="sign-up-paper">
+                <Box
+                    sx={{
+                        position: 'absolute',
+                        top: '15px',
+                        left: '15px',
+                        display: 'flex',
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        gap: '10px',
+                        cursor: 'pointer'
+                    }}
+                    onClick={() => navigate('/')}>
+                    <ArrowBackIcon />
+                </Box>
                 <Box>
                     <Box className="sign-up-header">
                         <Typography

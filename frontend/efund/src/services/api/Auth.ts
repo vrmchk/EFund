@@ -1,19 +1,18 @@
-import API from '../repository/API';
-import { ConfirmEmailRequest, RefreshTokenRequest, SignInRequest, SignUpRequest } from '../../../models/api/request/AuthRequests';
-import { AuthSuccessResponse, SignUpResponse } from '../../../models/api/response/AuthResponses';
-import { ErrorModel } from '../../../models/api/response/base/ErrorModel';
-import User from '../../../models/user/User';
+import API from './repository/API';
+import { ConfirmEmailRequest, RefreshTokenRequest, SignInRequest, SignUpRequest } from '../../models/api/request/AuthRequests';
+import { AuthSuccessResponse, SignUpResponse } from '../../models/api/response/AuthResponses';
+import { ErrorModel } from '../../models/api/response/base/ErrorModel';
+import User from '../../models/user/User';
 
 const Auth = {
-    signUp: async (request: SignUpRequest): Promise<SignUpResponse> => {
+    signUp: async (request: SignUpRequest): Promise<SignUpResponse | undefined> => {
         const response = await API.post<SignUpRequest, SignUpResponse>('/auth/sign-up', request);
 
         if (response.success) {
-
             return response.data as SignUpResponse;
         }
 
-        throw new Error(response.error?.message ?? 'Unknown error');
+        return undefined;
     },
 
     signIn: async (request: SignInRequest): Promise<ErrorModel | undefined> => {
@@ -36,8 +35,8 @@ const Auth = {
 
         if (response.success) {
             const tokens = response.data as AuthSuccessResponse;
-            localStorage.setItem('accessToken', tokens.accessToken ?? '');
-            localStorage.setItem('refreshToken', tokens.refreshToken ?? '');
+            localStorage.setItem('accessToken', tokens.accessToken);
+            localStorage.setItem('refreshToken', tokens.refreshToken);
 
             Auth.startSilentRefresh();
             return undefined;
@@ -51,8 +50,8 @@ const Auth = {
 
         if (response.success) {
             const tokens = response.data as AuthSuccessResponse;
-            localStorage.setItem('accessToken', tokens.accessToken ?? '');
-            localStorage.setItem('refreshToken', tokens.refreshToken ?? '');
+            localStorage.setItem('accessToken', tokens.accessToken);
+            localStorage.setItem('refreshToken', tokens.refreshToken);
 
             return undefined;
         }
@@ -68,7 +67,12 @@ const Auth = {
         }
 
         if (retry) {
-            Auth.silentRefresh({ accessToken: localStorage.getItem('accessToken') ?? '', refreshToken: localStorage.getItem('refreshToken') ?? '' });
+
+            const tokens = { accessToken: localStorage.getItem('accessToken') ?? '', refreshToken: localStorage.getItem('refreshToken') ?? '' };
+            if (!tokens.accessToken || !tokens.refreshToken)
+                return undefined;
+
+            Auth.silentRefresh(tokens);
             return Auth.me(false);
         }
 

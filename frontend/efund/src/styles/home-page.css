@@ -1,0 +1,30 @@
+.home-page-content {
+    padding: 25px;
+    position: relative;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+}
+
+.select-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    max-height: 110px;
+    overflow-y: auto;
+}
+
+.select-content::-webkit-scrollbar {
+    display: none;
+}
+
+.search-result-container {
+    height: 100%;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    justify-content: space-between;
+    width: max-content;
+}

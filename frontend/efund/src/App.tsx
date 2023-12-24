@@ -10,10 +10,12 @@ const darkTheme = createTheme({
   palette: {
     mode: 'dark',
     primary: {
-      main: '#EA5D0B',
+      main: '#FF8E72',
+      contrastText: '#000',
     },
     secondary: {
       main: '#064663',
+      contrastText: '#fff',
     },
     error: {
       main: '#D61F3D',
@@ -42,7 +44,7 @@ const App: React.FC = () => (
         <Route path="/" element={<HomePage />} />
         <Route path="/sign-up" element={<SignUpPage />} />
         <Route path='/sign-in' element={<SignInPage />} />
-        <Route path='/settings' element={(<><HomePage /><SettingsPage /></>)} />
+        <Route path='/settings' element={(<SettingsPage />)} />
 
         <Route path="*" element={<h1 style={{ color: 'red' }} >Not Found</h1>} />
       </Routes>

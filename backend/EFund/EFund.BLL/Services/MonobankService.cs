@@ -83,9 +83,9 @@ public class MonobankService : IMonobankService
         if (monobank == null)
             return new NotFoundErrorDTO("Specified user has not authorized from Monobank yet");
 
-        var option = await _cache.GetAsync<ClientInfo>(CachingKey.MonobankClientInfo, userId);
+        var cachedJarsResult = await _cache.GetAsync<ClientInfo>(CachingKey.MonobankClientInfo, userId);
 
-        var jars = await option.Match<Task<Either<ErrorDTO, List<Jar>>>>(
+        var jarsResult = await cachedJarsResult.Match<Task<Either<ErrorDTO, List<Jar>>>>(
             Some: clientInfo => Task.FromResult<Either<ErrorDTO, List<Jar>>>(clientInfo.Jars),
             None: async () =>
             {
@@ -120,11 +120,14 @@ public class MonobankService : IMonobankService
             }
         );
 
-        return jars.Map(j =>
-        {
-            j.ForEach(x => x.SendId = $"{_monobankConfig.SendAddress}/{x.SendId}");
-            return _mapper.Map<List<JarDTO>>(j);
-        });
+        return jarsResult.Match<Either<ErrorDTO, List<JarDTO>>>(
+            Right: jars =>
+            {
+                jars.ForEach(j => j.SendId = $"{_monobankConfig.SendAddress}/{j.SendId}");
+                return _mapper.Map<List<JarDTO>>(jars);
+            },
+            Left: error => error
+        );
     }
 
     public async Task<Either<ErrorDTO, List<JarDTO>>> GetJarsAsync(List<Guid> userIds)

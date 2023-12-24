@@ -106,7 +106,7 @@ builder.Services.AddFluentEmail(emailConfig.DefaultEmail)
         User = emailConfig.DefaultEmail,
         Password = emailConfig.Password,
         UseSsl = false,
-        RequiresAuthentication = true,
+        RequiresAuthentication = true
     });
 
 builder.Services.AddScoped<IEmailSender, EmailSender>();

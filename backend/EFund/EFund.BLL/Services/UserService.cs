@@ -294,7 +294,7 @@ public class UserService : IUserService
         if (dto.EmailConfirmed != null)
             queryable = queryable.Where(u => u.EmailConfirmed == dto.EmailConfirmed);
 
-        var users = await queryable.ToPagedListAsync(pagination.PageNumber, pagination.PageSize);
+        var users = await queryable.ToPagedListAsync(pagination.Page, pagination.PageSize);
         var dtos = _mapper.Map<PagedListDTO<UserExtendedDTO>>(users);
         var usersWithDtos = users
             .Zip(dtos.Items, (user, userDto) => (user, userDto));

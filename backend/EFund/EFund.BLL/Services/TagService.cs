@@ -31,7 +31,7 @@ public class TagService : ITagService
                 LEFT JOIN FundraisingTag FT ON T.Name = FT.TagsName
                 GROUP BY T.Name
                 ORDER BY COUNT(FT.TagsName) DESC
-                OFFSET {pagination.PageSize * (pagination.PageNumber - 1)} ROWS
+                OFFSET {pagination.PageSize * (pagination.Page - 1)} ROWS
                 FETCH NEXT {pagination.PageSize} ROWS ONLY
             """)
             .ToListAsync();
@@ -59,7 +59,7 @@ public class TagService : ITagService
                 WHERE T.Name LIKE {($"%{name}%")}
                 GROUP BY T.Name
                 ORDER BY COUNT(FT.TagsName) DESC
-                OFFSET {pagination.PageSize * (pagination.PageNumber - 1)} ROWS
+                OFFSET {pagination.PageSize * (pagination.Page - 1)} ROWS
                 FETCH NEXT {pagination.PageSize} ROWS ONLY
             """)
             .ToListAsync();

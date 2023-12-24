@@ -13,5 +13,20 @@ public class MonobankConfigValidator : ConfigValidatorBase<MonobankConfig>
 
         RuleFor(x => x.BaseAddress)
             .NotEmpty();
+        
+        RuleFor(x => x.SendAddress)
+            .NotEmpty();
+
+        RuleFor(x => x.ClientInfoCacheSlidingLifetime)
+            .NotEmpty();
+
+        RuleFor(x => x.ClientInfoCacheAbsoluteLifetime)
+            .NotEmpty();
+
+        RuleFor(x => x.ClientInfoCacheBackupSlidingLifetime)
+            .NotEmpty();
+
+        RuleFor(x => x.ClientInfoCacheBackupAbsoluteLifetime)
+            .NotEmpty();
     }
 }

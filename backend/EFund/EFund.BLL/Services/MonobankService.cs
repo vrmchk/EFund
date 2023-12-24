@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
+using EFund.BLL.Services.Cache.Interfaces;
 using EFund.BLL.Services.Interfaces;
 using EFund.Client.Monobank;
 using EFund.Client.Monobank.Models.Requests;
+using EFund.Client.Monobank.Models.Responses;
+using EFund.Common.Enums;
 using EFund.Common.Models.Configs;
 using EFund.Common.Models.DTO.Error;
 using EFund.Common.Models.DTO.Monobank;
@@ -22,6 +25,7 @@ public class MonobankService : IMonobankService
     private readonly IEncryptionService _encryptionService;
     private readonly IMapper _mapper;
     private readonly MonobankConfig _monobankConfig;
+    private readonly ICacheService _cache;
 
     public MonobankService(
         IMonobankClient monobankClient,
@@ -29,7 +33,8 @@ public class MonobankService : IMonobankService
         IRepository<UserMonobank> monobankRepository,
         IEncryptionService encryptionService,
         IMapper mapper,
-        MonobankConfig monobankConfig)
+        MonobankConfig monobankConfig,
+        ICacheService cache)
     {
         _monobankClient = monobankClient;
         _userManager = userManager;
@@ -37,6 +42,7 @@ public class MonobankService : IMonobankService
         _encryptionService = encryptionService;
         _mapper = mapper;
         _monobankConfig = monobankConfig;
+        _cache = cache;
     }
 
     public async Task<Option<ErrorDTO>> AddOrUpdateMonobankTokenAsync(Guid userId, string monobankToken)
@@ -77,17 +83,48 @@ public class MonobankService : IMonobankService
         if (monobank == null)
             return new NotFoundErrorDTO("Specified user has not authorized from Monobank yet");
 
-        var clientInfoResult =
-            await _monobankClient.GetClientInfoAsync(
-                new ClientInfoRequest(_encryptionService.Decrypt(monobank.MonobankToken)));
+        var option = await _cache.GetAsync<ClientInfo>(CachingKey.MonobankClientInfo, userId);
 
-        return clientInfoResult.Match<Either<ErrorDTO, List<JarDTO>>>(
-            Right: clientInfo =>
+        var jars = await option.Match<Task<Either<ErrorDTO, List<Jar>>>>(
+            Some: clientInfo => Task.FromResult<Either<ErrorDTO, List<Jar>>>(clientInfo.Jars),
+            None: async () =>
             {
-                clientInfo.Jars.ForEach(j => j.SendId = $"{_monobankConfig.SendAddress}/{j.SendId}");
-                return _mapper.Map<List<JarDTO>>(clientInfo.Jars);
-            },
-            Left: code => new ErrorDTO(code, "Unable to get info about accounts"));
+                var clientInfoResult =
+                    await _monobankClient.GetClientInfoAsync(
+                        new ClientInfoRequest(_encryptionService.Decrypt(monobank.MonobankToken)));
+
+                return await clientInfoResult.Match<Task<Either<ErrorDTO, List<Jar>>>>(
+                    Right: async clientInfo =>
+                    {
+                        await _cache.SetAsync(CachingKey.MonobankClientInfo, userId, clientInfo,
+                            _monobankConfig.ClientInfoCacheSlidingLifetime,
+                            _monobankConfig.ClientInfoCacheAbsoluteLifetime);
+
+                        await _cache.SetAsync(CachingKey.MonobankClientInfoBackup, userId, clientInfo,
+                            _monobankConfig.ClientInfoCacheBackupSlidingLifetime,
+                            _monobankConfig.ClientInfoCacheBackupAbsoluteLifetime);
+
+                        return clientInfo.Jars;
+                    },
+                    Left: async code =>
+                    {
+                        var clientInfoBackup =
+                            await _cache.GetAsync<ClientInfo>(CachingKey.MonobankClientInfoBackup, userId);
+
+                        return clientInfoBackup.Match<Either<ErrorDTO, List<Jar>>>(
+                            Some: clientInfo => clientInfo.Jars,
+                            None: () => new ErrorDTO(code, "Unable to get info about accounts")
+                        );
+                    }
+                );
+            }
+        );
+
+        return jars.Map(j =>
+        {
+            j.ForEach(x => x.SendId = $"{_monobankConfig.SendAddress}/{x.SendId}");
+            return _mapper.Map<List<JarDTO>>(j);
+        });
     }
 
     public async Task<Either<ErrorDTO, List<JarDTO>>> GetJarsAsync(List<Guid> userIds)

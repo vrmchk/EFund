@@ -2,6 +2,8 @@ using System.Text;
 using EFund.BLL.Services;
 using EFund.BLL.Services.Auth.Auth;
 using EFund.BLL.Services.Auth.Interfaces;
+using EFund.BLL.Services.Cache;
+using EFund.BLL.Services.Cache.Interfaces;
 using EFund.BLL.Services.Interfaces;
 using EFund.Client.Monobank;
 using EFund.Common.Constants;
@@ -54,7 +56,8 @@ builder.Services.AddConfigs(builder.Configuration, opt =>
         .AddConfig<HangfireConfig>(out hangfireConfig)
         .AddConfig<EncryptionConfig>()
         .AddConfig<MonobankConfig>(out monobankConfig, "ApiClients:Monobank")
-        .AddConfig<CallbackUrisConfig>());
+        .AddConfig<CallbackUrisConfig>()
+        .AddConfig<CacheConfig>());
 
 //DbContext
 var dbContextLoggerFactory = LoggerFactory.Create(cfg => cfg.AddConsole());
@@ -78,6 +81,7 @@ builder.Services.AddScoped<IEmailConfirmationService, EmailConfirmationService>(
 builder.Services.AddScoped<IGoogleAuthService, GoogleAuthService>();
 builder.Services.AddScoped<IPasswordService, PasswordService>();
 builder.Services.AddScoped<IRefreshTokenService, RefreshTokenService>();
+builder.Services.AddScoped<ICacheService, MemoryCacheService>();
 builder.Services.AddScoped<IEncryptionService, EncryptionService>();
 builder.Services.AddScoped<IFundraisingReportService, FundraisingReportService>();
 builder.Services.AddScoped<IFundraisingService, FundraisingService>();
@@ -110,6 +114,7 @@ builder.Services.AddScoped<IEmailSender, EmailSender>();
 //Utility
 builder.Services.AddSeeding();
 builder.Services.AddCors();
+builder.Services.AddMemoryCache();
 
 //Mapper
 builder.Services.AddAutoMapper(typeof(UserProfile));

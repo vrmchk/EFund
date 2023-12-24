@@ -53,17 +53,8 @@ public class FundraisingService : IFundraisingService
         if (dto.Tags.Count > 0)
             queryable = queryable.Where(f => f.Tags.Any(t => dto.Tags.Contains(t.Name)));
 
-        var fundraisings = await queryable.ToPagedListAsync(pagination.PageNumber, pagination.PageSize);
-        foreach (var fundraising in fundraisings)
-        {
-            fundraising.AvatarPath = (fundraising.AvatarPath ?? _appDataConfig.DefaultFundraisingAvatarPath)
-                .PathToUrl(apiUrl);
-
-            foreach (var report in fundraising.Reports)
-            {
-                report.Attachments.ForEach(a => a.FilePath = a.FilePath.PathToUrl(apiUrl));
-            }
-        }
+        var fundraisings = await queryable.ToPagedListAsync(pagination.Page, pagination.PageSize);
+        fundraisings.ForEach(f => PathToUrl(f, apiUrl));
 
         var dtos = _mapper.Map<PagedListDTO<FundraisingDTO>>(fundraisings);
 
@@ -201,7 +192,7 @@ public class FundraisingService : IFundraisingService
         return None;
     }
 
-    private async Task<Either<ErrorDTO, FundraisingDTO>> ToDto(Fundraising fundraising, string apiUrl)
+    private void PathToUrl(Fundraising fundraising, string apiUrl)
     {
         fundraising.AvatarPath = (fundraising.AvatarPath ?? _appDataConfig.DefaultFundraisingAvatarPath)
             .PathToUrl(apiUrl);
@@ -210,7 +201,11 @@ public class FundraisingService : IFundraisingService
         {
             report.Attachments.ForEach(a => a.FilePath = a.FilePath.PathToUrl(apiUrl));
         }
-
+    }
+    
+    private async Task<Either<ErrorDTO, FundraisingDTO>> ToDto(Fundraising fundraising, string apiUrl)
+    {
+        PathToUrl(fundraising, apiUrl);
         var result = await _monobankService.GetJarByIdAsync(fundraising.UserId, fundraising.MonobankFundraising.JarId);
         return result.Match<Either<ErrorDTO, FundraisingDTO>>(
             Right: jar =>
@@ -234,7 +229,7 @@ public class FundraisingService : IFundraisingService
 
     private async Task<List<Tag>> GetTags(List<string> tags)
     {
-        var existingTags = _tagRepository.Where(t => tags.Contains(t.Name)).ToList();
+        var existingTags = await _tagRepository.Where(t => tags.Contains(t.Name)).ToListAsync();
         var newTags = tags
             .Where(t => existingTags.All(et => et.Name != t))
             .Select(t => new Tag { Name = t })

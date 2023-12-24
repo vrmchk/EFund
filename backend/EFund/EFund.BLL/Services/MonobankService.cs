@@ -98,13 +98,13 @@ public class MonobankService : IMonobankService
         ErrorDTO? error = null;
         foreach (var result in results)
         {
-            if (error != null)
-                return error;
-
             result.Match(
                 Right: jarsList => jars.Add(jarsList),
                 Left: err => error = err
             );
+
+            if (error != null)
+                return error;
         }
 
         return jars.SelectMany(j => j).ToList();

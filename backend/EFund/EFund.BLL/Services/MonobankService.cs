@@ -92,12 +92,11 @@ public class MonobankService : IMonobankService
 
     public async Task<Either<ErrorDTO, List<JarDTO>>> GetJarsAsync(List<Guid> userIds)
     {
-        var tasks = userIds.Select(GetJarsAsync).ToList();
-        var results = await Task.WhenAll(tasks);
         var jars = new List<List<JarDTO>>();
         ErrorDTO? error = null;
-        foreach (var result in results)
+        foreach (var task in userIds.Select(async id => await GetJarsAsync(id)))
         {
+            var result = await task;
             result.Match(
                 Right: jarsList => jars.Add(jarsList),
                 Left: err => error = err

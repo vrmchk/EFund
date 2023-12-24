@@ -113,7 +113,7 @@ public class MonobankService : IMonobankService
 
                         return clientInfoBackup.Match<Either<ErrorDTO, List<Jar>>>(
                             Some: clientInfo => clientInfo.Jars,
-                            None: () => new ErrorDTO(code, "Unable to get info about accounts")
+                            None: () => new ErrorDTO(code, "Unable to get info about jars")
                         );
                     }
                 );

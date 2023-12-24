@@ -38,6 +38,7 @@ const HomePage = () => {
             else {
                 setFundraisings([]);
                 setTotalPages(1);
+                setPage(1);
             }
             setLoading(false);
         }
@@ -59,41 +60,51 @@ const HomePage = () => {
     return (
         <PageWrapper>
             <Box className='home-page-content'>
-                <Box sx={
-                    {
-                        display: 'flex',
-                        alignItems: 'center',
-                        flexDirection: 'row',
-                        gap: '25px',
-                    }
-                }>
-                    <Search onSearch={(query) => setSearchQuery(query)} />
-                    <MultiSelect names={tags.map((tag) => tag.name)} onChange={setSelectedTags} />
-                </Box >
-                <Box className='search-result-container'>
-                    <div style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '20px',
-                    }}>
+                <Box sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '20px'
+                }}>
+                    <Box sx={
                         {
-                            fundraisings.length === 0 && !loading
-                                ? <h3>No fundraisings found</h3>
-                                : fundraisings.map((fundraising, index) => (
-                                    <>
-                                        <Box height={'140px'} key={index}>
-                                            {loading
-                                                ? <Skeleton sx={{ transform: 'scale(1, 0.90)', height: '100%' }} />
-                                                : <FundraisingCard fundraising={fundraising} />}
-                                        </Box>
-                                    </>
-                                ))
+                            display: 'flex',
+                            alignItems: 'center',
+                            flexDirection: 'row',
+                            gap: '25px',
+                            justifyContent: 'space-evenly',
                         }
-                    </div>
-                    <Pagination sx={{
-                        display: totalPages > 1 ? 'flex' : 'none',
-                    }} count={totalPages} page={page} onChange={(_, value) => setPage(value)} />
+                    }>
+                        <Search onSearch={(query) => setSearchQuery(query)} />
+                        <MultiSelect names={tags.map((tag) => tag.name)} onChange={setSelectedTags} />
+                    </Box >
+                    <Box className='search-result-container'>
+                        <div style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            gap: '20px',
+                        }}>
+                            {
+                                fundraisings.length === 0 && !loading
+                                    ? <h3>No fundraisings found</h3>
+                                    : fundraisings.map((fundraising, index) => (
+                                        <>
+                                            <Box height={'140px'} key={index}>
+                                                {loading
+                                                    ? <Skeleton sx={{ transform: 'scale(1, 0.90)', height: '100%', width: '100%' }} />
+                                                    : <FundraisingCard fundraising={fundraising} size="small" />}
+                                            </Box>
+                                        </>
+                                    ))
+                            }
+                        </div>
+                        <Pagination sx={{
+                            display: totalPages > 1 ? 'flex' : 'none',
+                            justifyContent: 'center',
+                        }} count={totalPages + 1} page={page} onChange={(_, value) => setPage(value)} />
+                    </Box>
                 </Box>
+
             </Box>
         </PageWrapper>
     );

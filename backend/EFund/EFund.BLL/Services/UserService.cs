@@ -148,7 +148,7 @@ public class UserService : IUserService
         if (!_appDataConfig.AllowedImages.ContainsKey(file.ContentType))
             return new IncorrectParametersErrorDTO("This type of files is not allowed");
 
-        if (user.AvatarPath != null)
+        if (user.AvatarPath != null && File.Exists(user.AvatarPath))
             File.Delete(user.AvatarPath);
 
         var directory = Path.Combine(_appDataConfig.UserAvatarDirectoryPath, user.Id.ToString("N"));
@@ -182,7 +182,9 @@ public class UserService : IUserService
         if (user.AvatarPath is null)
             return None;
 
-        File.Delete(user.AvatarPath);
+        if (File.Exists(user.AvatarPath))
+            File.Delete(user.AvatarPath);
+
         user.AvatarPath = null;
         var userUpdated = await _userManager.UpdateAsync(user);
         if (!userUpdated.Succeeded)

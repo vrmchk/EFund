@@ -1,4 +1,5 @@
 using System.Text;
+using EFund.BLL.Extensions;
 using EFund.BLL.Services;
 using EFund.BLL.Services.Auth.Auth;
 using EFund.BLL.Services.Auth.Interfaces;
@@ -46,6 +47,7 @@ builder.Services.AddConfigs(builder.Configuration, opt =>
     opt.AddConfig<AppDataConfig>(out appDataConfig, configureOptions: config =>
         {
             config.AppDataPath = config.AppDataPath.ToAbsolutePath();
+            config.SeedingDataPath = config.SeedingDataPath.ToAbsolutePath();
             config.WebRootPath = builder.Environment.WebRootPath;
         })
         .AddConfig<JwtConfig>(out jwtConfig)

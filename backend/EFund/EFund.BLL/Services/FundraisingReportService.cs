@@ -77,7 +77,7 @@ public class FundraisingReportService : IFundraisingReportService
         if (report == null)
             return new NotFoundErrorDTO("Report with this id does not exist");
 
-        foreach (var attachment in report.Attachments)
+        foreach (var attachment in report.Attachments.Where(a => File.Exists(a.FilePath)))
         {
             File.Delete(attachment.FilePath);
         }
@@ -136,7 +136,7 @@ public class FundraisingReportService : IFundraisingReportService
             return new NotFoundErrorDTO("Report with this id does not exist");
 
         var toRemove = report.Attachments.Where(a => dto.AttachmentIds.Contains(a.Id)).ToList();
-        foreach (var attachment in toRemove)
+        foreach (var attachment in toRemove.Where(a => File.Exists(a.FilePath)))
         {
             File.Delete(attachment.FilePath);
         }

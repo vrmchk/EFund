@@ -51,4 +51,32 @@ public static class RuleBuilderExtensions
             .NotEmpty()
             .Matches(Regexes.MonthYear);
     }
+
+    public static IRuleBuilderOptions<T, ICollection<TItem>> CountGreaterThan<T, TItem>(
+        this IRuleBuilder<T, ICollection<TItem>> ruleBuilder, int count)
+    {
+        return ruleBuilder.Must(x => x.Count > count)
+            .WithMessage($"Collection must contain more than {count} items");
+    }
+    
+    public static IRuleBuilderOptions<T, ICollection<TItem>> CountGreaterThanOrEqualTo<T, TItem>(
+        this IRuleBuilder<T, ICollection<TItem>> ruleBuilder, int count)
+    {
+        return ruleBuilder.Must(x => x.Count >= count)
+            .WithMessage($"Collection must contain more or equal than {count} items");
+    }
+    
+    public static IRuleBuilderOptions<T, ICollection<TItem>> CountLessThan<T, TItem>(
+        this IRuleBuilder<T, ICollection<TItem>> ruleBuilder, int count)
+    {
+        return ruleBuilder.Must(x => x.Count < count)
+            .WithMessage($"Collection must contain less than {count} items");
+    }
+    
+    public static IRuleBuilderOptions<T, ICollection<TItem>> CountLessThanOrEqualTo<T, TItem>(
+        this IRuleBuilder<T, ICollection<TItem>> ruleBuilder, int count)
+    {
+        return ruleBuilder.Must(x => x.Count <= count)
+            .WithMessage($"Collection must contain less or equal than {count} items");
+    }
 }

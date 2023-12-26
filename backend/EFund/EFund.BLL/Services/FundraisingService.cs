@@ -121,10 +121,10 @@ public class FundraisingService : IFundraisingService
         if (fundraising == null)
             return new NotFoundErrorDTO("Fundraising with this id does not exist");
 
-        if (fundraising.AvatarPath != null)
+        if (fundraising.AvatarPath != null && File.Exists(fundraising.AvatarPath))
             File.Delete(fundraising.AvatarPath);
 
-        foreach (var attachment in fundraising.Reports.SelectMany(r => r.Attachments))
+        foreach (var attachment in fundraising.Reports.SelectMany(r => r.Attachments).Where(a => File.Exists(a.FilePath)))
         {
             File.Delete(attachment.FilePath);
         }
@@ -156,7 +156,7 @@ public class FundraisingService : IFundraisingService
         if (!_appDataConfig.AllowedImages.ContainsKey(file.ContentType))
             return new IncorrectParametersErrorDTO("This type of files is not allowed");
 
-        if (fundraising.AvatarPath != null)
+        if (fundraising.AvatarPath != null && File.Exists(fundraising.AvatarPath))
             File.Delete(fundraising.AvatarPath);
 
         var directory = Path.Combine(_appDataConfig.UserAvatarDirectoryPath, fundraising.Id.ToString());
@@ -185,7 +185,9 @@ public class FundraisingService : IFundraisingService
         if (fundraising.AvatarPath is null)
             return None;
 
-        File.Delete(fundraising.AvatarPath);
+        if (File.Exists(fundraising.AvatarPath))
+            File.Delete(fundraising.AvatarPath);
+
         fundraising.AvatarPath = null;
         await _fundraisingRepository.UpdateAsync(fundraising);
 

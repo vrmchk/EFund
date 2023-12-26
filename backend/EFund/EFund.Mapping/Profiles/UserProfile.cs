@@ -28,11 +28,13 @@ public class UserProfile : Profile
         CreateMap<User, UserDTO>()
             .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.DisplayName))
             .ForMember(dest => dest.HasPassword, opt => opt.MapFrom(src => src.PasswordHash != null))
+            .ForMember(dest => dest.HasMonobankToken, opt => opt.MapFrom(src => src.UserMonobanks.Count > 0))
             .ForMember(dest => dest.AvatarUrl, opt => opt.MapFrom(src => src.AvatarPath));
 
         CreateMap<User, UserExtendedDTO>()
             .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.DisplayName))
             .ForMember(dest => dest.HasPassword, opt => opt.MapFrom(src => src.PasswordHash != null))
+            .ForMember(dest => dest.HasMonobankToken, opt => opt.MapFrom(src => src.UserMonobanks.Count > 0))
             .ForMember(dest => dest.AvatarUrl, opt => opt.MapFrom(src => src.AvatarPath));
     }
 }

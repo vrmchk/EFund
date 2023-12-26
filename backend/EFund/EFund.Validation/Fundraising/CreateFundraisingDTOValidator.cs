@@ -1,4 +1,5 @@
 using EFund.Common.Models.DTO.Fundraising;
+using EFund.Validation.Extensions;
 using FluentValidation;
 
 namespace EFund.Validation.Fundraising;
@@ -14,7 +15,9 @@ public class CreateFundraisingDTOValidator : AbstractValidator<CreateFundraising
             .NotEmpty();
 
         RuleFor(x => x.Tags)
-            .NotNull();
+            .NotNull()
+            .CountLessThanOrEqualTo(5)
+            .WithMessage("Fundraising can have up to 5 tags");
 
         RuleForEach(x => x.Tags)
             .NotNull();

@@ -5,6 +5,7 @@ namespace EFund.Common.Models.Configs;
 public class AppDataConfig : ConfigBase
 {
     public string AppDataPath { get; set; } = string.Empty;
+    public string SeedingDataPath { get; set; } = string.Empty;
     public string LogDirectory { get; set; } = string.Empty;
     public string WebRootPath { get; set; } = string.Empty;
     public string UploadsDirectory { get; set; } = string.Empty;

@@ -1,4 +1,5 @@
 ﻿using EFund.Common.Constants;
+using EFund.Common.Models.Configs;
 using EFund.Seeding.Behaviors.Abstractions;
 using Microsoft.AspNetCore.Identity;
 
@@ -8,7 +9,8 @@ public class RolesSeedingBehaviour : BaseSeedingBehavior
 {
     private readonly RoleManager<IdentityRole<Guid>> _roleManager;
 
-    public RolesSeedingBehaviour(RoleManager<IdentityRole<Guid>> roleManager)
+    public RolesSeedingBehaviour(AppDataConfig appDataConfig, RoleManager<IdentityRole<Guid>> roleManager) 
+        : base(appDataConfig)
     {
         _roleManager = roleManager;
     }

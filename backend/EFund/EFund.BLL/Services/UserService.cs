@@ -14,6 +14,7 @@ using EFund.Email.Services.Interfaces;
 using LanguageExt;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using static LanguageExt.Prelude;
 
@@ -48,16 +49,16 @@ public class UserService : IUserService
 
     public async Task<Either<ErrorDTO, UserDTO>> GetByIdAsync(Guid id, string apiUrl)
     {
-        var user = await _userManager.FindByIdAsync(id.ToString());
+        var user = await _userManager.Users.Include(u => u.UserMonobanks).FirstOrDefaultAsync(u => u.Id == id);
         if (user is null)
             return new NotFoundErrorDTO("User with this id does not exist");
 
         return ToDto<UserDTO>(user, apiUrl);
     }
 
-    public async Task<Either<ErrorDTO, UserDTO>> UpdateUserAsync(Guid userId, UpdateUserDTO dto, string apiUrl)
+    public async Task<Either<ErrorDTO, UserDTO>> UpdateUserAsync(Guid id, UpdateUserDTO dto, string apiUrl)
     {
-        var user = await _userManager.FindByIdAsync(userId.ToString());
+        var user = await _userManager.Users.Include(u => u.UserMonobanks).FirstOrDefaultAsync(u => u.Id == id);
         if (user is null)
             return new NotFoundErrorDTO("User with this id does not exist");
 
@@ -148,7 +149,7 @@ public class UserService : IUserService
         if (!_appDataConfig.AllowedImages.ContainsKey(file.ContentType))
             return new IncorrectParametersErrorDTO("This type of files is not allowed");
 
-        if (user.AvatarPath != null)
+        if (user.AvatarPath != null && File.Exists(user.AvatarPath))
             File.Delete(user.AvatarPath);
 
         var directory = Path.Combine(_appDataConfig.UserAvatarDirectoryPath, user.Id.ToString("N"));
@@ -182,7 +183,9 @@ public class UserService : IUserService
         if (user.AvatarPath is null)
             return None;
 
-        File.Delete(user.AvatarPath);
+        if (File.Exists(user.AvatarPath))
+            File.Delete(user.AvatarPath);
+
         user.AvatarPath = null;
         var userUpdated = await _userManager.UpdateAsync(user);
         if (!userUpdated.Succeeded)
@@ -275,7 +278,9 @@ public class UserService : IUserService
         PaginationDTO pagination,
         string apiUrl)
     {
-        IQueryable<User> queryable = _userManager.Users;
+        IQueryable<User> queryable = _userManager.Users
+            .Include(u => u.UserMonobanks);
+
         if (dto.UserIds?.Count > 0)
             queryable = queryable.Where(u => dto.UserIds.Contains(u.Id));
 

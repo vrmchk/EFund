@@ -96,13 +96,10 @@ public class MonobankService : IMonobankService
                 return await clientInfoResult.Match<Task<Either<ErrorDTO, List<Jar>>>>(
                     Right: async clientInfo =>
                     {
-                        await _cache.SetAsync(CachingKey.MonobankClientInfo, userId, clientInfo,
-                            _monobankConfig.ClientInfoCacheSlidingLifetime,
-                            _monobankConfig.ClientInfoCacheAbsoluteLifetime);
-
-                        await _cache.SetAsync(CachingKey.MonobankClientInfoBackup, userId, clientInfo,
-                            _monobankConfig.ClientInfoCacheBackupSlidingLifetime,
-                            _monobankConfig.ClientInfoCacheBackupAbsoluteLifetime);
+                        await Task.WhenAll(new[] { CachingKey.MonobankClientInfo, CachingKey.MonobankClientInfoBackup }
+                            .Select(key => _cache.SetAsync(key, userId, clientInfo,
+                                _monobankConfig.ClientInfoCacheSlidingLifetime,
+                                _monobankConfig.ClientInfoCacheAbsoluteLifetime)));
 
                         return clientInfo.Jars;
                     },

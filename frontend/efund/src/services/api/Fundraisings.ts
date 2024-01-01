@@ -9,6 +9,12 @@ const Fundraisings = {
 
         return response.data;
     },
+
+    async getFundraising(id: string): Promise<Fundraising | undefined> {
+        const response = await API.get<Fundraising>(`/fundraisings/${id}`);
+
+        return response.data;
+    }
 };
 
 export default Fundraisings;

@@ -10,8 +10,10 @@ const darkTheme = createTheme({
   palette: {
     mode: 'dark',
     primary: {
-      main: '#FF8E72',
-      contrastText: '#000',
+      main: '#ff7654',
+      // dark: '#ff5f38',
+      // light: '#fe8f72',
+      contrastText: '#272525',
     },
     secondary: {
       main: '#064663',
@@ -30,14 +32,47 @@ const darkTheme = createTheme({
       main: '#FF9800',
     },
     background: {
-      default: '#041C32',
-      paper: '#041C32',
+      default: '#141313',
+      paper: '#1E1E1E',
     },
   },
 });
 
+const lightTheme = createTheme({
+  palette: {
+    primary: {
+      main: '#ff7654',
+      contrastText: '#ebf2fa',
+    },
+    // secondary: {
+    //   main: '#25a18e',
+    //   contrastText: '#ebf2fa',
+    // },
+    // error: {
+    //   main: '#D61F3D',
+    // },
+    // info: {
+    //   main: '#00A7E1  ',
+    // },
+    // success: {
+    //   main: '#4CAF50',
+    // },
+    // warning: {
+    //   main: '#FF9800',
+    // },
+    background: {
+      default: '#ebf2fa',
+      paper: '#e2e2e2',
+    },
+    // text: {
+    //   primary: '#041C32',
+    //   secondary: '#041C32',
+    // }
+  },
+});
+
 const App: React.FC = () => (
-  <ThemeProvider theme={darkTheme}>
+  <ThemeProvider theme={lightTheme}>
     <CssBaseline />
     <BrowserRouter>
       <Routes>

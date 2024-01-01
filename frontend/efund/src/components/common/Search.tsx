@@ -42,7 +42,7 @@ const Search: React.FC<SearchProps> = ({ onSearch }) => {
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onKeyPress={handleKeyPress}
             />
-            <IconButton onClick={handleSearch} color="primary" aria-label="search">
+            <IconButton onClick={handleSearch} color='primary' aria-label="search">
                 <SearchIcon sx={{ color: 'action.active', m: -0.5 }} />
             </IconButton>
         </Box>

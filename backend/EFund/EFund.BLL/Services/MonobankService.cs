@@ -123,8 +123,10 @@ public class MonobankService : IMonobankService
         return jarsResult.Match<Either<ErrorDTO, List<JarDTO>>>(
             Right: jars =>
             {
-                jars.ForEach(j => j.SendId = $"{_monobankConfig.SendAddress}/{j.SendId}");
-                return _mapper.Map<List<JarDTO>>(jars);
+                var dtos = _mapper.Map<List<JarDTO>>(jars);
+
+                dtos.ForEach(j => j.SendUrl = $"{_monobankConfig.SendAddress}/{j.SendUrl}");
+                return dtos;
             },
             Left: error => error
         );
@@ -138,7 +140,7 @@ public class MonobankService : IMonobankService
         {
             var result = await task;
             result.Match(
-                Right: jarsList => jars.Add(jarsList),
+                Right: jars.Add,
                 Left: err => error = err
             );
 

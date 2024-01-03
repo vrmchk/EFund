@@ -12,6 +12,6 @@ foreach(var filePath in filesPaths)
 {
     var fileContent = File.ReadAllText(filePath);
     var fileName = Path.GetFileName(filePath);
-    var result = $" {fileName}\n\n{fileContent}\n\n";
+    var result = $"{fileName}\n\n{fileContent}\n\n";
     File.AppendAllText(resultFilePath, result);
 }

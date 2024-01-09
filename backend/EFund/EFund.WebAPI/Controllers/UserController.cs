@@ -2,6 +2,7 @@
 using EFund.BLL.Services.Interfaces;
 using EFund.Common.Constants;
 using EFund.Common.Models.DTO.Common;
+using EFund.Common.Models.DTO.Error;
 using EFund.Common.Models.DTO.User;
 using EFund.Validation;
 using EFund.Validation.Extensions;
@@ -9,6 +10,7 @@ using EFund.WebAPI.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace EFund.WebAPI.Controllers;
 
@@ -29,6 +31,10 @@ public class UserController : ControllerBase
     }
 
     [HttpGet("me")]
+    [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(UserDTO))]
+    [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ErrorDTO))]
+    [SwaggerResponse(StatusCodes.Status401Unauthorized)]
+    [SwaggerResponse(StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> GetById()
     {
         var result = await _userService.GetByIdAsync(HttpContext.GetUserId(), HttpContext.GetApiUrl());
@@ -37,6 +43,10 @@ public class UserController : ControllerBase
 
     [HttpPost("search")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = Policies.Admin)]
+    [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(PagedListDTO<UserDTO>))]
+    [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ErrorDTO))]
+    [SwaggerResponse(StatusCodes.Status401Unauthorized)]
+    [SwaggerResponse(StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> Search([FromBody] SearchUserDTO dto, [FromQuery] PaginationDTO pagination)
     {
         var validationResult = await _validator.ValidateAsync(pagination);
@@ -48,6 +58,10 @@ public class UserController : ControllerBase
     }
 
     [HttpPut("me")]
+    [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(UserDTO))]
+    [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ErrorDTO))]
+    [SwaggerResponse(StatusCodes.Status401Unauthorized)]
+    [SwaggerResponse(StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> UpdateUser(UpdateUserDTO dto)
     {
         var validationResult = await _validator.ValidateAsync(dto);
@@ -59,6 +73,10 @@ public class UserController : ControllerBase
     }
 
     [HttpPost("change-password")]
+    [SwaggerResponse(StatusCodes.Status204NoContent)]
+    [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ErrorDTO))]
+    [SwaggerResponse(StatusCodes.Status401Unauthorized)]
+    [SwaggerResponse(StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> ChangePassword(ChangePasswordDTO dto)
     {
         var validationResult = await _validator.ValidateAsync(dto);
@@ -70,6 +88,10 @@ public class UserController : ControllerBase
     }
 
     [HttpPost("add-password")]
+    [SwaggerResponse(StatusCodes.Status204NoContent)]
+    [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ErrorDTO))]
+    [SwaggerResponse(StatusCodes.Status401Unauthorized)]
+    [SwaggerResponse(StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> AddPassword(AddPasswordDTO dto)
     {
         var validationResult = await _validator.ValidateAsync(dto);
@@ -81,6 +103,10 @@ public class UserController : ControllerBase
     }
 
     [HttpPost("change-email")]
+    [SwaggerResponse(StatusCodes.Status204NoContent)]
+    [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ErrorDTO))]
+    [SwaggerResponse(StatusCodes.Status401Unauthorized)]
+    [SwaggerResponse(StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> ChangeEmail(ChangeEmailDTO dto)
     {
         var validationResult = await _validator.ValidateAsync(dto);
@@ -92,6 +118,10 @@ public class UserController : ControllerBase
     }
 
     [HttpPost("confirm-change-email")]
+    [SwaggerResponse(StatusCodes.Status204NoContent)]
+    [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ErrorDTO))]
+    [SwaggerResponse(StatusCodes.Status401Unauthorized)]
+    [SwaggerResponse(StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> ConfirmChangeEmail(ConfirmChangeEmailDTO dto)
     {
         var validationResult = await _validator.ValidateAsync(dto);
@@ -103,6 +133,10 @@ public class UserController : ControllerBase
     }
 
     [HttpPost("upload-avatar")]
+    [SwaggerResponse(StatusCodes.Status204NoContent)]
+    [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ErrorDTO))]
+    [SwaggerResponse(StatusCodes.Status401Unauthorized)]
+    [SwaggerResponse(StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> UploadAvatar(IFormFile file)
     {
         var result = await _userService.UploadAvatarAsync(HttpContext.GetUserId(), file);
@@ -110,6 +144,10 @@ public class UserController : ControllerBase
     }
 
     [HttpPost("delete-avatar")]
+    [SwaggerResponse(StatusCodes.Status204NoContent)]
+    [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ErrorDTO))]
+    [SwaggerResponse(StatusCodes.Status401Unauthorized)]
+    [SwaggerResponse(StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> DeleteAvatar()
     {
         var result = await _userService.DeleteAvatarAsync(HttpContext.GetUserId());
@@ -118,6 +156,10 @@ public class UserController : ControllerBase
 
     [HttpPost("make-admin")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = Policies.Admin)]
+    [SwaggerResponse(StatusCodes.Status204NoContent)]
+    [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ErrorDTO))]
+    [SwaggerResponse(StatusCodes.Status401Unauthorized)]
+    [SwaggerResponse(StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> MakeAdmin(MakeAdminDTO dto)
     {
         var result = await _userService.MakeAdminAsync(dto);
@@ -126,6 +168,10 @@ public class UserController : ControllerBase
 
     [HttpPost("invite-admin")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = Policies.Admin)]
+    [SwaggerResponse(StatusCodes.Status204NoContent)]
+    [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ErrorDTO))]
+    [SwaggerResponse(StatusCodes.Status401Unauthorized)]
+    [SwaggerResponse(StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> Invite(InviteAdminDTO dto)
     {
         var validationResult = await _validator.ValidateAsync(dto);
@@ -138,6 +184,10 @@ public class UserController : ControllerBase
 
     [HttpPost("action")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = Policies.Admin)]
+    [SwaggerResponse(StatusCodes.Status204NoContent)]
+    [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ErrorDTO))]
+    [SwaggerResponse(StatusCodes.Status401Unauthorized)]
+    [SwaggerResponse(StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> BlockUser(UserActionDTO actionDTO)
     {
         var validationResult = await _validator.ValidateAsync(actionDTO);

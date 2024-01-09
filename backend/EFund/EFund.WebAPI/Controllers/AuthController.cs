@@ -1,9 +1,11 @@
 ﻿using EFund.BLL.Services.Auth.Interfaces;
 using EFund.Common.Models.DTO.Auth;
+using EFund.Common.Models.DTO.Error;
 using EFund.Validation;
 using EFund.Validation.Extensions;
 using EFund.WebAPI.Extensions;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace EFund.WebAPI.Controllers;
 
@@ -31,6 +33,8 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("sign-up")]
+    [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(SignUpResponseDTO))]
+    [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ErrorDTO))]
     public async Task<IActionResult> SignUp(SignUpDTO dto)
     {
         var validationResult = await _validator.ValidateAsync(dto);
@@ -42,6 +46,8 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("confirm-email")]
+    [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(AuthSuccessDTO))]
+    [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ErrorDTO))]
     public async Task<IActionResult> ConfirmEmail(ConfirmEmailDTO dto)
     {
         var validationResult = await _validator.ValidateAsync(dto);
@@ -53,6 +59,8 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("sign-in")]
+    [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(AuthSuccessDTO))]
+    [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ErrorDTO))]
     public async Task<IActionResult> SignIn(SignInDTO dto)
     {
         var validationResult = await _validator.ValidateAsync(dto);
@@ -64,6 +72,8 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("refresh-token")]
+    [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(AuthSuccessDTO))]
+    [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ErrorDTO))]
     public async Task<IActionResult> RefreshToken(RefreshTokenDTO dto)
     {
         var validationResult = await _validator.ValidateAsync(dto);
@@ -75,6 +85,8 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("resend-confirmation-code")]
+    [SwaggerResponse(StatusCodes.Status204NoContent)]
+    [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ErrorDTO))]
     public async Task<IActionResult> ResendConfirmationCode(ResendConfirmationCodeDTO dto)
     {
         var validationResult = await _validator.ValidateAsync(dto);
@@ -86,6 +98,8 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("forgot-password")]
+    [SwaggerResponse(StatusCodes.Status204NoContent)]
+    [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ErrorDTO))]
     public async Task<IActionResult> ForgotPassword(ForgotPasswordDTO dto)
     {
         var validationResult = await _validator.ValidateAsync(dto);
@@ -97,6 +111,8 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("reset-password")]
+    [SwaggerResponse(StatusCodes.Status204NoContent)]
+    [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ErrorDTO))]
     public async Task<IActionResult> ResetPassword(ResetPasswordDTO dto)
     {
         var validationResult = await _validator.ValidateAsync(dto);

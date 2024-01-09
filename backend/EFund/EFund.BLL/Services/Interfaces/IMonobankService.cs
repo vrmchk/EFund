@@ -7,7 +7,7 @@ namespace EFund.BLL.Services.Interfaces;
 public interface IMonobankService
 {
     Task<Option<ErrorDTO>> AddOrUpdateMonobankTokenAsync(Guid userId, string monobankToken);
-    Task<Either<ErrorDTO, List<JarDTO>>> GetJarsAsync(Guid userId);
+    Task<Either<ErrorDTO, List<JarDTO>>> GetJarsAsync(Guid userId, string? name = null);
     Task<Either<ErrorDTO, List<JarDTO>>> GetJarsAsync(List<Guid> userIds);
     Task<Either<ErrorDTO, JarDTO>> GetJarByIdAsync(Guid userId, string jarId);
 }

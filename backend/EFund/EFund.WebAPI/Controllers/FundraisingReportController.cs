@@ -1,5 +1,6 @@
 using EFund.BLL.Services.Interfaces;
 using EFund.Common.Constants;
+using EFund.Common.Models.DTO.Error;
 using EFund.Common.Models.DTO.FundraisingReport;
 using EFund.Validation;
 using EFund.Validation.Extensions;
@@ -7,6 +8,7 @@ using EFund.WebAPI.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace EFund.WebAPI.Controllers;
 
@@ -25,6 +27,10 @@ public class FundraisingReportController : ControllerBase
     }
 
     [HttpPost]
+    [SwaggerResponse(StatusCodes.Status201Created, Type = typeof(FundraisingReportDTO))]
+    [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ErrorDTO))]
+    [SwaggerResponse(StatusCodes.Status401Unauthorized)]
+    [SwaggerResponse(StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> AddReport([FromBody] CreateFundraisingReportDTO dto)
     {
         var validationResult = await _validator.ValidateAsync(dto);
@@ -36,6 +42,10 @@ public class FundraisingReportController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(FundraisingReportDTO))]
+    [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ErrorDTO))]
+    [SwaggerResponse(StatusCodes.Status401Unauthorized)]
+    [SwaggerResponse(StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> UpdateReport(Guid id, [FromBody] UpdateFundraisingReportDTO dto)
     {
         var validationResult = await _validator.ValidateAsync(dto);
@@ -47,6 +57,10 @@ public class FundraisingReportController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [SwaggerResponse(StatusCodes.Status204NoContent)]
+    [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ErrorDTO))]
+    [SwaggerResponse(StatusCodes.Status401Unauthorized)]
+    [SwaggerResponse(StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> DeleteReport(Guid id)
     {
         var result = await _fundraisingReportService.DeleteAsync(id, HttpContext.GetUserId());
@@ -54,6 +68,10 @@ public class FundraisingReportController : ControllerBase
     }
 
     [HttpPost("{id}/upload-attachments")]
+    [SwaggerResponse(StatusCodes.Status204NoContent)]
+    [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ErrorDTO))]
+    [SwaggerResponse(StatusCodes.Status401Unauthorized)]
+    [SwaggerResponse(StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> AddAttachment(Guid id, IFormFileCollection files)
     {
         var result = await _fundraisingReportService.AddAttachmentsAsync(id, HttpContext.GetUserId(), files);
@@ -61,6 +79,10 @@ public class FundraisingReportController : ControllerBase
     }
 
     [HttpPost("{id}/delete-attachments")]
+    [SwaggerResponse(StatusCodes.Status204NoContent)]
+    [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ErrorDTO))]
+    [SwaggerResponse(StatusCodes.Status401Unauthorized)]
+    [SwaggerResponse(StatusCodes.Status403Forbidden)] 
     public async Task<IActionResult> DeleteAttachments(Guid id, [FromBody] DeleteAttachmentsDTO dto)
     {
         var validationResult = await _validator.ValidateAsync(dto);

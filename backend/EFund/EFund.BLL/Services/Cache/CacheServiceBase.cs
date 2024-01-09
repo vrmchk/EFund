@@ -39,23 +39,20 @@ public abstract class CacheServiceBase : ICacheService
     }
 
     public Task SetAsync<T>(CachingKey key, IEnumerable<object> keyParameters, T value,
-        TimeSpan? slidingLifetime = null,
-        TimeSpan? absoluteLifetime = null)
+        TimeSpan? slidingLifetime = null, TimeSpan? absoluteLifetime = null)
     {
         var cachingKey = GetCachingKey(key, keyParameters);
         return SetAsync(cachingKey, value, slidingLifetime, absoluteLifetime);
     }
 
     public Task<T> GetOrSetAsync<T>(CachingKey key, object keyParameter, Func<T> valueFactory,
-        TimeSpan? slidingLifetime = null,
-        TimeSpan? absoluteLifetime = null)
+        TimeSpan? slidingLifetime = null, TimeSpan? absoluteLifetime = null)
     {
         return GetOrSetAsync(key, new[] { keyParameter }, valueFactory, slidingLifetime, absoluteLifetime);
     }
 
     public async Task<T> GetOrSetAsync<T>(CachingKey key, IEnumerable<object> keyParameters, Func<T> valueFactory,
-        TimeSpan? slidingLifetime = null,
-        TimeSpan? absoluteLifetime = null)
+        TimeSpan? slidingLifetime = null, TimeSpan? absoluteLifetime = null)
     {
         var cachingKey = GetCachingKey(key, keyParameters);
         var result = await GetAsync<T>(cachingKey);
@@ -70,15 +67,13 @@ public abstract class CacheServiceBase : ICacheService
     }
 
     public Task<T> GetOrSetAsync<T>(CachingKey key, object keyParameter, Func<Task<T>> valueFactory,
-        TimeSpan? slidingLifetime = null,
-        TimeSpan? absoluteLifetime = null)
+        TimeSpan? slidingLifetime = null, TimeSpan? absoluteLifetime = null)
     {
         return GetOrSetAsync(key, new[] { keyParameter }, valueFactory, slidingLifetime, absoluteLifetime);
     }
 
     public async Task<T> GetOrSetAsync<T>(CachingKey key, IEnumerable<object> keyParameters, Func<Task<T>> valueFactory,
-        TimeSpan? slidingLifetime = null,
-        TimeSpan? absoluteLifetime = null)
+        TimeSpan? slidingLifetime = null, TimeSpan? absoluteLifetime = null)
     {
         var cachingKey = GetCachingKey(key, keyParameters);
         var result = await GetAsync<T>(cachingKey);

@@ -1,6 +1,7 @@
 ﻿using EFund.BLL.Services.Interfaces;
 using EFund.Common.Constants;
 using EFund.Common.Models.DTO.Common;
+using EFund.Common.Models.DTO.Error;
 using EFund.Common.Models.DTO.Fundraising;
 using EFund.Validation;
 using EFund.Validation.Extensions;
@@ -8,6 +9,7 @@ using EFund.WebAPI.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace EFund.WebAPI.Controllers;
 
@@ -25,6 +27,8 @@ public class FundraisingController : ControllerBase
     }
 
     [HttpPost("search")]
+    [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(PagedListDTO<FundraisingDTO>))]
+    [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ErrorDTO))]
     public async Task<IActionResult> Search([FromBody] SearchFundraisingDTO dto, [FromQuery] PaginationDTO pagination)
     {
         var validationResult = await _validator.ValidateAsync(pagination);
@@ -36,6 +40,8 @@ public class FundraisingController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(FundraisingDTO))]
+    [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ErrorDTO))]
     public async Task<IActionResult> GetById(Guid id)
     {
         var result = await _fundraisingService.GetByIdAsync(id, HttpContext.GetApiUrl());
@@ -44,6 +50,10 @@ public class FundraisingController : ControllerBase
 
     [HttpPost]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = Policies.User)]
+    [SwaggerResponse(StatusCodes.Status201Created, Type = typeof(FundraisingDTO))]
+    [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ErrorDTO))]
+    [SwaggerResponse(StatusCodes.Status401Unauthorized)]
+    [SwaggerResponse(StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> Add([FromBody] CreateFundraisingDTO dto)
     {
         var validationResult = await _validator.ValidateAsync(dto);
@@ -59,6 +69,10 @@ public class FundraisingController : ControllerBase
 
     [HttpPut("{id}")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = Policies.User)]
+    [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(FundraisingDTO))]
+    [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ErrorDTO))]
+    [SwaggerResponse(StatusCodes.Status401Unauthorized)]
+    [SwaggerResponse(StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> Update(Guid id, [FromBody] UpdateFundraisingDTO dto)
     {
         var validationResult = await _validator.ValidateAsync(dto);
@@ -71,6 +85,10 @@ public class FundraisingController : ControllerBase
 
     [HttpDelete("{id}")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = Policies.Shared)]
+    [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(FundraisingDTO))]
+    [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ErrorDTO))]
+    [SwaggerResponse(StatusCodes.Status401Unauthorized)]
+    [SwaggerResponse(StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> Delete(Guid id)
     {
         var result = HttpContext.IsAdmin()
@@ -82,6 +100,10 @@ public class FundraisingController : ControllerBase
 
     [HttpPost("{id}/upload-avatar")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = Policies.User)]
+    [SwaggerResponse(StatusCodes.Status204NoContent)]
+    [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ErrorDTO))]
+    [SwaggerResponse(StatusCodes.Status401Unauthorized)]
+    [SwaggerResponse(StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> UploadAvatar(Guid id, IFormFile file)
     {
         var result = await _fundraisingService.UploadAvatarAsync(id, HttpContext.GetUserId(), file);
@@ -90,6 +112,10 @@ public class FundraisingController : ControllerBase
 
     [HttpPost("{id}/delete-avatar")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = Policies.User)]
+    [SwaggerResponse(StatusCodes.Status204NoContent)]
+    [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ErrorDTO))]
+    [SwaggerResponse(StatusCodes.Status401Unauthorized)]
+    [SwaggerResponse(StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> DeleteAvatar(Guid id)
     {
         var result = await _fundraisingService.DeleteAvatarAsync(id, HttpContext.GetUserId());

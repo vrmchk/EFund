@@ -1,6 +1,7 @@
 ﻿using EFund.BLL.Services.Interfaces;
 using EFund.Common.Constants;
 using EFund.Common.Models.DTO.Common;
+using EFund.Common.Models.DTO.Error;
 using EFund.Common.Models.DTO.Tag;
 using EFund.Validation;
 using EFund.Validation.Extensions;
@@ -8,6 +9,7 @@ using EFund.WebAPI.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace EFund.WebAPI.Controllers;
 
@@ -25,6 +27,8 @@ public class TagController : ControllerBase
     }
 
     [HttpGet]
+    [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(List<TagDTO>))]
+    [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ErrorDTO))]
     public async Task<IActionResult> GetAll([FromQuery] PaginationDTO pagination)
     {
         var validationResult = await _validator.ValidateAsync(pagination);
@@ -37,6 +41,10 @@ public class TagController : ControllerBase
 
     [HttpPost]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = Policies.Shared)]
+    [SwaggerResponse(StatusCodes.Status201Created, Type = typeof(TagDTO))]
+    [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ErrorDTO))]
+    [SwaggerResponse(StatusCodes.Status401Unauthorized)]
+    [SwaggerResponse(StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> Add([FromBody] CreateTagDTO dto)
     {
         var validationResult = await _validator.ValidateAsync(dto);
@@ -51,6 +59,8 @@ public class TagController : ControllerBase
     }
 
     [HttpGet("{name}")]
+    [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(TagDTO))]
+    [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ErrorDTO))]
     public async Task<IActionResult> GetByName(string name, [FromQuery] PaginationDTO pagination)
     {
         var validationResult = await _validator.ValidateAsync(pagination);
@@ -63,6 +73,10 @@ public class TagController : ControllerBase
     
     [HttpDelete("{name}")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = Policies.Admin)]
+    [SwaggerResponse(StatusCodes.Status204NoContent)]
+    [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ErrorDTO))]
+    [SwaggerResponse(StatusCodes.Status401Unauthorized)]
+    [SwaggerResponse(StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> Delete(string name)
     {
         var result = await _tagService.DeleteAsync(name);

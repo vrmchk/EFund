@@ -77,7 +77,7 @@ public class MonobankService : IMonobankService
         return None;
     }
 
-    public async Task<Either<ErrorDTO, List<JarDTO>>> GetJarsAsync(Guid userId)
+    public async Task<Either<ErrorDTO, List<JarDTO>>> GetJarsAsync(Guid userId, string? name = null)
     {
         var monobank = await _monobankRepository.FirstOrDefaultAsync(m => m.UserId == userId);
         if (monobank == null)
@@ -121,6 +121,8 @@ public class MonobankService : IMonobankService
             Right: jars =>
             {
                 var dtos = _mapper.Map<List<JarDTO>>(jars);
+                if (!string.IsNullOrEmpty(name))
+                    dtos = dtos.Where(x => x.Title.Contains(name, StringComparison.OrdinalIgnoreCase)).ToList();
 
                 dtos.ForEach(j => j.SendUrl = $"{_monobankConfig.SendAddress}/{j.SendUrl}");
                 return dtos;

@@ -184,6 +184,8 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "EFund API", Version = "v1" });
 
+    c.EnableAnnotations();
+
     c.AddSecurityDefinition("Bearer",
         new OpenApiSecurityScheme
         {

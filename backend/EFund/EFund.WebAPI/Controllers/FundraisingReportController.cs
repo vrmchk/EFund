@@ -67,7 +67,7 @@ public class FundraisingReportController : ControllerBase
         return result.ToActionResult();
     }
 
-    [HttpPost("{id}/upload-attachments")]
+    [HttpPost("{id}/attachments")]
     [SwaggerResponse(StatusCodes.Status204NoContent)]
     [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ErrorDTO))]
     [SwaggerResponse(StatusCodes.Status401Unauthorized)]
@@ -78,7 +78,7 @@ public class FundraisingReportController : ControllerBase
         return result.ToActionResult();
     }
 
-    [HttpPost("{id}/delete-attachments")]
+    [HttpDelete("{id}/attachments")]
     [SwaggerResponse(StatusCodes.Status204NoContent)]
     [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ErrorDTO))]
     [SwaggerResponse(StatusCodes.Status401Unauthorized)]

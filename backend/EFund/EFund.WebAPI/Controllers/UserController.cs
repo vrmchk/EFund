@@ -132,7 +132,7 @@ public class UserController : ControllerBase
         return result.ToActionResult();
     }
 
-    [HttpPost("upload-avatar")]
+    [HttpPost("avatar")]
     [SwaggerResponse(StatusCodes.Status204NoContent)]
     [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ErrorDTO))]
     [SwaggerResponse(StatusCodes.Status401Unauthorized)]
@@ -143,7 +143,7 @@ public class UserController : ControllerBase
         return result.ToActionResult();
     }
 
-    [HttpPost("delete-avatar")]
+    [HttpDelete("avatar")]
     [SwaggerResponse(StatusCodes.Status204NoContent)]
     [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ErrorDTO))]
     [SwaggerResponse(StatusCodes.Status401Unauthorized)]

@@ -98,7 +98,7 @@ public class FundraisingController : ControllerBase
         return result.ToActionResult();
     }
 
-    [HttpPost("{id}/upload-avatar")]
+    [HttpPost("{id}/avatar")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = Policies.User)]
     [SwaggerResponse(StatusCodes.Status204NoContent)]
     [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ErrorDTO))]
@@ -110,7 +110,7 @@ public class FundraisingController : ControllerBase
         return result.ToActionResult();
     }
 
-    [HttpPost("{id}/delete-avatar")]
+    [HttpDelete("{id}/avatar")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = Policies.User)]
     [SwaggerResponse(StatusCodes.Status204NoContent)]
     [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ErrorDTO))]

@@ -165,7 +165,7 @@ public class FundraisingService : IFundraisingService
             Directory.CreateDirectory(directory);
 
         fundraising.AvatarPath = Path.Combine(directory,
-            $"{_appDataConfig.AvatarFileName}{_appDataConfig.AllowedImages[file.ContentType]}");
+            $"{_appDataConfig.AvatarFileName}{Guid.NewGuid():N}{_appDataConfig.AllowedImages[file.ContentType]}");
 
         await using var outputStream = File.Create(fundraising.AvatarPath);
         await using var inputStream = file.OpenReadStream();

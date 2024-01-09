@@ -158,7 +158,7 @@ public class UserService : IUserService
             Directory.CreateDirectory(directory);
 
         user.AvatarPath = Path.Combine(directory,
-            $"{_appDataConfig.AvatarFileName}{_appDataConfig.AllowedImages[file.ContentType]}");
+            $"{_appDataConfig.AvatarFileName}{Guid.NewGuid():N}{_appDataConfig.AllowedImages[file.ContentType]}");
 
         await using var outputStream = File.Create(user.AvatarPath);
         await using var inputStream = file.OpenReadStream();

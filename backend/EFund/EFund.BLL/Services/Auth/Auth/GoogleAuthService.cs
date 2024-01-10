@@ -1,6 +1,8 @@
-﻿using AutoMapper;
+﻿using System.Web;
+using AutoMapper;
 using EFund.BLL.Extensions;
 using EFund.BLL.Services.Auth.Interfaces;
+using EFund.Common.Constants;
 using EFund.Common.Models.Configs;
 using EFund.Common.Models.DTO.Auth;
 using EFund.Common.Models.DTO.Error;
@@ -36,24 +38,40 @@ public class GoogleAuthService : AuthServiceBase, IGoogleAuthService
         _mapper = mapper;
     }
 
-    public async Task<Either<ErrorDTO, AuthSuccessDTO>> SignUpAsync(string authorizationCode)
+    public async Task<Either<ErrorDTO, AuthSuccessDTO>> SignUpAsync(string authorizationCode, GoogleSingUpDTO dto)
     {
         var payload = await GetGooglePayloadAsync(authorizationCode);
 
         var user = await _userManager.FindByEmailAsync(payload.Email);
-
-        if (user is not null)
+        if (user is { CreatedByAdmin: false })
             return new AlreadyExistsErrorDTO("User with this email already exists");
-
-        user = _mapper.Map<User>(payload);
-
-        user.EmailConfirmed = true;
-        var createdUserResult = await _userManager.CreateAsync(user);
-
-        if (!createdUserResult.Succeeded)
+        
+        if (user != null)
         {
-            _logger.LogIdentityErrors(user, createdUserResult);
-            return new IdentityErrorDTO("Unable to authenticate given user");
+            var error = await UpdateUserCreateByAdmin(user, dto);
+            if (error != null)
+                return error;
+        }
+        else
+        {
+            user = _mapper.Map<User>(payload);
+
+            user.EmailConfirmed = true;
+            var createdUserResult = await _userManager.CreateAsync(user);
+
+            if (!createdUserResult.Succeeded)
+            {
+                _logger.LogIdentityErrors(user, createdUserResult);
+                return new IdentityErrorDTO("Unable to authenticate given user");
+            }            
+        }
+
+        var role = dto.AdminToken != null ? Roles.Admin : Roles.User;
+        var roleAdded = await _userManager.AddToRoleAsync(user, role);
+        if (!roleAdded.Succeeded)
+        {
+            _logger.LogIdentityErrors(user, roleAdded);
+            return new IdentityErrorDTO("Unable to create a user. Please try again later");
         }
 
         return await GenerateAuthResultAsync(user);
@@ -113,5 +131,24 @@ public class GoogleAuthService : AuthServiceBase, IGoogleAuthService
 
         var payload = await GoogleJsonWebSignature.ValidateAsync(tokenResponse.IdToken, settings);
         return payload;
+    }
+
+    private async Task<ErrorDTO?> UpdateUserCreateByAdmin(User user, GoogleSingUpDTO dto)
+    {
+        _mapper.Map(dto, user);
+        user.CreatedByAdmin = false;
+        user.EmailConfirmed = true;
+        var decodedToken = HttpUtility.UrlDecode(dto.AdminToken);
+        if (dto.AdminToken == null || !await _userManager.CanMakeAdminAsync(user, decodedToken!))
+            return new IncorrectParametersErrorDTO("Invalid admin token");
+
+        var updatedUser = await _userManager.UpdateAsync(user);
+        if (!updatedUser.Succeeded)
+        {
+            _logger.LogIdentityErrors(user, updatedUser);
+            return new IdentityErrorDTO("Unable to create a user. Please try again later or use another email address");
+        }
+
+        return null;
     }
 }

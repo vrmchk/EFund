@@ -21,9 +21,9 @@ public class GoogleAuthController : ControllerBase
     [HttpPost("sign-up")]
     [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(AuthSuccessDTO))]
     [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ErrorDTO))]
-    public async Task<IActionResult> SignUp([FromHeader(Name = "Authorization-Code")] string authorizationCode)
+    public async Task<IActionResult> SignUp([FromHeader(Name = "Authorization-Code")] string authorizationCode, [FromBody] GoogleSingUpDTO dto)
     {
-        var result = await _googleAuthService.SignUpAsync(authorizationCode);
+        var result = await _googleAuthService.SignUpAsync(authorizationCode, dto);
         return result.ToActionResult();
     }
 

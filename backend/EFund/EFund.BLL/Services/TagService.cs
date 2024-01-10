@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using EFund.BLL.Services.Interfaces;
-using EFund.Common.Models.DTO.Common;
 using EFund.Common.Models.DTO.Error;
 using EFund.Common.Models.DTO.Tag;
 using EFund.DAL.Entities;
@@ -22,23 +21,6 @@ public class TagService : ITagService
         _mapper = mapper;
     }
 
-    public async Task<List<TagDTO>> GetAllAsync(PaginationDTO pagination)
-    {
-        var tags = await _repository
-            .FromSqlInterpolated($"""
-                SELECT T.Name
-                FROM Tags T
-                LEFT JOIN FundraisingTag FT ON T.Name = FT.TagsName
-                GROUP BY T.Name
-                ORDER BY COUNT(FT.TagsName) DESC
-                OFFSET {pagination.PageSize * (pagination.Page - 1)} ROWS
-                FETCH NEXT {pagination.PageSize} ROWS ONLY
-            """)
-            .ToListAsync();
-
-        return _mapper.Map<List<TagDTO>>(tags);
-    }
-
     public async Task<Either<ErrorDTO, TagDTO>> AddAsync(CreateTagDTO dto)
     {
         if (await _repository.AnyAsync(x => x.Name == dto.Name))
@@ -49,7 +31,7 @@ public class TagService : ITagService
         return _mapper.Map<TagDTO>(tag);
     }
 
-    public async Task<List<TagDTO>> GetByNameAsync(string name, PaginationDTO pagination)
+    public async Task<List<TagDTO>> GetByNameAsync(string name)
     {
         var tags = await _repository
             .FromSqlInterpolated($"""
@@ -59,8 +41,6 @@ public class TagService : ITagService
                 WHERE T.Name LIKE {($"%{name}%")}
                 GROUP BY T.Name
                 ORDER BY COUNT(FT.TagsName) DESC
-                OFFSET {pagination.PageSize * (pagination.Page - 1)} ROWS
-                FETCH NEXT {pagination.PageSize} ROWS ONLY
             """)
             .ToListAsync();
 

@@ -1,6 +1,5 @@
 ﻿using EFund.BLL.Services.Interfaces;
 using EFund.Common.Constants;
-using EFund.Common.Models.DTO.Common;
 using EFund.Common.Models.DTO.Error;
 using EFund.Common.Models.DTO.Tag;
 using EFund.Validation;
@@ -26,19 +25,6 @@ public class TagController : ControllerBase
         _validator = validator;
     }
 
-    [HttpGet]
-    [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(List<TagDTO>))]
-    [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ErrorDTO))]
-    public async Task<IActionResult> GetAll([FromQuery] PaginationDTO pagination)
-    {
-        var validationResult = await _validator.ValidateAsync(pagination);
-        if (!validationResult.IsValid)
-            return BadRequest(validationResult.ToErrorDTO());
-
-        var result = await _tagService.GetAllAsync(pagination);
-        return Ok(result);
-    }
-
     [HttpPost]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = Policies.Shared)]
     [SwaggerResponse(StatusCodes.Status201Created, Type = typeof(TagDTO))]
@@ -59,15 +45,10 @@ public class TagController : ControllerBase
     }
 
     [HttpGet("{name}")]
-    [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(TagDTO))]
-    [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ErrorDTO))]
-    public async Task<IActionResult> GetByName(string name, [FromQuery] PaginationDTO pagination)
+    [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(List<TagDTO>))]
+    public async Task<IActionResult> GetByName(string name)
     {
-        var validationResult = await _validator.ValidateAsync(pagination);
-        if (!validationResult.IsValid)
-            return BadRequest(validationResult.ToErrorDTO());
-
-        var result = await _tagService.GetByNameAsync(name, pagination);
+        var result = await _tagService.GetByNameAsync(name);
         return Ok(result);
     }
     

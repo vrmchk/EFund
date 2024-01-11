@@ -26,7 +26,7 @@ public class EmailSender : IEmailSender
     public async Task<Option<ErrorModel>> SendEmailAsync<T>(string to, T message)
         where T : EmailMessageBase
     {
-        var path = $@"{_emailConfig.TemplatesPath}\{message.TemplateName}.cshtml";
+        var path = Path.Combine(_emailConfig.TemplatesPath, $"{message.TemplateName}.cshtml");
         var response = await _email
             .To(to)
             .Subject(message.Subject)

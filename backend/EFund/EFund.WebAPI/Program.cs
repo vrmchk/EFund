@@ -23,6 +23,7 @@ using EFund.Validation.Auth;
 using EFund.Validation.Extensions;
 using EFund.WebAPI.Extensions;
 using FluentEmail.MailKitSmtp;
+using FluentValidation;
 using Hangfire;
 using HangfireBasicAuthenticationFilter;
 using Microsoft.AspNetCore.Authentication.Google;
@@ -92,6 +93,7 @@ builder.Services.AddScoped<ITagService, TagService>();
 builder.Services.AddScoped<IUserCleanerService, UserCleanerService>();
 builder.Services.AddScoped<IUserRegistrationService, UserRegistrationService>();
 builder.Services.AddScoped<IUserService, UserService>();
+
 
 //ApiClients
 builder.Services.AddHttpClient(monobankConfig.HttpClientName,
@@ -207,7 +209,6 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
@@ -234,12 +235,12 @@ app.MapHangfireDashboard();
 
 app.SetupHangfire(hangfireConfig);
 
-if (app.Environment.IsDevelopment())
-{
+//if (app.Environment.IsDevelopment())
+//{
     app.UseSwagger();
     app.UseSwaggerUI();
     app.UseDeveloperExceptionPage();
-}
+//}
 
 app.UseHttpsRedirection();
 

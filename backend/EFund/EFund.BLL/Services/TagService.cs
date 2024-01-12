@@ -21,6 +21,21 @@ public class TagService : ITagService
         _mapper = mapper;
     }
 
+    public async Task<List<TagDTO>> GetAllAsync()
+    {
+        var tags = await _repository
+            .FromSqlInterpolated($"""
+                SELECT T.Name
+                FROM Tags T
+                LEFT JOIN FundraisingTag FT ON T.Name = FT.TagsName
+                GROUP BY T.Name
+                ORDER BY COUNT(FT.TagsName) DESC
+            """)
+            .ToListAsync();
+
+        return _mapper.Map<List<TagDTO>>(tags);
+    }
+
     public async Task<Either<ErrorDTO, TagDTO>> AddAsync(CreateTagDTO dto)
     {
         if (await _repository.AnyAsync(x => x.Name == dto.Name))

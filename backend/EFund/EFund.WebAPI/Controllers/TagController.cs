@@ -25,6 +25,15 @@ public class TagController : ControllerBase
         _validator = validator;
     }
 
+    [HttpGet]
+    [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(List<TagDTO>))]
+    
+    public async Task<IActionResult> GetAll()
+    {
+        var result = await _tagService.GetAllAsync();
+        return Ok(result);
+    }
+
     [HttpPost]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = Policies.Shared)]
     [SwaggerResponse(StatusCodes.Status201Created, Type = typeof(TagDTO))]

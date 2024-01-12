@@ -13,9 +13,13 @@ public static class StringExtensions
 
     public static string ToAbsolutePath(this string source)
     {
-        const string solutionName = "EFund";
         var path = Directory.GetCurrentDirectory();
+#if DEBUG
+        const string solutionName = "EFund";
         var solutionPath = path[..path.LastIndexOf(solutionName, StringComparison.Ordinal)];
         return $"{solutionPath}{source}";
+#else
+        return Path.Combine(path, source);
+#endif
     }
 }

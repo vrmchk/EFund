@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>net7.0</TargetFramework>
@@ -15,5 +15,35 @@
     <ItemGroup>
       <ProjectReference Include="..\EFund.Common\EFund.Common.csproj" />
     </ItemGroup>
+
+    <ItemGroup>
+		<ViewFiles Include="$(ProjectDir)\Templates\**\*.cshtml" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Templates\AdminInvitationMessage.cshtml" />
+      <None Remove="Templates\EmailConfirmationMessage.cshtml" />
+      <None Remove="Templates\PasswordChangedMessage.cshtml" />
+      <None Remove="Templates\ResetPasswordMessage.cshtml" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Include="Templates\AdminInvitationMessage.cshtml">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <EmbeddedResource Include="Templates\EmailConfirmationMessage.cshtml">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <EmbeddedResource Include="Templates\PasswordChangedMessage.cshtml">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <EmbeddedResource Include="Templates\ResetPasswordMessage.cshtml">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </EmbeddedResource>
+    </ItemGroup>
+
+	<Target Name="CopyViewFilesAfterPublish" AfterTargets="Publish">
+		<Copy SourceFiles="@(ViewFiles)" DestinationFolder="$(PublishDir)\Templates\%(RecursiveDir)" />
+	</Target>
 
 </Project>

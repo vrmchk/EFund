@@ -8,6 +8,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\EFund.BLL\EFund.BLL.csproj" />
+      <ProjectReference Include="..\EFund.Common\EFund.Common.csproj" />
     </ItemGroup>
 
     <ItemGroup>

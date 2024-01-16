@@ -68,33 +68,21 @@ public class EmailConfirmationService : AuthServiceBase, IEmailConfirmationServi
         if (user is null)
             return new NotFoundErrorDTO("User with this id does not exist");
 
-        var result = await _userRegistrationService.RegenerateEmailConfirmationCodeAsync(dto.UserId);
+        var code = await _userRegistrationService.RegenerateEmailConfirmationCodeAsync(dto.UserId);
+        var emailSent = await _emailSender.SendEmailAsync(user.Email!,
+            new EmailConfirmationMessage { Code = code });
 
-        return await result.Match<Task<Option<ErrorDTO>>>(
-            Right: async code =>
+        return emailSent.Match<Option<ErrorDTO>>(
+            None: () =>
             {
-                var emailSent = await _emailSender.SendEmailAsync(user.Email!,
-                    new EmailConfirmationMessage { Code = code });
-
-                return emailSent.Match<Option<ErrorDTO>>(
-                    None: () =>
-                    {
-                        _logger.LogInformation("Email confirmation code sent to user {0}", user.Id);
-                        return None;
-                    },
-                    Some: error =>
-                    {
-                        _logger.LogError("Unable to send email confirmation code to user {0}", user.Id);
-                        return new ExternalErrorDTO(error.Message);
-                    }
-                );
+                _logger.LogInformation("Email confirmation code sent to user {0}", user.Id);
+                return None;
             },
-            Left: error =>
+            Some: error =>
             {
-                _logger.LogError("Unable to generate email confirmation code for user {0}, error: {1}", user.Id,
-                    error.Message);
-
-                return Task.FromResult<Option<ErrorDTO>>(new IncorrectParametersErrorDTO(error.Message));
-            });
+                _logger.LogError("Unable to send email confirmation code to user {0}", user.Id);
+                return new ExternalErrorDTO(error.Message);
+            }
+        );
     }
 }

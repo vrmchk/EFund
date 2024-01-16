@@ -81,30 +81,23 @@ public class UserService : IUserService
         if (user is null)
             return new NotFoundErrorDTO("User with this id does not exist");
 
-        var either = await _userRegistrationService.GenerateEmailConfirmationCodeAsync(userId);
-        return await either.Match<Task<Option<ErrorDTO>>>(
-            Right: async code =>
-            {
-                var emailSent = await _emailSender.SendEmailAsync(dto.NewEmail,
-                    new EmailConfirmationMessage { Code = code });
+        if (user.Email == dto.NewEmail)
+            return new IncorrectParametersErrorDTO("New email has to differ from the old one");
 
-                return emailSent.Match<Option<ErrorDTO>>(
-                    None: () =>
-                    {
-                        _logger.LogInformation("Email confirmation code sent to user {0}", user.Id);
-                        return None;
-                    },
-                    Some: error =>
-                    {
-                        _logger.LogError("Unable to send email confirmation code to user {0}", user.Id);
-                        return new ExternalErrorDTO(error.Message);
-                    }
-                );
-            },
-            Left: error =>
+        var code = await _userRegistrationService.RegenerateEmailConfirmationCodeAsync(userId);
+        var emailSent = await _emailSender.SendEmailAsync(dto.NewEmail,
+            new EmailConfirmationMessage { Code = code });
+
+        return emailSent.Match<Option<ErrorDTO>>(
+            None: () =>
             {
-                _logger.LogError("Unable to generate email confirmation code for user {0}", user.Id);
-                return Task.FromResult<Option<ErrorDTO>>(new IncorrectParametersErrorDTO(error.Message));
+                _logger.LogInformation("Email confirmation code sent to user {0}", user.Id);
+                return None;
+            },
+            Some: error =>
+            {
+                _logger.LogError("Unable to send email confirmation code to user {0}", user.Id);
+                return new ExternalErrorDTO(error.Message);
             }
         );
     }

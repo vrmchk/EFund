@@ -60,14 +60,10 @@ public class UserRegistrationService : IUserRegistrationService
         return None;
     }
 
-    public async Task<Either<ErrorModel, int>> RegenerateEmailConfirmationCodeAsync(Guid userId)
+    public async Task<int> RegenerateEmailConfirmationCodeAsync(Guid userId)
     {
-        var registration = await _userRegistrationRepository.FirstOrDefaultAsync(r => r.UserId == userId);
-        if (registration is null)
-            return new ErrorModel("You have not requested email confirmation");
-
-        if (registration.IsCodeRegenerated)
-            return new ErrorModel("You have already requested a new code");
+        var registration = await _userRegistrationRepository.FirstOrDefaultAsync(r => r.UserId == userId)
+                           ?? new UserRegistration { CreatedAt = DateTimeOffset.UtcNow, UserId = userId };
 
         registration.Code = TokenGenerator.GenerateNumericCode(_authConfig.ConfirmationCodeLenght);
         registration.ExpiresAt = DateTimeOffset.UtcNow.Add(_authConfig.ConfirmationCodeLifetime);

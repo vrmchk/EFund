@@ -33,7 +33,7 @@ public class PasswordService : AuthServiceBase, IPasswordService
 
     public async Task<Option<ErrorDTO>> ChangePasswordAsync(Guid userId, ChangePasswordDTO dto)
     {
-        var user = await _userManager.FindByEmailAsync(userId.ToString());
+        var user = await _userManager.FindByIdAsync(userId.ToString());
         if (user is null)
             return new NotFoundErrorDTO("User with this id does not exist");
 

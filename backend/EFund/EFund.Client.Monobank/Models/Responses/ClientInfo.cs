@@ -10,7 +10,7 @@ public class ClientInfo
 
     public string Permissions { get; set; } = string.Empty;
 
-    public List<Account> Accounts { get; set; } = null!;
+    public List<Account> Accounts { get; set; } = new();
 
-    public List<Jar> Jars { get; set; } = null!;
+    public List<Jar> Jars { get; set; } = new();
 }

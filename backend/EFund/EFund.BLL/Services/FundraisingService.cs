@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using EFund.BLL.Extensions;
 using EFund.BLL.Services.Interfaces;
+using EFund.BLL.Utility;
 using EFund.Common.Models.Configs;
 using EFund.Common.Models.DTO.Common;
 using EFund.Common.Models.DTO.Error;
@@ -38,6 +39,16 @@ public class FundraisingService : IFundraisingService
         _monobankFundraisings = monobankFundraisings;
     }
 
+    public async Task<Either<ErrorDTO, PagedListDTO<FundraisingDTO>>> GetAllAsync(Guid userId, PaginationDTO pagination,
+        string apiUrl)
+    {
+        var fundraisings = await IncludeRelations(_fundraisingRepository)
+            .Where(f => f.UserId == userId)
+            .ToPagedListAsync(pagination.Page, pagination.PageSize);
+
+        return await ToDto(fundraisings, apiUrl);
+    }
+
     public async Task<Either<ErrorDTO, PagedListDTO<FundraisingDTO>>> Search(SearchFundraisingDTO dto,
         PaginationDTO pagination,
         string apiUrl)
@@ -54,21 +65,7 @@ public class FundraisingService : IFundraisingService
             queryable = queryable.Where(f => f.Tags.Any(t => dto.Tags.Contains(t.Name)));
 
         var fundraisings = await queryable.ToPagedListAsync(pagination.Page, pagination.PageSize);
-        fundraisings.ForEach(f => PathToUrl(f, apiUrl));
-
-        var dtos = _mapper.Map<PagedListDTO<FundraisingDTO>>(fundraisings);
-
-        var userIds = dtos.Items.Select(f => f.UserId).Distinct().ToList();
-
-        var result = await _monobankService.GetJarsAsync(userIds);
-        return result.Match<Either<ErrorDTO, PagedListDTO<FundraisingDTO>>>(
-            Right: jars =>
-            {
-                dtos.Items.ForEach(f => f.MonobankJar = jars.FirstOrDefault(j => j.Id == f.MonobankJarId));
-                return dtos;
-            },
-            Left: error => error
-        );
+        return await ToDto(fundraisings, apiUrl);
     }
 
     public async Task<Either<ErrorDTO, FundraisingDTO>> GetByIdAsync(Guid id, string apiUrl)
@@ -124,7 +121,8 @@ public class FundraisingService : IFundraisingService
         if (fundraising.AvatarPath != null && File.Exists(fundraising.AvatarPath))
             File.Delete(fundraising.AvatarPath);
 
-        foreach (var attachment in fundraising.Reports.SelectMany(r => r.Attachments).Where(a => File.Exists(a.FilePath)))
+        foreach (var attachment in fundraising.Reports.SelectMany(r => r.Attachments)
+                     .Where(a => File.Exists(a.FilePath)))
         {
             File.Delete(attachment.FilePath);
         }
@@ -204,7 +202,7 @@ public class FundraisingService : IFundraisingService
             report.Attachments.ForEach(a => a.FilePath = a.FilePath.PathToUrl(apiUrl));
         }
     }
-    
+
     private async Task<Either<ErrorDTO, FundraisingDTO>> ToDto(Fundraising fundraising, string apiUrl)
     {
         PathToUrl(fundraising, apiUrl);
@@ -215,6 +213,26 @@ public class FundraisingService : IFundraisingService
                 var fundraisingDto = _mapper.Map<FundraisingDTO>(fundraising);
                 fundraisingDto.MonobankJar = jar;
                 return fundraisingDto;
+            },
+            Left: error => error
+        );
+    }
+
+    private async Task<Either<ErrorDTO, PagedListDTO<FundraisingDTO>>> ToDto(PagedList<Fundraising> fundraisings,
+        string apiUrl)
+    {
+        fundraisings.ForEach(f => PathToUrl(f, apiUrl));
+
+        var dtos = _mapper.Map<PagedListDTO<FundraisingDTO>>(fundraisings);
+
+        var userIds = dtos.Items.Select(f => f.UserId).Distinct().ToList();
+
+        var result = await _monobankService.GetJarsAsync(userIds);
+        return result.Match<Either<ErrorDTO, PagedListDTO<FundraisingDTO>>>(
+            Right: jars =>
+            {
+                dtos.Items.ForEach(f => f.MonobankJar = jars.FirstOrDefault(j => j.Id == f.MonobankJarId));
+                return dtos;
             },
             Left: error => error
         );

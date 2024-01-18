@@ -26,6 +26,22 @@ public class FundraisingController : ControllerBase
         _validator = validator;
     }
 
+    [HttpGet]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = Policies.User)]
+    [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(PagedListDTO<FundraisingDTO>))]
+    [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ErrorDTO))]
+    [SwaggerResponse(StatusCodes.Status401Unauthorized)]
+    [SwaggerResponse(StatusCodes.Status403Forbidden)]
+    public async Task<IActionResult> Get([FromQuery] PaginationDTO pagination)
+    {
+        var validationResult = await _validator.ValidateAsync(pagination);
+        if (!validationResult.IsValid)
+            return BadRequest(validationResult.ToErrorDTO());
+
+        var result = await _fundraisingService.GetAllAsync(HttpContext.GetUserId(), pagination, HttpContext.GetApiUrl());
+        return result.ToActionResult();
+    }
+    
     [HttpPost("search")]
     [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(PagedListDTO<FundraisingDTO>))]
     [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ErrorDTO))]

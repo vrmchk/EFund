@@ -8,7 +8,8 @@ namespace EFund.BLL.Services.Interfaces;
 
 public interface IFundraisingService
 {
-    Task<Either<ErrorDTO, PagedListDTO<FundraisingDTO>>> Search(SearchFundraisingDTO dto, PaginationDTO pagination,
+    Task<Either<ErrorDTO, PagedListDTO<FundraisingDTO>>> GetAllAsync(Guid userId, PaginationDTO pagination, string apiUrl);
+    Task<Either<ErrorDTO, PagedListDTO<FundraisingDTO>>> Search(SearchFundraisingDTO dto, PaginationDTO pagination, 
         string apiUrl);
     Task<Either<ErrorDTO, FundraisingDTO>> GetByIdAsync(Guid id, string apiUrl);
     Task<Either<ErrorDTO, FundraisingDTO>> AddAsync(Guid userId, CreateFundraisingDTO dto, string apiUrl);

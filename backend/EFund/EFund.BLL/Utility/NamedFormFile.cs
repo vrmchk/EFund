@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 
-namespace EFund.Common.Models.DTO.Common;
+namespace EFund.BLL.Utility;
 
 public class NamedFormFile
 {

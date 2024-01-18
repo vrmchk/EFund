@@ -1,4 +1,4 @@
-﻿using EFund.Common.Models.DTO.Common;
+﻿using EFund.BLL.Utility;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EFund.WebAPI.Controllers;
@@ -16,6 +16,6 @@ public class TestController : ControllerBase
     [HttpPost("files")]
     public IActionResult Test(NamedFormFileCollection files)
     {
-        return Ok(files.FileTitle != null ? "Success" : "Fail");
+        return Ok(files.FileCollection.Any() ? "Success" : "Fail");
     }
 }

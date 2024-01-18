@@ -68,6 +68,9 @@ public class EmailConfirmationService : AuthServiceBase, IEmailConfirmationServi
         if (user is null)
             return new NotFoundErrorDTO("User with this id does not exist");
 
+        if (user.EmailConfirmed)
+            return new IncorrectParametersErrorDTO("Email is already confirmed");
+
         var code = await _userRegistrationService.RegenerateEmailConfirmationCodeAsync(dto.UserId);
         var emailSent = await _emailSender.SendEmailAsync(user.Email!,
             new EmailConfirmationMessage { Code = code });

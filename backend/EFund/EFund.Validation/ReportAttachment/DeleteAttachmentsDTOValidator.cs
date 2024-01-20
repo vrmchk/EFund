@@ -1,7 +1,7 @@
-﻿using EFund.Common.Models.DTO.FundraisingReport;
+﻿using EFund.Common.Models.DTO.ReportAttachment;
 using FluentValidation;
 
-namespace EFund.Validation.FundraisingReport;
+namespace EFund.Validation.ReportAttachment;
 
 public class DeleteAttachmentsDTOValidator : AbstractValidator<DeleteAttachmentsDTO>
 {

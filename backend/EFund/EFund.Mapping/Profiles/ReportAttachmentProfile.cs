@@ -10,5 +10,7 @@ public class ReportAttachmentProfile : Profile
     {
         CreateMap<ReportAttachment, ReportAttachmentDTO>()
             .ForMember(dest => dest.FileUrl, opt => opt.MapFrom(src => src.FilePath));
+
+        CreateMap<UpdateAttachmentDTO, ReportAttachment>();
     }
 }

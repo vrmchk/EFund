@@ -2,6 +2,7 @@ using EFund.BLL.Services.Interfaces;
 using EFund.Common.Constants;
 using EFund.Common.Models.DTO.Error;
 using EFund.Common.Models.DTO.FundraisingReport;
+using EFund.Common.Models.DTO.ReportAttachment;
 using EFund.Validation;
 using EFund.Validation.Extensions;
 using EFund.WebAPI.Extensions;
@@ -90,6 +91,21 @@ public class FundraisingReportController : ControllerBase
             return BadRequest(validationResult.ToErrorDTO());
 
         var result = await _fundraisingReportService.DeleteAttachmentsAsync(id, HttpContext.GetUserId(), dto);
+        return result.ToActionResult();
+    }
+    
+    [HttpPut("{id}/attachments/{attachmentId}")]
+    [SwaggerResponse(StatusCodes.Status204NoContent)]
+    [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ErrorDTO))]
+    [SwaggerResponse(StatusCodes.Status401Unauthorized)]
+    [SwaggerResponse(StatusCodes.Status403Forbidden)]
+    public async Task<IActionResult> UpdateAttachment(Guid id, Guid attachmentId, [FromBody] UpdateAttachmentDTO dto)
+    {
+        var validationResult = await _validator.ValidateAsync(dto);
+        if (!validationResult.IsValid)
+            return BadRequest(validationResult.ToErrorDTO());
+
+        var result = await _fundraisingReportService.UpdateAttachmentAsync(id, attachmentId, HttpContext.GetUserId(), dto);
         return result.ToActionResult();
     }
 }

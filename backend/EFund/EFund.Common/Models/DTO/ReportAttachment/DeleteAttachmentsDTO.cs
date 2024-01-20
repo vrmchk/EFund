@@ -1,4 +1,4 @@
-namespace EFund.Common.Models.DTO.FundraisingReport;
+namespace EFund.Common.Models.DTO.ReportAttachment;
 
 public class DeleteAttachmentsDTO
 {

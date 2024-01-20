@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using EFund.BLL.Extensions;
 using EFund.BLL.Services.Interfaces;
 using EFund.Common.Models.Configs;
 using EFund.Common.Models.DTO.Error;
 using EFund.Common.Models.DTO.FundraisingReport;
+using EFund.Common.Models.DTO.ReportAttachment;
 using EFund.DAL.Entities;
 using EFund.DAL.Repositories.Interfaces;
 using LanguageExt;
@@ -110,6 +110,7 @@ public class FundraisingReportService : IFundraisingReportService
         var attachments = files.ToDictionary(f => new ReportAttachment
         {
             FundraisingReportId = reportId,
+            Name = Path.GetFileNameWithoutExtension(f.FileName),
             FilePath = Path.Combine(directory, $"{Guid.NewGuid():N}{_appDataConfig.AllowedFiles[f.ContentType]}")
         });
 
@@ -121,6 +122,27 @@ public class FundraisingReportService : IFundraisingReportService
         }));
 
         await _attachmentRepository.InsertManyAsync(attachments.Keys);
+
+        return None;
+    }
+
+    public async Task<Option<ErrorDTO>> UpdateAttachmentAsync(Guid reportId, Guid attachmentId, Guid userId,
+        UpdateAttachmentDTO dto)
+    {
+        var report = await _reportRepository
+            .Include(r => r.Fundraising)
+            .Include(r => r.Attachments)
+            .FirstOrDefaultAsync(r => r.Id == reportId && r.Fundraising.UserId == userId);
+
+        if (report == null)
+            return new NotFoundErrorDTO("Report with this id does not exist");
+
+        var attachment = report.Attachments.SingleOrDefault(a => a.Id == attachmentId);
+        if (attachment == null)
+            return new NotFoundErrorDTO("Attachment with this id does not exist");
+
+        _mapper.Map(dto, attachment);
+        await _attachmentRepository.UpdateAsync(attachment);
 
         return None;
     }

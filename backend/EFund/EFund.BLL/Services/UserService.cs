@@ -234,7 +234,7 @@ public class UserService : IUserService
 
         var token = await _userManager.GenerateAdminInvitationTokenAsync(user);
         var encodedToken = HttpUtility.UrlEncode(token);
-        var callbackUri = string.Format(_callbackUrisConfig.InviteUserUriTemplate, user.Email, encodedToken);
+        var callbackUri = string.Format(_callbackUrisConfig.InviteUserUriTemplate, encodedToken);
 
         var emailSent = await _emailSender.SendEmailAsync(dto.Email,
             new AdminInvitationMessage { InvitationUri = callbackUri });

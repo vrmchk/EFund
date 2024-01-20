@@ -43,7 +43,7 @@ public class UserController : ControllerBase
 
     [HttpPost("search")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = Policies.Admin)]
-    [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(PagedListDTO<UserDTO>))]
+    [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(PagedListDTO<UserExtendedDTO>))]
     [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ErrorDTO))]
     [SwaggerResponse(StatusCodes.Status401Unauthorized)]
     [SwaggerResponse(StatusCodes.Status403Forbidden)]

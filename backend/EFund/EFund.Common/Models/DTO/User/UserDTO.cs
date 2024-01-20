@@ -8,4 +8,5 @@ public class UserDTO
     public string AvatarUrl { get; set; } = string.Empty;
     public bool HasPassword { get; set; }
     public bool HasMonobankToken { get; set; }
+    public bool IsAdmin { get; set; }
 }

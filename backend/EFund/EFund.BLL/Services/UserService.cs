@@ -53,7 +53,7 @@ public class UserService : IUserService
         if (user is null)
             return new NotFoundErrorDTO("User with this id does not exist");
 
-        return ToDto<UserDTO>(user, apiUrl);
+        return await ToDto(user, apiUrl);
     }
 
     public async Task<Either<ErrorDTO, UserDTO>> UpdateUserAsync(Guid id, UpdateUserDTO dto, string apiUrl)
@@ -72,7 +72,7 @@ public class UserService : IUserService
 
         _logger.LogInformation("User updated: {0}", user.Id);
 
-        return ToDto<UserDTO>(user, apiUrl);
+        return await ToDto(user, apiUrl);
     }
 
     public async Task<Option<ErrorDTO>> SendChangeEmailCodeAsync(Guid userId, ChangeEmailDTO dto)
@@ -306,15 +306,17 @@ public class UserService : IUserService
         foreach (var (user, userDto) in usersWithDtos)
         {
             userDto.AvatarUrl = (user.AvatarPath ?? _appDataConfig.DefaultUserAvatarPath).PathToUrl(apiUrl);
-            userDto.Roles = (await _userManager.GetRolesAsync(user)).ToList();
+            userDto.IsAdmin = await _userManager.IsInRoleAsync(user, Roles.Admin);
         }
 
         return dtos;
     }
 
-    private T ToDto<T>(User user, string apiUrl)
+    private async Task<UserDTO> ToDto(User user, string apiUrl)
     {
         user.AvatarPath = (user.AvatarPath ?? _appDataConfig.DefaultUserAvatarPath).PathToUrl(apiUrl);
-        return _mapper.Map<T>(user);
+        var dto = _mapper.Map<UserDTO>(user);
+        dto.IsAdmin = await _userManager.IsInRoleAsync(user, Roles.Admin);
+        return dto;
     }
 }

@@ -11,5 +11,5 @@ public class UserExtendedDTO
     public bool EmailConfirmed { get; set; }
     public bool CreatedByAdmin { get; set; }
     public bool IsBlocked { get; set; }
-    public List<string> Roles { get; set; } = new();
+    public bool IsAdmin { get; set; }
 }

@@ -84,6 +84,9 @@ public class UserService : IUserService
         if (user.Email == dto.NewEmail)
             return new IncorrectParametersErrorDTO("New email has to differ from the old one");
 
+        if (await _userManager.FindByEmailAsync(dto.NewEmail) != null)
+            return new IncorrectParametersErrorDTO("User with this email already exists");
+
         var code = await _userRegistrationService.RegenerateEmailConfirmationCodeAsync(userId);
         var emailSent = await _emailSender.SendEmailAsync(dto.NewEmail,
             new EmailConfirmationMessage { Code = code });
@@ -110,6 +113,9 @@ public class UserService : IUserService
 
         if (user.Email == dto.NewEmail)
             return new IncorrectParametersErrorDTO("New email has to differ from the old one");
+
+        if (await _userManager.FindByEmailAsync(dto.NewEmail) != null)
+            return new IncorrectParametersErrorDTO("User with this email already exists");
 
         var option = await _userRegistrationService.CanConfirmEmailAsync(userId, dto.Code);
         return await option.Match<Task<Option<ErrorDTO>>>(

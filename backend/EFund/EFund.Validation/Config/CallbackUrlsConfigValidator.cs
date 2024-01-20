@@ -15,6 +15,6 @@ public class CallbackUrlsConfigValidator : ConfigValidatorBase<CallbackUrisConfi
 
         RuleFor(x => x.InviteUserUriTemplate)
             .NotEmpty()
-            .HasFormatParams(2);
+            .HasFormatParams(1);
     }
 }

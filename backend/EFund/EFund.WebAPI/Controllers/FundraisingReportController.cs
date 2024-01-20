@@ -41,6 +41,17 @@ public class FundraisingReportController : ControllerBase
         var result = await _fundraisingReportService.AddAsync(HttpContext.GetUserId(), dto);
         return result.ToActionResult();
     }
+    
+    [HttpGet("{id}")]
+    [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(FundraisingReportDTO))]
+    [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ErrorDTO))]
+    [SwaggerResponse(StatusCodes.Status401Unauthorized)]
+    [SwaggerResponse(StatusCodes.Status403Forbidden)]
+    public async Task<IActionResult> GetById(Guid id)
+    {
+        var result = await _fundraisingReportService.GetByIdAsync(id, HttpContext.GetUserId(), HttpContext.GetApiUrl());
+        return result.ToActionResult();
+    }
 
     [HttpPut("{id}")]
     [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(FundraisingReportDTO))]
@@ -53,7 +64,7 @@ public class FundraisingReportController : ControllerBase
         if (!validationResult.IsValid)
             return BadRequest(validationResult.ToErrorDTO());
 
-        var result = await _fundraisingReportService.UpdateAsync(id, HttpContext.GetUserId(), dto);
+        var result = await _fundraisingReportService.UpdateAsync(id, HttpContext.GetUserId(), dto, HttpContext.GetApiUrl());
         return result.ToActionResult();
     }
 

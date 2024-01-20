@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using EFund.BLL.Extensions;
 using EFund.BLL.Services.Interfaces;
 using EFund.Common.Models.Configs;
 using EFund.Common.Models.DTO.Error;
@@ -34,6 +35,19 @@ public class FundraisingReportService : IFundraisingReportService
         _appDataConfig = appDataConfig;
     }
 
+    public async Task<Either<ErrorDTO, FundraisingReportDTO>> GetByIdAsync(Guid id, Guid userId, string apiUrl)
+    {
+        var report = await _reportRepository
+            .Include(r => r.Fundraising)
+            .Include(r => r.Attachments)
+            .FirstOrDefaultAsync(r => r.Id == id && r.Fundraising.UserId == userId);
+
+        if (report == null)
+            return new NotFoundErrorDTO("Report with this id does not exist");
+
+        return ToDto(report, apiUrl);
+    }
+
     public async Task<Either<ErrorDTO, FundraisingReportDTO>> AddAsync(Guid userId, CreateFundraisingReportDTO dto)
     {
         var fundraising = await _fundraisingRepository
@@ -50,7 +64,7 @@ public class FundraisingReportService : IFundraisingReportService
     }
 
     public async Task<Either<ErrorDTO, FundraisingReportDTO>> UpdateAsync(Guid id, Guid userId,
-        UpdateFundraisingReportDTO dto)
+        UpdateFundraisingReportDTO dto, string apiUrl)
     {
         var report = await _reportRepository
             .Include(r => r.Fundraising)
@@ -64,7 +78,7 @@ public class FundraisingReportService : IFundraisingReportService
 
         await _reportRepository.UpdateAsync(report);
 
-        return _mapper.Map<FundraisingReportDTO>(report);
+        return ToDto(report, apiUrl);
     }
 
     public async Task<Option<ErrorDTO>> DeleteAsync(Guid id, Guid userId)
@@ -166,5 +180,16 @@ public class FundraisingReportService : IFundraisingReportService
         await _attachmentRepository.DeleteManyAsync(toRemove);
 
         return None;
+    }
+    
+    private FundraisingReportDTO ToDto(FundraisingReport report, string apiUrl)
+    {
+        foreach (var attachment in report.Attachments)
+        {
+            attachment.FilePath = attachment.FilePath.PathToUrl(apiUrl);
+        }
+
+        var dto = _mapper.Map<FundraisingReportDTO>(report);
+        return dto;
     }
 }

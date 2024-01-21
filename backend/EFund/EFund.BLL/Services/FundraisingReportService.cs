@@ -173,7 +173,7 @@ public class FundraisingReportService : IFundraisingReportService
         return None;
     }
 
-    public async Task<Option<ErrorDTO>> DeleteAttachmentsAsync(Guid reportId, Guid userId, DeleteAttachmentsDTO dto)
+    public async Task<Option<ErrorDTO>> DeleteAttachmentsAsync(Guid reportId, Guid userId, Guid attachmentId)
     {
         var report = await _reportRepository
             .Include(r => r.Fundraising)
@@ -183,13 +183,14 @@ public class FundraisingReportService : IFundraisingReportService
         if (report == null)
             return new NotFoundErrorDTO("Report with this id does not exist");
 
-        var toRemove = report.Attachments.Where(a => dto.AttachmentIds.Contains(a.Id)).ToList();
-        foreach (var attachment in toRemove.Where(a => File.Exists(a.FilePath)))
-        {
-            File.Delete(attachment.FilePath);
-        }
+        var attachment = report.Attachments.SingleOrDefault(a => a.Id == attachmentId);
+        if (attachment == null)
+            return new NotFoundErrorDTO("Attachment with this id does not exist");
 
-        await _attachmentRepository.DeleteManyAsync(toRemove);
+        if (File.Exists(attachment.FilePath))
+            File.Delete(attachment.FilePath);
+
+        await _attachmentRepository.DeleteAsync(attachment);
 
         return None;
     }

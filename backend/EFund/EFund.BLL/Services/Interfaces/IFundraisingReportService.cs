@@ -14,5 +14,5 @@ public interface IFundraisingReportService
     Task<Option<ErrorDTO>> DeleteAsync(Guid id, Guid userId);
     Task<Option<ErrorDTO>> AddAttachmentsAsync(Guid reportId, Guid userId, IFormFileCollection files);
     Task<Option<ErrorDTO>> UpdateAttachmentAsync(Guid reportId, Guid attachmentId, Guid userId, UpdateAttachmentDTO dto);
-    Task<Option<ErrorDTO>> DeleteAttachmentsAsync(Guid reportId, Guid userId, DeleteAttachmentsDTO dto);
+    Task<Option<ErrorDTO>> DeleteAttachmentsAsync(Guid reportId, Guid userId, Guid attachmentId);
 }

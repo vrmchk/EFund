@@ -90,18 +90,14 @@ public class FundraisingReportController : ControllerBase
         return result.ToActionResult();
     }
 
-    [HttpDelete("{id}/attachments")]
+    [HttpDelete("{id}/attachments/{attachmentId}")]
     [SwaggerResponse(StatusCodes.Status204NoContent)]
     [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ErrorDTO))]
     [SwaggerResponse(StatusCodes.Status401Unauthorized)]
     [SwaggerResponse(StatusCodes.Status403Forbidden)] 
-    public async Task<IActionResult> DeleteAttachments(Guid id, [FromBody] DeleteAttachmentsDTO dto)
+    public async Task<IActionResult> DeleteAttachments(Guid id,  Guid attachmentId)
     {
-        var validationResult = await _validator.ValidateAsync(dto);
-        if (!validationResult.IsValid)
-            return BadRequest(validationResult.ToErrorDTO());
-
-        var result = await _fundraisingReportService.DeleteAttachmentsAsync(id, HttpContext.GetUserId(), dto);
+        var result = await _fundraisingReportService.DeleteAttachmentsAsync(id, HttpContext.GetUserId(), attachmentId);
         return result.ToActionResult();
     }
     

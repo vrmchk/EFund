@@ -104,6 +104,7 @@ public class FundraisingReportService : IFundraisingReportService
     {
         var report = await _reportRepository
             .Include(r => r.Fundraising)
+            .Include(r => r.Attachments)
             .FirstOrDefaultAsync(r => r.Id == reportId && r.Fundraising.UserId == userId);
 
         if (report == null)
@@ -121,12 +122,23 @@ public class FundraisingReportService : IFundraisingReportService
         if (!Directory.Exists(directory))
             Directory.CreateDirectory(directory);
 
-        var attachments = files.ToDictionary(f => new ReportAttachment
+        var attachments = new Dictionary<ReportAttachment, IFormFile>();
+        foreach (var file in files)
         {
-            FundraisingReportId = reportId,
-            Name = Path.GetFileNameWithoutExtension(f.FileName),
-            FilePath = Path.Combine(directory, $"{Guid.NewGuid():N}{_appDataConfig.AllowedFiles[f.ContentType]}")
-        });
+            var name = Path.GetFileNameWithoutExtension(file.FileName);
+            if (attachments.Any(a => a.Key.Name == name)
+                || report.Attachments.Any(a => a.Name == name))
+                name += "(1)";
+
+            var attachment = new ReportAttachment
+            {
+                FundraisingReportId = reportId,
+                Name = name,
+                FilePath = Path.Combine(directory, $"{name}{_appDataConfig.AllowedFiles[file.ContentType]}")
+            };
+
+            attachments.Add(attachment, file);
+        }
 
         await Task.WhenAll(attachments.Select(async pair =>
         {
@@ -181,7 +193,7 @@ public class FundraisingReportService : IFundraisingReportService
 
         return None;
     }
-    
+
     private FundraisingReportDTO ToDto(FundraisingReport report, string apiUrl)
     {
         foreach (var attachment in report.Attachments)

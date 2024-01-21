@@ -9,6 +9,7 @@ public class TagProfile : Profile
     public TagProfile()
     {
         CreateMap<Tag, TagDTO>();
-        CreateMap<CreateTagDTO, Tag>();
+        CreateMap<CreateTagDTO, Tag>()
+            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name.ToLower()));
     }
 }

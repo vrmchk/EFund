@@ -249,6 +249,7 @@ public class FundraisingService : IFundraisingService
 
     private async Task<List<Tag>> GetTags(List<string> tags)
     {
+        tags = tags.Select(t => t.ToLower()).ToList();
         var existingTags = await _tagRepository.Where(t => tags.Contains(t.Name)).ToListAsync();
         var newTags = tags
             .Where(t => existingTags.All(et => et.Name != t))

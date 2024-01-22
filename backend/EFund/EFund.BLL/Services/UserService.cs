@@ -233,8 +233,7 @@ public class UserService : IUserService
         }
 
         var token = await _userManager.GenerateAdminInvitationTokenAsync(user);
-        var encodedToken = HttpUtility.UrlEncode(token);
-        var callbackUri = string.Format(_callbackUrisConfig.InviteUserUriTemplate, encodedToken);
+        var callbackUri = string.Format(_callbackUrisConfig.InviteUserUriTemplate, token);
 
         var emailSent = await _emailSender.SendEmailAsync(dto.Email,
             new AdminInvitationMessage { InvitationUri = callbackUri });
@@ -275,28 +274,15 @@ public class UserService : IUserService
 
     public async Task<Either<ErrorDTO, PagedListDTO<UserExtendedDTO>>> SearchAsync(SearchUserDTO dto,
         PaginationDTO pagination,
-        string apiUrl)
+        string apiUrl,
+        Guid providerId)
     {
         IQueryable<User> queryable = _userManager.Users
+            .Where(u => u.Id != providerId)
             .Include(u => u.UserMonobanks);
 
-        if (dto.UserIds?.Count > 0)
-            queryable = queryable.Where(u => dto.UserIds.Contains(u.Id));
-
-        if (dto.Emails?.Count > 0)
-            queryable = queryable.Where(u => dto.Emails.Contains(u.Email!));
-
-        if (dto.UserNames?.Count > 0)
-            queryable = queryable.Where(u => dto.UserNames.Contains(u.DisplayName));
-
-        if (dto.CreatedByAdmin != null)
-            queryable = queryable.Where(u => u.CreatedByAdmin == dto.CreatedByAdmin);
-
-        if (dto.IsBlocked != null)
-            queryable = queryable.Where(u => u.IsBlocked == dto.IsBlocked);
-
-        if (dto.EmailConfirmed != null)
-            queryable = queryable.Where(u => u.EmailConfirmed == dto.EmailConfirmed);
+        if (!string.IsNullOrEmpty(dto.Query))
+            queryable = queryable.Where(u => u.DisplayName.ToLower().Contains(dto.Query.ToLower()) || u.Email!.Contains(dto.Query));
 
         var users = await queryable.ToPagedListAsync(pagination.Page, pagination.PageSize);
         var dtos = _mapper.Map<PagedListDTO<UserExtendedDTO>>(users);

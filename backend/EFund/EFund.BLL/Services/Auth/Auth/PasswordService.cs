@@ -79,8 +79,7 @@ public class PasswordService : AuthServiceBase, IPasswordService
             return new IncorrectParametersErrorDTO("Your email is not confirmed yet");
 
         var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-        var encodedToken = HttpUtility.UrlEncode(token);
-        var callbackUri = string.Format(_callbackUrisConfig.ResetPasswordUriTemplate, user.Email, encodedToken);
+        var callbackUri = string.Format(_callbackUrisConfig.ResetPasswordUriTemplate, user.Email, token);
 
         var emailSent = await _emailSender.SendEmailAsync(user.Email!,
             new ResetPasswordMessage { UserName = user.DisplayName, ResetPasswordUri = callbackUri });
@@ -112,8 +111,8 @@ public class PasswordService : AuthServiceBase, IPasswordService
         if (isSamePassword)
             return new IncorrectParametersErrorDTO("New password have to differ from the old one");
 
-        var decodedToken = HttpUtility.UrlDecode(dto.Token);
-        var result = await _userManager.ResetPasswordAsync(user, decodedToken, dto.NewPassword);
+        var token = dto.Token.Replace(' ', '+');
+        var result = await _userManager.ResetPasswordAsync(user, token, dto.NewPassword);
         if (!result.Succeeded)
         {
             _logger.LogIdentityErrors(user, result);

@@ -53,7 +53,7 @@ public class UserController : ControllerBase
         if (!validationResult.IsValid)
             return BadRequest(validationResult.ToErrorDTO());
 
-        var result = await _userService.SearchAsync(dto, pagination, HttpContext.GetApiUrl());
+        var result = await _userService.SearchAsync(dto, pagination, HttpContext.GetApiUrl(), HttpContext.GetUserId());
         return result.ToActionResult();
     }
 

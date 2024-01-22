@@ -106,6 +106,9 @@ public class AuthService : AuthServiceBase, IAuthService
         if (!user.EmailConfirmed)
             return new IncorrectParametersErrorDTO("Confirm your email before signing in");
 
+        if (user.IsBlocked)
+            return new NotFoundErrorDTO("User blocked by administrators");
+
         var validPassword = await _userManager.CheckPasswordAsync(user, dto.Password);
         if (!validPassword)
             return new IncorrectParametersErrorDTO("Email or password is incorrect");
@@ -117,8 +120,7 @@ public class AuthService : AuthServiceBase, IAuthService
     {
         _mapper.Map(dto, user);
         user.CreatedByAdmin = false;
-        var decodedToken = HttpUtility.UrlDecode(dto.AdminToken);
-        if (dto.AdminToken == null || !await _userManager.CanMakeAdminAsync(user, decodedToken!))
+        if (dto.AdminToken == null || !await _userManager.CanMakeAdminAsync(user, dto.AdminToken!))
             return new IncorrectParametersErrorDTO("Invalid admin token");
 
         var updatedUser = await _userManager.UpdateAsync(user);

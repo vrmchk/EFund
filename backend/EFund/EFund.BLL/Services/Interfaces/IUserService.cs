@@ -18,5 +18,5 @@ public interface IUserService
     Task<Option<ErrorDTO>> InviteAdminAsync(InviteAdminDTO dto);
     Task<Option<ErrorDTO>> PerformUserActionAsync(UserActionDTO dto);
     Task<Either<ErrorDTO, PagedListDTO<UserExtendedDTO>>> SearchAsync(SearchUserDTO dto, PaginationDTO pagination,
-        string apiUrl);
+        string apiUrl, Guid providerId);
 }

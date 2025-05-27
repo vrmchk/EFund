@@ -14,6 +14,7 @@ public interface IFundraisingService
     Task<Either<ErrorDTO, FundraisingDTO>> GetByIdAsync(Guid id, string apiUrl);
     Task<Either<ErrorDTO, FundraisingDTO>> AddAsync(Guid userId, CreateFundraisingDTO dto, string apiUrl);
     Task<Either<ErrorDTO, FundraisingDTO>> UpdateAsync(Guid id, Guid userId, UpdateFundraisingDTO dto, string apiUrl);
+    Task<Either<ErrorDTO, FundraisingDTO>> UpdateStatusAsync(Guid id, Guid userId, UpdateFundraisingStatusDTO dto, string apiUrl);
     Task<Option<ErrorDTO>> DeleteAsync(Guid id);
     Task<Option<ErrorDTO>> DeleteAsync(Guid id, Guid userId);
     Task<Option<ErrorDTO>> UploadAvatarAsync(Guid id, Guid userId, IFormFile file);

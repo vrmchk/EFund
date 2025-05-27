@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using EFund.Common.Enums;
 using EFund.Common.Models.DTO.Fundraising;
 using EFund.DAL.Entities;
 using EFund.Mapping.MappingActions;
@@ -13,16 +14,21 @@ public class FundraisingProfile : Profile
             .ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.Tags.Select(t => t.Name).ToList()))
             .ForMember(dest => dest.MonobankJarId, opt => opt.MapFrom(src => src.MonobankFundraising.JarId))
             .ForMember(dest => dest.AvatarUrl, opt => opt.MapFrom(src => src.AvatarPath))
-            .ForMember(dest => dest.Reports, opt => opt.MapAtRuntime())
-            .AfterMap<FundraisingToFundraisingDTOMappingAction>();
+            .ForMember(dest => dest.Reports, opt => opt.MapAtRuntime());
 
         CreateMap<CreateFundraisingDTO, Fundraising>()
             .ForMember(dest => dest.MonobankFundraising, opt => opt.MapAtRuntime())
             .ForMember(dest => dest.Tags, opt => opt.Ignore())
+            .ForMember(dest => dest.Status, opt => opt.MapFrom(_ => FundraisingStatus.Open))
+            .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(_ => DateTimeOffset.Now))
             .AfterMap<CreateFundraisingDTOToFundraisingMappingAction>();
 
         CreateMap<UpdateFundraisingDTO, Fundraising>()
             .ForMember(dest => dest.Tags, opt => opt.Ignore())
             .AfterMap<UpdateFundraisingDTOToFundraisingMappingAction>();
+
+        CreateMap<UpdateFundraisingStatusDTO, Fundraising>()
+            .ForMember(dest => dest.ClosedAt, opt => opt.MapFrom(src => src.Status == FundraisingStatus.Closed ? DateTimeOffset.Now : (DateTimeOffset?)null))
+            .ForMember(dest => dest.ReadyForReviewAt, opt => opt.MapFrom(src => src.Status == FundraisingStatus.ReadyForReview ? DateTimeOffset.Now : (DateTimeOffset?)null));
     }
 }

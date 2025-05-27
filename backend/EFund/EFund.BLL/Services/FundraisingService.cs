@@ -55,8 +55,8 @@ public class FundraisingService : IFundraisingService
     {
         IQueryable<Fundraising> queryable = IncludeRelations(_fundraisingRepository);
 
-        if (!dto.IncludeClosed)
-            queryable = queryable.Where(f => !f.IsClosed);
+        if (dto.Statuses.Count > 0)
+            queryable = queryable.Where(f => dto.Statuses.Contains(f.Status));
 
         if (!string.IsNullOrEmpty(dto.Title))
             queryable = queryable.Where(f => f.Title.Contains(dto.Title));
@@ -103,6 +103,21 @@ public class FundraisingService : IFundraisingService
         _mapper.Map(dto, fundraising);
         fundraising.Tags = await GetTags(dto.Tags);
 
+        await _fundraisingRepository.UpdateAsync(fundraising);
+
+        return await ToDto(fundraising, apiUrl);
+    }
+
+    public async Task<Either<ErrorDTO, FundraisingDTO>> UpdateStatusAsync(Guid id, Guid userId,
+        UpdateFundraisingStatusDTO dto, string apiUrl)
+    {
+        var fundraising = await IncludeRelations(_fundraisingRepository)
+            .FirstOrDefaultAsync(f => f.Id == id && f.UserId == userId);
+
+        if (fundraising == null)
+            return new NotFoundErrorDTO("Fundraising with this id does not exist");
+
+        _mapper.Map(dto, fundraising);
         await _fundraisingRepository.UpdateAsync(fundraising);
 
         return await ToDto(fundraising, apiUrl);

@@ -64,6 +64,9 @@ public class FundraisingService : IFundraisingService
         if (dto.Tags.Count > 0)
             queryable = queryable.Where(f => f.Tags.Any(t => dto.Tags.Contains(t.Name)));
 
+        if (dto.UserId != null)
+            queryable = queryable.Where(f => f.UserId == dto.UserId);
+
         var fundraisings = await queryable.ToPagedListAsync(pagination.Page, pagination.PageSize);
         return await ToDto(fundraisings, apiUrl);
     }

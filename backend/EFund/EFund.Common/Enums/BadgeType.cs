@@ -18,6 +18,6 @@ public enum BadgeType
     [Display(Name = "Fundraising Champion", Description = "Successfully completed 10+ fundraising campaigns. You're a pro!")]
     ExperiencedFundraiser,
 
-    [Display(Name = "UserSince", Description = "Fundraising for")]
+    [Display(Name = "User Since", Description = "Fundraising for")]
     UserSince
 }

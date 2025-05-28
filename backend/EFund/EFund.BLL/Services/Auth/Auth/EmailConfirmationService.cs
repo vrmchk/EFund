@@ -7,6 +7,9 @@ using EFund.Common.Models.DTO.Error;
 using EFund.DAL.Entities;
 using EFund.Email.Models;
 using EFund.Email.Services.Interfaces;
+using EFund.Hangfire.Abstractions;
+using EFund.Hangfire.JobArgs;
+using EFund.Hangfire.Jobs;
 using LanguageExt;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
@@ -18,16 +21,19 @@ public class EmailConfirmationService : AuthServiceBase, IEmailConfirmationServi
 {
     private readonly IEmailSender _emailSender;
     private readonly IUserRegistrationService _userRegistrationService;
+    private readonly IHangfireService _hangfireService;
 
     public EmailConfirmationService(UserManager<User> userManager,
         JwtConfig jwtConfig,
         ILogger<AuthServiceBase> logger,
         IEmailSender emailSender,
-        IUserRegistrationService userRegistrationService)
+        IUserRegistrationService userRegistrationService, 
+        IHangfireService hangfireService)
         : base(userManager, jwtConfig, logger)
     {
         _emailSender = emailSender;
         _userRegistrationService = userRegistrationService;
+        _hangfireService = hangfireService;
     }
 
     public async Task<Either<ErrorDTO, AuthSuccessDTO>> ConfirmEmailAsync(ConfirmEmailDTO dto)
@@ -52,6 +58,10 @@ public class EmailConfirmationService : AuthServiceBase, IEmailConfirmationServi
                 }
 
                 _logger.LogInformation("Email confirmed for user: {0}", user.Id);
+
+                _hangfireService.Enqueue<AssignUserCreatedBadgesJob, AssignUserCreatedBadgesJobArgs>(
+                    new AssignUserCreatedBadgesJobArgs { UserId = user.Id });              
+
                 return await GenerateAuthResultAsync(user);
             },
             Some: error =>

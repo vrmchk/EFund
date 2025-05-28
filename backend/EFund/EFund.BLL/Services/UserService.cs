@@ -49,7 +49,11 @@ public class UserService : IUserService
 
     public async Task<Either<ErrorDTO, UserDTO>> GetByIdAsync(Guid id, string apiUrl)
     {
-        var user = await _userManager.Users.Include(u => u.UserMonobanks).FirstOrDefaultAsync(u => u.Id == id);
+        var user = await _userManager.Users
+            .Include(u => u.UserMonobanks)
+            .Include(u => u.Badges)
+            .FirstOrDefaultAsync(u => u.Id == id);
+
         if (user is null)
             return new NotFoundErrorDTO("User with this id does not exist");
 

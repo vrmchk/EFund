@@ -8,8 +8,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\EFund.BLL\EFund.BLL.csproj" />
       <ProjectReference Include="..\EFund.Common\EFund.Common.csproj" />
+      <ProjectReference Include="..\EFund.DAL\EFund.DAL.csproj" />
     </ItemGroup>
 
     <ItemGroup>

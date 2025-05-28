@@ -12,6 +12,7 @@
       <ProjectReference Include="..\EFund.Common\EFund.Common.csproj" />
       <ProjectReference Include="..\EFund.DAL\EFund.DAL.csproj" />
       <ProjectReference Include="..\EFund.Email\EFund.Email.csproj" />
+      <ProjectReference Include="..\EFund.Hangfire\EFund.Hangfire.csproj" />
     </ItemGroup>
 
     <ItemGroup>

@@ -8,6 +8,9 @@ using EFund.Common.Models.DTO.Auth;
 using EFund.Common.Models.DTO.Error;
 using EFund.DAL.Entities;
 using EFund.DAL.Repositories.Interfaces;
+using EFund.Hangfire.Abstractions;
+using EFund.Hangfire.JobArgs;
+using EFund.Hangfire.Jobs;
 using Google.Apis.Auth;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Auth.OAuth2.Flows;
@@ -23,6 +26,7 @@ public class GoogleAuthService : AuthServiceBase, IGoogleAuthService
     private readonly GoogleConfig _googleConfig;
     private readonly IRepository<UserRegistration> _userRegistrationRepository;
     private readonly IMapper _mapper;
+    private readonly IHangfireService _hangfireService;
 
     public GoogleAuthService(
         UserManager<User> userManager,
@@ -30,12 +34,14 @@ public class GoogleAuthService : AuthServiceBase, IGoogleAuthService
         JwtConfig jwtConfig,
         GoogleConfig googleConfig,
         IMapper mapper,
-        ILogger<GoogleAuthService> logger)
+        ILogger<GoogleAuthService> logger, 
+        IHangfireService hangfireService)
         : base(userManager, jwtConfig, logger)
     {
         _userRegistrationRepository = userRegistrationRepository;
         _googleConfig = googleConfig;
         _mapper = mapper;
+        _hangfireService = hangfireService;
     }
 
     public async Task<Either<ErrorDTO, AuthSuccessDTO>> SignUpAsync(string authorizationCode, GoogleSingUpDTO dto)
@@ -73,6 +79,9 @@ public class GoogleAuthService : AuthServiceBase, IGoogleAuthService
             _logger.LogIdentityErrors(user, roleAdded);
             return new IdentityErrorDTO("Unable to create a user. Please try again later");
         }
+
+        _hangfireService.Enqueue<AssignUserCreatedBadgesJob, AssignUserCreatedBadgesJobArgs>(
+            new AssignUserCreatedBadgesJobArgs { UserId = user.Id });
 
         return await GenerateAuthResultAsync(user);
     }

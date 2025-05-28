@@ -7,4 +7,6 @@ public class Badge
 {
     [Key]
     public BadgeType Type { get; set; }
+
+    public List<User> Users { get; set; } = [];
 }

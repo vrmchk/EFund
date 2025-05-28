@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EFund.DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250528001151_AddBadges")]
+    [Migration("20250528132600_AddBadges")]
     partial class AddBadges
     {
         /// <inheritdoc />
@@ -25,17 +25,27 @@ namespace EFund.DAL.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("BadgeUser", b =>
+                {
+                    b.Property<int>("BadgesType")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("UsersId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("BadgesType", "UsersId");
+
+                    b.HasIndex("UsersId");
+
+                    b.ToTable("BadgeUser");
+                });
+
             modelBuilder.Entity("EFund.DAL.Entities.Badge", b =>
                 {
                     b.Property<int>("Type")
                         .HasColumnType("int");
 
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Type");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Badge");
                 });
@@ -452,11 +462,19 @@ namespace EFund.DAL.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("EFund.DAL.Entities.Badge", b =>
+            modelBuilder.Entity("BadgeUser", b =>
                 {
+                    b.HasOne("EFund.DAL.Entities.Badge", null)
+                        .WithMany()
+                        .HasForeignKey("BadgesType")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("EFund.DAL.Entities.User", null)
-                        .WithMany("Badges")
-                        .HasForeignKey("UserId");
+                        .WithMany()
+                        .HasForeignKey("UsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("EFund.DAL.Entities.Fundraising", b =>
@@ -606,8 +624,6 @@ namespace EFund.DAL.Migrations
 
             modelBuilder.Entity("EFund.DAL.Entities.User", b =>
                 {
-                    b.Navigation("Badges");
-
                     b.Navigation("UserMonobanks");
 
                     b.Navigation("UserRegistrations");

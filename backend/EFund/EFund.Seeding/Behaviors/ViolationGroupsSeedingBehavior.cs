@@ -28,7 +28,10 @@ public class ViolationGroupsSeedingBehavior(
         var titlesToAdd = seedingGroupTitles.Except(existingGroupTitle);
         var titlesToRemove = existingGroupTitle.Except(seedingGroupTitles);
 
-        await _groupRepository.Where(g => titlesToRemove.Contains(g.Title)).ExecuteDeleteAsync();
+        await _groupRepository
+            .Where(g => titlesToRemove.Contains(g.Title))
+            .ExecuteUpdateAsync(s => s.SetProperty(g => g.IsDeleted, true));
+
         await _groupRepository.InsertManyAsync(titlesToAdd.Select(t => new ViolationGroup { Title = t, }));
     }
 }

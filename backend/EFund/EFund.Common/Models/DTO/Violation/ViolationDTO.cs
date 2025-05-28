@@ -1,11 +1,9 @@
-using System;
+namespace EFund.Common.Models.DTO.Violation;
 
-namespace EFund.Common.Models.DTO.Violation
+public class ViolationDTO
 {
-    public class ViolationDTO
-    {
-        public Guid Id { get; set; }
-        public string Title { get; set; } = string.Empty;
-        public Guid ViolationGroupId { get; set; }
-    }
-} 
+    public Guid Id { get; set; }
+    public string Title { get; set; } = string.Empty;
+    public bool IsDeleted { get; set; }
+    public Guid ViolationGroupId { get; set; }
+}

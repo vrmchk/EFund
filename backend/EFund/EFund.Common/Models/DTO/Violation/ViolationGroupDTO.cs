@@ -1,12 +1,9 @@
-using System;
-using System.Collections.Generic;
+namespace EFund.Common.Models.DTO.Violation;
 
-namespace EFund.Common.Models.DTO.Violation
+public class ViolationGroupDTO
 {
-    public class ViolationGroupDTO
-    {
-        public Guid Id { get; set; }
-        public string Title { get; set; } = string.Empty;
-        public List<ViolationDTO> Violations { get; set; } = [];
-    }
-} 
+    public Guid Id { get; set; }
+    public string Title { get; set; } = string.Empty;
+    public bool IsDeleted { get; set; }
+    public List<ViolationDTO> Violations { get; set; } = [];
+}

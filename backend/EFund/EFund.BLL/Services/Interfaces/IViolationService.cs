@@ -6,6 +6,6 @@ namespace EFund.BLL.Services.Interfaces
 {
     public interface IViolationService
     {
-        Task<List<ViolationGroupDTO>> GetGroupedViolationsAsync();
+        Task<List<ViolationGroupDTO>> GetGroupedViolationsAsync(bool withDeleted);
     }
 } 

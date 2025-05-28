@@ -33,7 +33,9 @@ public class ViolationsSeedingBehavior(
         var titlesToAdd = seedingViolationTitles.Except(existingViolationTitles);
         var titlesToRemove = existingViolationTitles.Except(seedingViolationTitles);
 
-        await _violationRepository.Where(v => titlesToRemove.Contains(v.Title)).ExecuteDeleteAsync();
+        await _violationRepository
+            .Where(v => titlesToRemove.Contains(v.Title))
+            .ExecuteUpdateAsync(s => s.SetProperty(v => v.IsDeleted, true));
 
         var violationsToAdd = seedingViolations
             .Where(v => titlesToAdd.Contains(v.Title))

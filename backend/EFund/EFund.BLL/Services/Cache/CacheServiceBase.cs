@@ -21,6 +21,11 @@ public abstract class CacheServiceBase : ICacheService
 
     protected abstract Task RemoveAsync(string cachingKey);
 
+    public Task<Option<T>> GetAsync<T>(CachingKey key)
+    {
+        return GetAsync<T>(GetCachingKey(key));
+    }
+
     public Task<Option<T>> GetAsync<T>(CachingKey key, object keyParameter)
     {
         return GetAsync<T>(key, new[] { keyParameter });
@@ -30,6 +35,11 @@ public abstract class CacheServiceBase : ICacheService
     {
         var cachingKey = GetCachingKey(key, keyParameters);
         return GetAsync<T>(cachingKey);
+    }
+
+    public Task SetAsync<T>(CachingKey key, T value, TimeSpan? slidingLifetime = null, TimeSpan? absoluteLifetime = null)
+    {
+        return SetAsync(GetCachingKey(key), value, slidingLifetime, absoluteLifetime);
     }
 
     public Task SetAsync<T>(CachingKey key, object keyParameter, T value, TimeSpan? slidingLifetime = null,
@@ -43,6 +53,21 @@ public abstract class CacheServiceBase : ICacheService
     {
         var cachingKey = GetCachingKey(key, keyParameters);
         return SetAsync(cachingKey, value, slidingLifetime, absoluteLifetime);
+    }
+
+    public async Task<T> GetOrSetAsync<T>(CachingKey key, Func<T> valueFactory, TimeSpan? slidingLifetime = null,
+        TimeSpan? absoluteLifetime = null)
+    {
+        var cachingKey = GetCachingKey(key);
+        var result = await GetAsync<T>(cachingKey);
+        return await result.Match<Task<T>>(
+            Some: Task.FromResult,
+            None: async () =>
+            {
+                var value = valueFactory();
+                await SetAsync(cachingKey, value, slidingLifetime, absoluteLifetime);
+                return value;
+            });
     }
 
     public Task<T> GetOrSetAsync<T>(CachingKey key, object keyParameter, Func<T> valueFactory,
@@ -61,6 +86,21 @@ public abstract class CacheServiceBase : ICacheService
             None: async () =>
             {
                 var value = valueFactory();
+                await SetAsync(cachingKey, value, slidingLifetime, absoluteLifetime);
+                return value;
+            });
+    }
+
+    public async Task<T> GetOrSetAsync<T>(CachingKey key, Func<Task<T>> valueFactory, TimeSpan? slidingLifetime = null,
+        TimeSpan? absoluteLifetime = null)
+    {
+        var cachingKey = GetCachingKey(key);
+        var result = await GetAsync<T>(cachingKey);
+        return await result.Match<Task<T>>(
+            Some: Task.FromResult,
+            None: async () =>
+            {
+                var value = await valueFactory();
                 await SetAsync(cachingKey, value, slidingLifetime, absoluteLifetime);
                 return value;
             });
@@ -103,4 +143,6 @@ public abstract class CacheServiceBase : ICacheService
         var parameterString = string.Join("_", keyParameters);
         return $"{key}_{parameterString}";
     }
+
+    private string GetCachingKey(CachingKey key) => key.ToString();
 }

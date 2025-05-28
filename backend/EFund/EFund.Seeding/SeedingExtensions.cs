@@ -1,5 +1,6 @@
 ﻿using EFund.Seeding.Behaviors;
 using EFund.Seeding.Behaviors.Abstractions;
+using EFund.Seeding.Utils;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -9,7 +10,9 @@ public static class SeedingExtensions
 {
     public static IServiceCollection AddSeeding(this IServiceCollection services)
     {
-        services.AddScoped<ISeedingBehavior, RolesSeedingBehaviour>();
+        services.AddScoped<ISeedingBehavior, RolesSeedingBehavior>();
+        services.AddScoped<ISeedingBehavior, ViolationGroupsSeedingBehavior>();
+        services.AddScoped<ISeedingBehavior, ViolationsSeedingBehavior>();
 
         return services;
     }
@@ -21,7 +24,7 @@ public static class SeedingExtensions
 
         var behaviors = services.GetRequiredService<IEnumerable<ISeedingBehavior>>();
 
-        foreach (var behavior in behaviors)
+        foreach (var behavior in behaviors.OrderBy(b => b.GetType().GetDepth()))
         {
             await behavior.SeedAsync();
         }

@@ -3,5 +3,6 @@
 public enum CachingKey
 {
     MonobankClientInfo,
-    MonobankClientInfoBackup
+    MonobankClientInfoBackup,
+    ViolationGroups
 }

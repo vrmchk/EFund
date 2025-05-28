@@ -5,11 +5,11 @@ using Microsoft.AspNetCore.Identity;
 
 namespace EFund.Seeding.Behaviors;
 
-public class RolesSeedingBehaviour : BaseSeedingBehavior
+public class RolesSeedingBehavior : BaseSeedingBehavior
 {
     private readonly RoleManager<IdentityRole<Guid>> _roleManager;
 
-    public RolesSeedingBehaviour(AppDataConfig appDataConfig, RoleManager<IdentityRole<Guid>> roleManager) 
+    public RolesSeedingBehavior(AppDataConfig appDataConfig, RoleManager<IdentityRole<Guid>> roleManager) 
         : base(appDataConfig)
     {
         _roleManager = roleManager;

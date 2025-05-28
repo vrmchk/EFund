@@ -89,11 +89,6 @@ public class FundraisingController : ControllerBase
     [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ErrorDTO))]
     [SwaggerResponse(StatusCodes.Status401Unauthorized)]
     [SwaggerResponse(StatusCodes.Status403Forbidden)]
-    [SwaggerOperation(
-        Summary = "Update fundraising status (User only)",
-        Description = "Allows a regular authenticated user to update the status of their own fundraising request. " +
-                      "Admins must use a different endpoint with full review submission."
-    )]
     public async Task<IActionResult> Update(Guid id, [FromBody] UpdateFundraisingDTO dto)
     {
         var validationResult = await _validator.ValidateAsync(dto);
@@ -110,6 +105,11 @@ public class FundraisingController : ControllerBase
     [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ErrorDTO))]
     [SwaggerResponse(StatusCodes.Status401Unauthorized)]
     [SwaggerResponse(StatusCodes.Status403Forbidden)]
+    [SwaggerOperation(
+        Summary = "Update fundraising status (User only)",
+        Description = "Allows a regular authenticated user to update the status of their own fundraising request. " +
+                      "Admins must use a different endpoint with full review submission."
+    )]
     public async Task<IActionResult> UpdateStatus(Guid id, [FromBody] UpdateFundraisingStatusDTO dto)
     {
         var validationResult = await _validator.ValidateAsync(dto);

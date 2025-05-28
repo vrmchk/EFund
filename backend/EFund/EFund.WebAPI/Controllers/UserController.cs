@@ -44,8 +44,6 @@ public class UserController : ControllerBase
     [HttpGet("{id}")]
     [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(UserDTO))]
     [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ErrorDTO))]
-    [SwaggerResponse(StatusCodes.Status401Unauthorized)]
-    [SwaggerResponse(StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> GetById(Guid id)
     {
         var result = await _userService.GetByIdAsync(id, HttpContext.GetApiUrl());

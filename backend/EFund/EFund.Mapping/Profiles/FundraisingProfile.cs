@@ -14,6 +14,7 @@ public class FundraisingProfile : Profile
             .ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.Tags.Select(t => t.Name).ToList()))
             .ForMember(dest => dest.MonobankJarId, opt => opt.MapFrom(src => src.MonobankFundraising.JarId))
             .ForMember(dest => dest.AvatarUrl, opt => opt.MapFrom(src => src.AvatarPath))
+            .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User != null ? src.User.DisplayName : null))
             .ForMember(dest => dest.Reports, opt => opt.MapAtRuntime());
 
         CreateMap<CreateFundraisingDTO, Fundraising>()

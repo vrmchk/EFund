@@ -262,6 +262,7 @@ public class FundraisingService : IFundraisingService
     private IQueryable<Fundraising> IncludeRelations(IQueryable<Fundraising> queryable)
     {
         return queryable
+            .Include(f => f.User)
             .Include(f => f.Tags)
             .Include(f => f.MonobankFundraising)
             .Include(f => f.Reports)

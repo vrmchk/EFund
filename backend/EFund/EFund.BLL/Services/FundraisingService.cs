@@ -54,7 +54,7 @@ public class FundraisingService : IFundraisingService
         PaginationDTO pagination,
         string apiUrl)
     {
-        IQueryable<Fundraising> queryable = IncludeRelations(_fundraisingRepository);
+        var queryable = IncludeRelations(_fundraisingRepository);
 
         if (dto.Statuses.Count > 0)
             queryable = queryable.Where(f => dto.Statuses.Contains(f.Status));

@@ -1,4 +1,4 @@
-﻿using EFund.Seeding.Behaviors;
+﻿using EFund.Common.Extensions;
 using EFund.Seeding.Behaviors.Abstractions;
 using EFund.Seeding.Utils;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,9 +10,11 @@ public static class SeedingExtensions
 {
     public static IServiceCollection AddSeeding(this IServiceCollection services)
     {
-        services.AddScoped<ISeedingBehavior, RolesSeedingBehavior>();
-        services.AddScoped<ISeedingBehavior, ViolationGroupsSeedingBehavior>();
-        services.AddScoped<ISeedingBehavior, ViolationsSeedingBehavior>();
+        var behaviourTypes = typeof(ISeedingBehavior).Assembly.GetTypesImplementingInterface<ISeedingBehavior>();
+        foreach (var behaviourType in behaviourTypes)
+        {
+            services.AddScoped(typeof(ISeedingBehavior), behaviourType);
+        }
 
         return services;
     }

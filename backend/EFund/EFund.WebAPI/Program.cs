@@ -60,7 +60,8 @@ builder.Services.AddConfigs(builder.Configuration, opt =>
         .AddConfig<EncryptionConfig>()
         .AddConfig<MonobankConfig>(out monobankConfig, "ApiClients:Monobank")
         .AddConfig<CallbackUrisConfig>()
-        .AddConfig<CacheConfig>());
+        .AddConfig<CacheConfig>()
+        .AddConfig<GeneralConfig>());
 
 //DbContext
 var dbContextLoggerFactory = LoggerFactory.Create(cfg => cfg.AddConsole());
@@ -94,6 +95,8 @@ builder.Services.AddScoped<IUserCleanerService, UserCleanerService>();
 builder.Services.AddScoped<IUserRegistrationService, UserRegistrationService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IViolationService, ViolationService>();
+builder.Services.AddScoped<IComplaintService, ComplaintService>();
+builder.Services.AddScoped<INotificationService, NotificationService>();
 
 //ApiClients
 builder.Services.AddHttpClient(monobankConfig.HttpClientName,

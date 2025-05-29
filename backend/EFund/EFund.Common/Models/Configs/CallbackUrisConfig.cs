@@ -6,4 +6,5 @@ public class CallbackUrisConfig : ConfigBase
 {
     public string ResetPasswordUriTemplate { get; set; } = string.Empty;
     public string InviteUserUriTemplate { get; set; } = string.Empty;
+    public string ViewFundraisingUriTemplate { get; set; } = string.Empty;
 }

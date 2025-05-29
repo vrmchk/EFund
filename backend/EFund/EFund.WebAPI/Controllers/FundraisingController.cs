@@ -27,7 +27,7 @@ public class FundraisingController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = Policies.User)]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = Policies.Shared)]
     [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(PagedListDTO<FundraisingDTO>))]
     [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ErrorDTO))]
     [SwaggerResponse(StatusCodes.Status401Unauthorized)]

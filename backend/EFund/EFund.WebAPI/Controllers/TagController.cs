@@ -27,7 +27,6 @@ public class TagController : ControllerBase
 
     [HttpGet]
     [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(List<TagDTO>))]
-    
     public async Task<IActionResult> GetAll()
     {
         var result = await _tagService.GetAllAsync();
@@ -60,7 +59,7 @@ public class TagController : ControllerBase
         var result = await _tagService.GetByNameAsync(name);
         return Ok(result);
     }
-    
+
     [HttpDelete("{name}")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = Policies.Admin)]
     [SwaggerResponse(StatusCodes.Status204NoContent)]

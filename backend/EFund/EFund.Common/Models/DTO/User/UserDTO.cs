@@ -1,4 +1,5 @@
 ﻿using EFund.Common.Models.DTO.Badge;
+using EFund.Common.Models.DTO.Notification;
 
 namespace EFund.Common.Models.DTO.User;
 
@@ -13,5 +14,7 @@ public class UserDTO
     public bool HasMonobankToken { get; set; }
     public bool IsAdmin { get; set; }
     public DateTimeOffset CreatedAt { get; set; }
+    public decimal Rating { get; set; }
     public List<BadgeDTO> Badges { get; set; } = [];
+    public List<NotificationDTO> Notifications { get; set; } = [];
 }

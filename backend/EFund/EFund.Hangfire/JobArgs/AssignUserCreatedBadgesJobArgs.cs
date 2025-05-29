@@ -4,5 +4,5 @@ namespace EFund.Hangfire.JobArgs;
 
 public class AssignUserCreatedBadgesJobArgs : IJobArgs
 {
-    public Guid UserId { get; set; }
+    public required Guid UserId { get; set; }
 }

@@ -23,6 +23,29 @@ public partial class ApplicationDbContext : IdentityDbContext<User, IdentityRole
     {
         base.OnModelCreating(builder);
         OnModelCreatingPartial(builder);
+
+        builder.Entity<Complaint>(cfg =>
+        {
+            cfg.HasOne(c => c.Fundraising)
+                .WithMany(f => f.Complaints)
+                .HasForeignKey(c => c.FundraisingId)
+                .OnDelete(DeleteBehavior.Restrict); // 🔐 Avoid unintended cascade
+
+            cfg.HasOne(c => c.RequestedByUser)
+                .WithMany()
+                .HasForeignKey(c => c.RequestedBy)
+                .OnDelete(DeleteBehavior.Restrict); // ✅ Safe
+
+            cfg.HasOne(c => c.RequestedForUser)
+                .WithMany()
+                .HasForeignKey(c => c.RequestedFor)
+                .OnDelete(DeleteBehavior.Restrict); // ✅ Avoid cascade cycles
+
+            cfg.HasOne(c => c.ReviewedByUser)
+                .WithMany()
+                .HasForeignKey(c => c.ReviewedBy)
+                .OnDelete(DeleteBehavior.Restrict); // ✅ Optional reviewer
+        });
     }
 
     partial void OnModelCreatingPartial(ModelBuilder builder);

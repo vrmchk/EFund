@@ -8,16 +8,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EFund.Hangfire.Jobs;
 
-public class AssignFundraisingBadgesJob : IJob<AssignFundraisingBadgesJobArgs>
+public class AssignFundraisingBadgesJob(
+    UserManager<User> userManager,
+    IRepository<Fundraising> fundraisingRepository
+)
+    : IJob<AssignFundraisingBadgesJobArgs>
 {
-    private readonly UserManager<User> _userManager;
-    private readonly IRepository<Fundraising> _fundraisingRepository;
-
-    public AssignFundraisingBadgesJob(UserManager<User> userManager, IRepository<Fundraising> fundraisingRepository)
-    {
-        _userManager = userManager;
-        _fundraisingRepository = fundraisingRepository;
-    }
+    private readonly UserManager<User> _userManager = userManager;
+    private readonly IRepository<Fundraising> _fundraisingRepository = fundraisingRepository;
 
     public static string Id => nameof(AssignUserCreatedBadgesJob);
 
@@ -25,12 +23,12 @@ public class AssignFundraisingBadgesJob : IJob<AssignFundraisingBadgesJobArgs>
     {
         var user = await _userManager.Users
             .Include(u => u.Badges)
-            .SingleOrDefaultAsync(u => u.Id == data.UserId);
+            .SingleOrDefaultAsync(u => u.Id == data.UserId, cancellationToken);
 
         if (user == null)
             return;
 
-        var count = await _fundraisingRepository.CountAsync(f => f.UserId == data.UserId && f.Status == FundraisingStatus.Reviewed);
+        var count = await _fundraisingRepository.CountAsync(f => f.UserId == data.UserId && f.Status == FundraisingStatus.Reviewed, cancellationToken);
         var (newType, oldType) = count switch
         {
             1 => (BadgeType.NoviceFundraiser, BadgeType.Freshman),

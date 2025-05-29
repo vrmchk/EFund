@@ -2,6 +2,7 @@
 using EFund.BLL.Extensions;
 using EFund.BLL.Services.Interfaces;
 using EFund.BLL.Utility;
+using EFund.Common.Enums;
 using EFund.Common.Models.Configs;
 using EFund.Common.Models.DTO.Common;
 using EFund.Common.Models.DTO.Error;
@@ -158,7 +159,9 @@ public class FundraisingService : IFundraisingService
         if (fundraising == null)
             return new NotFoundErrorDTO("Fundraising with this id does not exist");
 
-        await _fundraisingRepository.DeleteAsync(fundraising);
+        fundraising.Status = FundraisingStatus.Deleted;
+
+        await _fundraisingRepository.UpdateAsync(fundraising);
 
         return None;
     }

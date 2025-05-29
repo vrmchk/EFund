@@ -6,12 +6,6 @@ namespace EFund.DAL.Entities;
 
 public class Fundraising : BaseEntity<Guid>
 {
-    public Fundraising()
-    {
-        Tags = new List<Tag>();
-        Reports = new List<FundraisingReport>();
-    }
-
     public FundraisingProvider Provider { get; set; }
     public string Title { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
@@ -29,6 +23,7 @@ public class Fundraising : BaseEntity<Guid>
 
     public MonobankFundraising MonobankFundraising { get; set; } = null!;
 
-    public List<Tag> Tags { get; set; }
-    public List<FundraisingReport> Reports { get; set; }
+    public List<Tag> Tags { get; set; } = [];
+    public List<FundraisingReport> Reports { get; set; } = [];
+    public List<Complaint> Complaints { get; set; } = [];
 }

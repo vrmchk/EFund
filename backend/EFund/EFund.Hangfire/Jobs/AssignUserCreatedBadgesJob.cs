@@ -6,15 +6,13 @@ using Microsoft.AspNetCore.Identity;
 
 namespace EFund.Hangfire.Jobs;
 
-public class AssignUserCreatedBadgesJob : IJob<AssignUserCreatedBadgesJobArgs>
+public class AssignUserCreatedBadgesJob(
+    UserManager<User> userManager
+)
+    : IJob<AssignUserCreatedBadgesJobArgs>
 {
-    private readonly UserManager<User> _userManager;
+    private readonly UserManager<User> _userManager = userManager;
     private readonly BadgeType[] _badgeTypesToAssign = [BadgeType.Freshman, BadgeType.UserSince];
-
-    public AssignUserCreatedBadgesJob(UserManager<User> userManager)
-    {
-        _userManager = userManager;
-    }
 
     public static string Id => nameof(AssignUserCreatedBadgesJob);
 

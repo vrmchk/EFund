@@ -6,16 +6,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EFund.Hangfire.Jobs;
 
-public class ClearExpiredUserRegistrationsJob : IJob
+public class ClearExpiredUserRegistrationsJob(
+    IRepository<UserRegistration> userRegistrationRepository,
+    UserManager<User> userManager
+) : IJob
 {
-    private readonly IRepository<UserRegistration> _userRegistrationRepository;
-    private readonly UserManager<User> _userManager;
-
-    public ClearExpiredUserRegistrationsJob(IRepository<UserRegistration> userRegistrationRepository, UserManager<User> userManager)
-    {
-        _userRegistrationRepository = userRegistrationRepository;
-        _userManager = userManager;
-    }
+    private readonly IRepository<UserRegistration> _userRegistrationRepository = userRegistrationRepository;
+    private readonly UserManager<User> _userManager = userManager;
 
     public static string Id => nameof(ClearExpiredUserRegistrationsJob);
 
@@ -24,12 +21,12 @@ public class ClearExpiredUserRegistrationsJob : IJob
         var expiredUsers = _userRegistrationRepository.Where(user =>
             user.IsCodeRegenerated && user.ExpiresAt <= DateTimeOffset.UtcNow);
 
-        var users = await expiredUsers.Include(ur => ur.User).Select(ur => ur.User).ToListAsync();
+        var users = await expiredUsers.Include(ur => ur.User).Select(ur => ur.User).ToListAsync(cancellationToken);
         foreach (var user in users)
         {
             await _userManager.DeleteAsync(user);
         }
 
-        await _userRegistrationRepository.DeleteManyAsync(await expiredUsers.ToListAsync());
+        await _userRegistrationRepository.DeleteManyAsync(await expiredUsers.ToListAsync(cancellationToken));
     }
 }

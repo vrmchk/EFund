@@ -12,4 +12,6 @@ public class Violation : BaseEntity<Guid>
 
     [ForeignKey(nameof(ViolationGroupId))]
     public ViolationGroup ViolationGroup { get; set; } = null!;
+
+    public List<Complaint> Complaints { get; set; } = [];
 }

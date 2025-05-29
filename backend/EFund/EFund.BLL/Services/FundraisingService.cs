@@ -213,10 +213,9 @@ public class FundraisingService : IFundraisingService
         return None;
     }
 
-    private void PathToUrl(Fundraising fundraising, string apiUrl)
+    private void ConvertFundraisingPathToUrl(Fundraising fundraising, string apiUrl)
     {
-        fundraising.AvatarPath = (fundraising.AvatarPath ?? _appDataConfig.DefaultFundraisingAvatarPath)
-            .PathToUrl(apiUrl);
+        fundraising.AvatarPath = (fundraising.AvatarPath ?? _appDataConfig.DefaultFundraisingAvatarPath).PathToUrl(apiUrl);
 
         foreach (var report in fundraising.Reports)
         {
@@ -224,15 +223,21 @@ public class FundraisingService : IFundraisingService
         }
     }
 
+    private string GetUserAvatarUrl(Fundraising fundraising, string apiUrl)
+    {
+        return (fundraising.User?.AvatarPath ?? _appDataConfig.DefaultUserAvatarPath).PathToUrl(apiUrl);
+    }
+
     private async Task<Either<ErrorDTO, FundraisingDTO>> ToDto(Fundraising fundraising, string apiUrl)
     {
-        PathToUrl(fundraising, apiUrl);
+        ConvertFundraisingPathToUrl(fundraising, apiUrl);
         var result = await _monobankService.GetJarByIdAsync(fundraising.UserId, fundraising.MonobankFundraising.JarId);
         return result.Match<Either<ErrorDTO, FundraisingDTO>>(
             Right: jar =>
             {
                 var fundraisingDto = _mapper.Map<FundraisingDTO>(fundraising);
                 fundraisingDto.MonobankJar = jar;
+                fundraisingDto.UserAvatarUrl = GetUserAvatarUrl(fundraising, apiUrl);
                 return fundraisingDto;
             },
             Left: error => error
@@ -242,7 +247,7 @@ public class FundraisingService : IFundraisingService
     private async Task<Either<ErrorDTO, PagedListDTO<FundraisingDTO>>> ToDto(PagedList<Fundraising> fundraisings,
         string apiUrl)
     {
-        fundraisings.ForEach(f => PathToUrl(f, apiUrl));
+        fundraisings.ForEach(f => ConvertFundraisingPathToUrl(f, apiUrl));
 
         var dtos = _mapper.Map<PagedListDTO<FundraisingDTO>>(fundraisings);
 
@@ -252,7 +257,12 @@ public class FundraisingService : IFundraisingService
         return result.Match<Either<ErrorDTO, PagedListDTO<FundraisingDTO>>>(
             Right: jars =>
             {
-                dtos.Items.ForEach(f => f.MonobankJar = jars.FirstOrDefault(j => j.Id == f.MonobankJarId));
+                foreach (var (fundraising, dto) in fundraisings
+                             .Join(dtos.Items, f => f.Id, dto => dto.Id, (f, dto) => (f, dto)))
+                {
+                    dto.UserAvatarUrl = GetUserAvatarUrl(fundraising, apiUrl);
+                    dto.MonobankJar = jars.FirstOrDefault(j => j.Id == dto.MonobankJarId);
+                }
                 return dtos;
             },
             Left: error => error

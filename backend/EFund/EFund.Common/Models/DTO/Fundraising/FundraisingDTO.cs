@@ -17,6 +17,7 @@ public class FundraisingDTO
     public DateTimeOffset? ReviewedAt { get; set; }
     public Guid UserId { get; set; }
     public string UserName { get; set; } = string.Empty;
+    public string UserAvatarUrl { get; set; } = string.Empty;
     public string MonobankJarId { get; set; } = string.Empty;
     public List<string> Tags { get; set; } = new();
     public List<FundraisingReportDTO> Reports { get; set; } = new();

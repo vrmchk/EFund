@@ -90,7 +90,7 @@ public class ComplaintService(
             {
                 await SetReviewed(complaint, reviewedBy, ComplaintStatus.Accepted);
 
-                TriggerPostAcceptActions(dto, complaint);
+                await TriggerPostAcceptActions(dto, complaint);
 
                 return None;
             },
@@ -117,7 +117,7 @@ public class ComplaintService(
             {
                 await SetReviewed(complaint, reviewedBy, ComplaintStatus.RequestedChanges);
 
-                TriggerPostRequestChangesActions(dto, complaint);
+                await TriggerPostRequestChangesActions(dto, complaint);
 
                 return None;
             },

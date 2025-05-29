@@ -27,7 +27,7 @@ public class ViolationsSeedingBehavior(
         var existingViolations = await _violationRepository.ToListAsync();
         var existingViolationTitles = existingViolations.Select(v => v.Title).ToList();
 
-        var seedingViolations = SeedingUtils.GetFromCsv<ViolationSeedingDTO>($"{DataFolder}/violations.csv");
+        var seedingViolations = SeedingUtils.GetFromCsv<ViolationSeedingDTO>($"{DataFolder}Violations.csv");
         var seedingViolationTitles = seedingViolations.Select(v => v.Title).ToList();
 
         var titlesToAdd = seedingViolationTitles.Except(existingViolationTitles);

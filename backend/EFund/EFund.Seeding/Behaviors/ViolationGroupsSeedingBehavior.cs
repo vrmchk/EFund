@@ -16,13 +16,12 @@ public class ViolationGroupsSeedingBehavior(
 {
     private readonly IRepository<ViolationGroup> _groupRepository = groupRepository;
 
-
     public override async Task SeedAsync()
     {
         var existingGroups = await _groupRepository.ToListAsync();
         var existingGroupTitle = existingGroups.Select(g => g.Title).ToList();
 
-        var seedingViolations = SeedingUtils.GetFromCsv<ViolationSeedingDTO>($"{DataFolder}/violations.csv");
+        var seedingViolations = SeedingUtils.GetFromCsv<ViolationSeedingDTO>($"{DataFolder}Violations.csv");
         var seedingGroupTitles = seedingViolations.Select(g => g.Group).ToList();
 
         var titlesToAdd = seedingGroupTitles.Except(existingGroupTitle);

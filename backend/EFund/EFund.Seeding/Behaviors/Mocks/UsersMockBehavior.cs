@@ -1,11 +1,13 @@
 using EFund.Common.Constants;
 using EFund.Common.Models.Configs;
 using EFund.DAL.Entities;
+using EFund.Seeding.Behaviors.Abstractions;
 using EFund.Seeding.Behaviors.Mocks.Abstractions;
 using Microsoft.AspNetCore.Identity;
 
 namespace EFund.Seeding.Behaviors.Mocks;
 
+[DependsOn([typeof(RolesSeedingBehavior)])]
 public class UsersMockBehavior(
     AppDataConfig appDataConfig,
     GeneralConfig generalConfig,
@@ -34,7 +36,7 @@ public class UsersMockBehavior(
             Email = "admin@admin.com",
             UserName = "admin@admin.com",
             EmailConfirmed = true,
-            CreatedAt = DateTimeOffset.Now,
+            CreatedAt = DateTimeOffset.Now.AddYears(-5),
         }, Roles.Admin),
         (new User
         {
@@ -42,7 +44,7 @@ public class UsersMockBehavior(
             Email = "ihverwork@gmail.com",
             UserName = "ihverwork@gmail.com",
             EmailConfirmed = true,
-            CreatedAt = DateTimeOffset.Now,
+            CreatedAt = DateTimeOffset.Now.AddYears(-2),
             UserMonobanks =
             [
                 new UserMonobank
@@ -59,7 +61,41 @@ public class UsersMockBehavior(
             Email = "vladd.golovatyuk@gmail.com",
             UserName = "vladd.golovatyuk@gmail.com",
             EmailConfirmed = true,
-            CreatedAt = DateTimeOffset.Now,
+            CreatedAt = DateTimeOffset.Now.AddYears(-2),
+            UserMonobanks =
+            [
+                new UserMonobank
+                {
+                    MonobankToken =
+                        Convert.FromHexString(
+                            "92ABFCEDD31F7CDE7D8EF02187E91C272B786B347EA7C660659BA9E2DC5E41F300FA31C72F1EE35AF770D6F926101EA2C15226B73CF6F565A4BCC19E984D872F"),
+                }
+            ],
+        }, Roles.User),
+        (new User
+        {
+            DisplayName = "Bombardiro Crocdilo",
+            Email = "croco@gmail.com",
+            UserName = "croco@gmail.com",
+            EmailConfirmed = true,
+            CreatedAt = DateTimeOffset.Now.AddYears(-3),
+            UserMonobanks =
+            [
+                new UserMonobank
+                {
+                    MonobankToken =
+                        Convert.FromHexString(
+                            "3B35663CFB669144DF4650095A8C004933564CED8600E51BFD17EFD915259BF0DD134A3960C1BF4645B0CD1862B75A53B4E6E6B72136C23A6FAE1BBB39AEAF16"),
+                }
+            ],
+        }, Roles.User),
+        (new User
+        {
+            DisplayName = "Tralalero Tralala",
+            Email = "tralala@gmail.com",
+            UserName = "tralala@gmail.com",
+            EmailConfirmed = true,
+            CreatedAt = DateTimeOffset.Now.AddYears(-1),
             UserMonobanks =
             [
                 new UserMonobank

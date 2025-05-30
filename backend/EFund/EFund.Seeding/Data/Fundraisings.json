@@ -1,567 +1,1153 @@
-[ {
-  "Fundraising" : {
-    "Title" : "Fundraising Campaign 1",
-    "Description" : "This is a description for campaign 1",
-    "Status" : 3,
-    "CreatedAt" : "2025-04-23T00:38:26.743303",
-    "MonobankFundraising" : {
-      "JarId" : "fCpr0muj2gVfPBFmwgygMGWj5kiYvbw"
+[
+  {
+    "Fundraising": {
+      "Title": "Education Kits for Kids",
+      "Description": "Providing essential learning kits for children in remote areas.",
+      "Status": 0,
+      "CreatedAt": "2025-04-05T10:15:00Z",
+      "MonobankFundraising": {
+        "JarId": "VxhMxJ3F6JGk7oqZWF-W4f87HThGSAo"
+      },
+      "Tags": [
+        {
+          "Name": "Education"
+        },
+        {
+          "Name": "Children"
+        }
+      ],
+      "Reports": [
+        {
+          "CreatedAt": "2025-04-10T12:00:00Z",
+          "Title": "Kit Distribution Report",
+          "Description": "Report on kit distribution across villages."
+        }
+      ]
     },
-    "Tags" : [ {
-      "Name" : "Education"
-    }, {
-      "Name" : "Emergency"
-    }, {
-      "Name" : "Technology"
-    }, {
-      "Name" : "Military"
-    } ],
-    "Reports" : [ {
-      "CreatedAt" : "2025-03-10T00:38:26.743303",
-      "Title" : "Report 1",
-      "Description" : "Detailed report on progress and expenses part 1"
-    }, {
-      "CreatedAt" : "2025-04-27T00:38:26.743303",
-      "Title" : "Report 2",
-      "Description" : "Detailed report on progress and expenses part 2"
-    }, {
-      "CreatedAt" : "2025-05-28T00:38:26.743303",
-      "Title" : "Report 3",
-      "Description" : "Detailed report on progress and expenses part 3"
-    } ]
+    "UserEmail": "vladd.golovatyuk@gmail.com"
   },
-  "UserEmail" : "vladd.golovatyuk@gmail.com"
-}, {
-  "Fundraising" : {
-    "Title" : "Fundraising Campaign 1",
-    "Description" : "This is a description for campaign 1",
-    "Status" : 1,
-    "CreatedAt" : "2025-03-31T00:38:26.743303",
-    "MonobankFundraising" : {
-      "JarId" : "RN_5G_zcqzQeeE3mEeta6ukfr5SWT8I"
+  {
+    "Fundraising": {
+      "Title": "Health Aid for Veterans",
+      "Description": "Supporting war veterans with vital medicine and treatments.",
+      "Status": 2,
+      "CreatedAt": "2025-02-20T08:00:00Z",
+      "MonobankFundraising": {
+        "JarId": "8RiPXg6wcISIrPlwuRGI654P8Fm_XxQ"
+      },
+      "Tags": [
+        {
+          "Name": "Medicine"
+        },
+        {
+          "Name": "Veterans"
+        },
+        {
+          "Name": "Support"
+        }
+      ],
+      "Reports": [
+        {
+          "CreatedAt": "2025-03-01T09:30:00Z",
+          "Title": "Medical Supplies Delivered",
+          "Description": "Purchased and delivered critical medicines."
+        },
+        {
+          "CreatedAt": "2025-04-15T14:20:00Z",
+          "Title": "Follow-Up Treatments",
+          "Description": "Update on ongoing treatments for beneficiaries."
+        }
+      ]
     },
-    "Tags" : [ {
-      "Name" : "Charity"
-    }, {
-      "Name" : "Medicine"
-    }, {
-      "Name" : "Emergency"
-    } ],
-    "Reports" : [ {
-      "CreatedAt" : "2025-05-05T00:38:26.743303",
-      "Title" : "Report 1",
-      "Description" : "Detailed report on progress and expenses part 1"
-    }, {
-      "CreatedAt" : "2025-03-14T00:38:26.743303",
-      "Title" : "Report 2",
-      "Description" : "Detailed report on progress and expenses part 2"
-    } ]
+    "UserEmail": "vladd.golovatyuk@gmail.com"
   },
-  "UserEmail" : "ihverwork@gmail.com"
-}, {
-  "Fundraising" : {
-    "Title" : "Fundraising Campaign 2",
-    "Description" : "This is a description for campaign 2",
-    "Status" : 2,
-    "CreatedAt" : "2025-02-05T00:38:26.743303",
-    "MonobankFundraising" : {
-      "JarId" : "VxhMxJ3F6JGk7oqZWF-W4f87HThGSAo"
+  {
+    "Fundraising": {
+      "Title": "Athlete Gear Fund",
+      "Description": "Raising money to provide gear for underfunded sports programs.",
+      "Status": 1,
+      "CreatedAt": "2025-01-10T07:00:00Z",
+      "MonobankFundraising": {
+        "JarId": "RlraFcUPRTLazMzRK-UyTQgGozfiILM"
+      },
+      "Tags": [
+        {
+          "Name": "Sport"
+        },
+        {
+          "Name": "Youth"
+        },
+        {
+          "Name": "Inspiration"
+        }
+      ],
+      "Reports": [
+        {
+          "CreatedAt": "2025-02-15T11:00:00Z",
+          "Title": "Equipment Ordered",
+          "Description": "Report on order and shipment tracking."
+        },
+        {
+          "CreatedAt": "2025-03-10T10:45:00Z",
+          "Title": "Team Usage Summary",
+          "Description": "How the athletes benefited from the support."
+        },
+        {
+          "CreatedAt": "2025-05-01T13:30:00Z",
+          "Title": "Season Wrap-Up",
+          "Description": "Closing insights and media from funded teams."
+        }
+      ]
     },
-    "Tags" : [ {
-      "Name" : "Health"
-    }, {
-      "Name" : "Emergency"
-    }, {
-      "Name" : "Support"
-    }, {
-      "Name" : "Sports"
-    } ],
-    "Reports" : [ {
-      "CreatedAt" : "2025-05-20T00:38:26.743303",
-      "Title" : "Report 1",
-      "Description" : "Detailed report on progress and expenses part 1"
-    } ]
+    "UserEmail": "vladd.golovatyuk@gmail.com"
   },
-  "UserEmail" : "vladd.golovatyuk@gmail.com"
-}, {
-  "Fundraising" : {
-    "Title" : "Fundraising Campaign 2",
-    "Description" : "This is a description for campaign 2",
-    "Status" : 2,
-    "CreatedAt" : "2025-03-18T00:38:26.743303",
-    "MonobankFundraising" : {
-      "JarId" : "IIpBxNYuC35daeq8ZnYpgJXPnKb6jQE"
+  {
+    "Fundraising": {
+      "Title": "First Aid Kits for Frontline",
+      "Description": "Procurement and delivery of first aid kits for frontline defenders.",
+      "Status": 0,
+      "CreatedAt": "2025-04-12T13:00:00Z",
+      "MonobankFundraising": {
+        "JarId": "dAoaCvnMPV1oSEYTMh3TSTTPCNOa12c"
+      },
+      "Tags": [
+        {
+          "Name": "Emergency"
+        },
+        {
+          "Name": "Medical"
+        },
+        {
+          "Name": "Frontline"
+        }
+      ],
+      "Reports": [
+        {
+          "CreatedAt": "2025-04-18T09:00:00Z",
+          "Title": "Procurement Completed",
+          "Description": "All items purchased and packed."
+        },
+        {
+          "CreatedAt": "2025-05-10T15:00:00Z",
+          "Title": "Distribution Update",
+          "Description": "Distribution to 4 battalions completed."
+        }
+      ]
     },
-    "Tags" : [ {
-      "Name" : "Technology"
-    }, {
-      "Name" : "Support"
-    }, {
-      "Name" : "Medicine"
-    }, {
-      "Name" : "Health"
-    } ],
-    "Reports" : [ {
-      "CreatedAt" : "2025-03-12T00:38:26.743303",
-      "Title" : "Report 1",
-      "Description" : "Detailed report on progress and expenses part 1"
-    } ]
+    "UserEmail": "ihverwork@gmail.com"
   },
-  "UserEmail" : "ihverwork@gmail.com"
-}, {
-  "Fundraising" : {
-    "Title" : "Fundraising Campaign 3",
-    "Description" : "This is a description for campaign 3",
-    "Status" : 1,
-    "CreatedAt" : "2025-03-29T00:38:26.743303",
-    "MonobankFundraising" : {
-      "JarId" : "VxhMxJ3F6JGk7oqZWF-W4f87HThGSAo"
+  {
+    "Fundraising": {
+      "Title": "Drone Recon Support",
+      "Description": "Collecting funds to supply a recon drone to the defense team.",
+      "Status": 0,
+      "CreatedAt": "2025-03-10T12:00:00Z",
+      "MonobankFundraising": {
+        "JarId": "IIpBxNYuC35daeq8ZnYpgJXPnKb6jQE"
+      },
+      "Tags": [
+        {
+          "Name": "Technology"
+        },
+        {
+          "Name": "Military"
+        },
+        {
+          "Name": "Defense"
+        }
+      ],
+      "Reports": [
+        {
+          "CreatedAt": "2025-03-20T11:00:00Z",
+          "Title": "Supplier Confirmed",
+          "Description": "Recon drone model and supplier selected."
+        },
+        {
+          "CreatedAt": "2025-04-22T10:00:00Z",
+          "Title": "Deployment Report",
+          "Description": "Drone used in two missions with success."
+        }
+      ]
     },
-    "Tags" : [ {
-      "Name" : "Technology"
-    }, {
-      "Name" : "AnimalCare"
-    } ],
-    "Reports" : [ {
-      "CreatedAt" : "2025-04-14T00:38:26.743303",
-      "Title" : "Report 1",
-      "Description" : "Detailed report on progress and expenses part 1"
-    }, {
-      "CreatedAt" : "2025-03-11T00:38:26.743303",
-      "Title" : "Report 2",
-      "Description" : "Detailed report on progress and expenses part 2"
-    } ]
+    "UserEmail": "ihverwork@gmail.com"
   },
-  "UserEmail" : "vladd.golovatyuk@gmail.com"
-}, {
-  "Fundraising" : {
-    "Title" : "Fundraising Campaign 3",
-    "Description" : "This is a description for campaign 3",
-    "Status" : 2,
-    "CreatedAt" : "2025-05-20T00:38:26.743303",
-    "MonobankFundraising" : {
-      "JarId" : "E4vT6_pi8by0kngVTFxJi489avt_Qas"
+  {
+    "Fundraising": {
+      "Title": "Psychological Help Hotline",
+      "Description": "Funding the launch and maintenance of a 24/7 mental health hotline.",
+      "Status": 2,
+      "CreatedAt": "2025-01-25T08:00:00Z",
+      "MonobankFundraising": {
+        "JarId": "E4vT6_pi8by0kngVTFxJi489avt_Qas"
+      },
+      "Tags": [
+        {
+          "Name": "Mental Health"
+        },
+        {
+          "Name": "Emergency"
+        },
+        {
+          "Name": "Support"
+        },
+        {
+          "Name": "Hotline"
+        }
+      ],
+      "Reports": [
+        {
+          "CreatedAt": "2025-02-10T09:15:00Z",
+          "Title": "Team Assembled",
+          "Description": "Team of 5 certified counselors onboarded."
+        },
+        {
+          "CreatedAt": "2025-03-05T14:45:00Z",
+          "Title": "Line Activated",
+          "Description": "24/7 hotline operational since March 1."
+        },
+        {
+          "CreatedAt": "2025-04-29T17:20:00Z",
+          "Title": "Usage Metrics",
+          "Description": "Over 1000 calls handled within the first month."
+        }
+      ]
     },
-    "Tags" : [ {
-      "Name" : "Emergency"
-    }, {
-      "Name" : "Support"
-    }, {
-      "Name" : "AnimalCare"
-    }, {
-      "Name" : "Education"
-    }, {
-      "Name" : "Military"
-    } ],
-    "Reports" : [ {
-      "CreatedAt" : "2025-04-01T00:38:26.743303",
-      "Title" : "Report 1",
-      "Description" : "Detailed report on progress and expenses part 1"
-    } ]
+    "UserEmail": "ihverwork@gmail.com"
   },
-  "UserEmail" : "ihverwork@gmail.com"
-}, {
-  "Fundraising" : {
-    "Title" : "Fundraising Campaign 4",
-    "Description" : "This is a description for campaign 4",
-    "Status" : 1,
-    "CreatedAt" : "2025-05-11T00:38:26.743303",
-    "MonobankFundraising" : {
-      "JarId" : "xNki0XEr37ejDQf3UmCER-rS-Pey7h4"
+  {
+    "Fundraising": {
+      "Title": "Fundraising Campaign 1",
+      "Description": "This is a description for campaign 1",
+      "Status": 3,
+      "CreatedAt": "2025-04-23T00:38:26.743303",
+      "MonobankFundraising": {
+        "JarId": "fCpr0muj2gVfPBFmwgygMGWj5kiYvbw"
+      },
+      "Tags": [
+        {
+          "Name": "Education"
+        },
+        {
+          "Name": "Emergency"
+        },
+        {
+          "Name": "Technology"
+        },
+        {
+          "Name": "Military"
+        }
+      ],
+      "Reports": [
+        {
+          "CreatedAt": "2025-03-10T00:38:26.743303",
+          "Title": "Report 1",
+          "Description": "Detailed report on progress and expenses part 1"
+        },
+        {
+          "CreatedAt": "2025-04-27T00:38:26.743303",
+          "Title": "Report 2",
+          "Description": "Detailed report on progress and expenses part 2"
+        },
+        {
+          "CreatedAt": "2025-05-28T00:38:26.743303",
+          "Title": "Report 3",
+          "Description": "Detailed report on progress and expenses part 3"
+        }
+      ]
     },
-    "Tags" : [ {
-      "Name" : "Support"
-    }, {
-      "Name" : "Education"
-    }, {
-      "Name" : "AnimalCare"
-    } ],
-    "Reports" : [ {
-      "CreatedAt" : "2025-03-08T00:38:26.743303",
-      "Title" : "Report 1",
-      "Description" : "Detailed report on progress and expenses part 1"
-    }, {
-      "CreatedAt" : "2025-03-23T00:38:26.743303",
-      "Title" : "Report 2",
-      "Description" : "Detailed report on progress and expenses part 2"
-    }, {
-      "CreatedAt" : "2025-04-20T00:38:26.743303",
-      "Title" : "Report 3",
-      "Description" : "Detailed report on progress and expenses part 3"
-    } ]
+    "UserEmail": "vladd.golovatyuk@gmail.com"
   },
-  "UserEmail" : "vladd.golovatyuk@gmail.com"
-}, {
-  "Fundraising" : {
-    "Title" : "Fundraising Campaign 4",
-    "Description" : "This is a description for campaign 4",
-    "Status" : 3,
-    "CreatedAt" : "2025-04-29T00:38:26.743303",
-    "MonobankFundraising" : {
-      "JarId" : "RN_5G_zcqzQeeE3mEeta6ukfr5SWT8I"
+  {
+    "Fundraising": {
+      "Title": "Fundraising Campaign 1",
+      "Description": "This is a description for campaign 1",
+      "Status": 1,
+      "CreatedAt": "2025-03-31T00:38:26.743303",
+      "MonobankFundraising": {
+        "JarId": "RN_5G_zcqzQeeE3mEeta6ukfr5SWT8I"
+      },
+      "Tags": [
+        {
+          "Name": "Charity"
+        },
+        {
+          "Name": "Medicine"
+        },
+        {
+          "Name": "Emergency"
+        }
+      ],
+      "Reports": [
+        {
+          "CreatedAt": "2025-05-05T00:38:26.743303",
+          "Title": "Report 1",
+          "Description": "Detailed report on progress and expenses part 1"
+        },
+        {
+          "CreatedAt": "2025-03-14T00:38:26.743303",
+          "Title": "Report 2",
+          "Description": "Detailed report on progress and expenses part 2"
+        }
+      ]
     },
-    "Tags" : [ {
-      "Name" : "Support"
-    }, {
-      "Name" : "Military"
-    }, {
-      "Name" : "Medicine"
-    }, {
-      "Name" : "Charity"
-    }, {
-      "Name" : "AnimalCare"
-    } ],
-    "Reports" : [ {
-      "CreatedAt" : "2025-03-22T00:38:26.743303",
-      "Title" : "Report 1",
-      "Description" : "Detailed report on progress and expenses part 1"
-    }, {
-      "CreatedAt" : "2025-03-01T00:38:26.743303",
-      "Title" : "Report 2",
-      "Description" : "Detailed report on progress and expenses part 2"
-    } ]
+    "UserEmail": "ihverwork@gmail.com"
   },
-  "UserEmail" : "ihverwork@gmail.com"
-}, {
-  "Fundraising" : {
-    "Title" : "Fundraising Campaign 5",
-    "Description" : "This is a description for campaign 5",
-    "Status" : 3,
-    "CreatedAt" : "2025-03-23T00:38:26.743303",
-    "MonobankFundraising" : {
-      "JarId" : "8RiPXg6wcISIrPlwuRGI654P8Fm_XxQ"
+  {
+    "Fundraising": {
+      "Title": "Fundraising Campaign 2",
+      "Description": "This is a description for campaign 2",
+      "Status": 2,
+      "CreatedAt": "2025-02-05T00:38:26.743303",
+      "MonobankFundraising": {
+        "JarId": "VxhMxJ3F6JGk7oqZWF-W4f87HThGSAo"
+      },
+      "Tags": [
+        {
+          "Name": "Health"
+        },
+        {
+          "Name": "Emergency"
+        },
+        {
+          "Name": "Support"
+        },
+        {
+          "Name": "Sports"
+        }
+      ],
+      "Reports": [
+        {
+          "CreatedAt": "2025-05-20T00:38:26.743303",
+          "Title": "Report 1",
+          "Description": "Detailed report on progress and expenses part 1"
+        }
+      ]
     },
-    "Tags" : [ {
-      "Name" : "Technology"
-    }, {
-      "Name" : "Medicine"
-    }, {
-      "Name" : "Military"
-    } ],
-    "Reports" : [ {
-      "CreatedAt" : "2025-05-15T00:38:26.743303",
-      "Title" : "Report 1",
-      "Description" : "Detailed report on progress and expenses part 1"
-    } ]
+    "UserEmail": "vladd.golovatyuk@gmail.com"
   },
-  "UserEmail" : "vladd.golovatyuk@gmail.com"
-}, {
-  "Fundraising" : {
-    "Title" : "Fundraising Campaign 5",
-    "Description" : "This is a description for campaign 5",
-    "Status" : 1,
-    "CreatedAt" : "2025-05-25T00:38:26.743303",
-    "MonobankFundraising" : {
-      "JarId" : "IIpBxNYuC35daeq8ZnYpgJXPnKb6jQE"
+  {
+    "Fundraising": {
+      "Title": "Fundraising Campaign 2",
+      "Description": "This is a description for campaign 2",
+      "Status": 2,
+      "CreatedAt": "2025-03-18T00:38:26.743303",
+      "MonobankFundraising": {
+        "JarId": "IIpBxNYuC35daeq8ZnYpgJXPnKb6jQE"
+      },
+      "Tags": [
+        {
+          "Name": "Technology"
+        },
+        {
+          "Name": "Support"
+        },
+        {
+          "Name": "Medicine"
+        },
+        {
+          "Name": "Health"
+        }
+      ],
+      "Reports": [
+        {
+          "CreatedAt": "2025-03-12T00:38:26.743303",
+          "Title": "Report 1",
+          "Description": "Detailed report on progress and expenses part 1"
+        }
+      ]
     },
-    "Tags" : [ {
-      "Name" : "Medicine"
-    }, {
-      "Name" : "Education"
-    } ],
-    "Reports" : [ {
-      "CreatedAt" : "2025-03-21T00:38:26.743303",
-      "Title" : "Report 1",
-      "Description" : "Detailed report on progress and expenses part 1"
-    } ]
+    "UserEmail": "ihverwork@gmail.com"
   },
-  "UserEmail" : "ihverwork@gmail.com"
-}, {
-  "Fundraising" : {
-    "Title" : "Fundraising Campaign 6",
-    "Description" : "This is a description for campaign 6",
-    "Status" : 1,
-    "CreatedAt" : "2025-02-20T00:38:26.743303",
-    "MonobankFundraising" : {
-      "JarId" : "xNki0XEr37ejDQf3UmCER-rS-Pey7h4"
+  {
+    "Fundraising": {
+      "Title": "Fundraising Campaign 3",
+      "Description": "This is a description for campaign 3",
+      "Status": 1,
+      "CreatedAt": "2025-03-29T00:38:26.743303",
+      "MonobankFundraising": {
+        "JarId": "VxhMxJ3F6JGk7oqZWF-W4f87HThGSAo"
+      },
+      "Tags": [
+        {
+          "Name": "Technology"
+        },
+        {
+          "Name": "AnimalCare"
+        }
+      ],
+      "Reports": [
+        {
+          "CreatedAt": "2025-04-14T00:38:26.743303",
+          "Title": "Report 1",
+          "Description": "Detailed report on progress and expenses part 1"
+        },
+        {
+          "CreatedAt": "2025-03-11T00:38:26.743303",
+          "Title": "Report 2",
+          "Description": "Detailed report on progress and expenses part 2"
+        }
+      ]
     },
-    "Tags" : [ {
-      "Name" : "Emergency"
-    }, {
-      "Name" : "Education"
-    }, {
-      "Name" : "Medicine"
-    }, {
-      "Name" : "Military"
-    }, {
-      "Name" : "AnimalCare"
-    } ],
-    "Reports" : [ {
-      "CreatedAt" : "2025-04-02T00:38:26.743303",
-      "Title" : "Report 1",
-      "Description" : "Detailed report on progress and expenses part 1"
-    }, {
-      "CreatedAt" : "2025-03-22T00:38:26.743303",
-      "Title" : "Report 2",
-      "Description" : "Detailed report on progress and expenses part 2"
-    }, {
-      "CreatedAt" : "2025-04-28T00:38:26.743303",
-      "Title" : "Report 3",
-      "Description" : "Detailed report on progress and expenses part 3"
-    } ]
+    "UserEmail": "vladd.golovatyuk@gmail.com"
   },
-  "UserEmail" : "vladd.golovatyuk@gmail.com"
-}, {
-  "Fundraising" : {
-    "Title" : "Fundraising Campaign 6",
-    "Description" : "This is a description for campaign 6",
-    "Status" : 1,
-    "CreatedAt" : "2025-04-28T00:38:26.743303",
-    "MonobankFundraising" : {
-      "JarId" : "dAoaCvnMPV1oSEYTMh3TSTTPCNOa12c"
+  {
+    "Fundraising": {
+      "Title": "Fundraising Campaign 3",
+      "Description": "This is a description for campaign 3",
+      "Status": 2,
+      "CreatedAt": "2025-05-20T00:38:26.743303",
+      "MonobankFundraising": {
+        "JarId": "E4vT6_pi8by0kngVTFxJi489avt_Qas"
+      },
+      "Tags": [
+        {
+          "Name": "Emergency"
+        },
+        {
+          "Name": "Support"
+        },
+        {
+          "Name": "AnimalCare"
+        },
+        {
+          "Name": "Education"
+        },
+        {
+          "Name": "Military"
+        }
+      ],
+      "Reports": [
+        {
+          "CreatedAt": "2025-04-01T00:38:26.743303",
+          "Title": "Report 1",
+          "Description": "Detailed report on progress and expenses part 1"
+        }
+      ]
     },
-    "Tags" : [ {
-      "Name" : "Medicine"
-    }, {
-      "Name" : "Sports"
-    }, {
-      "Name" : "Health"
-    }, {
-      "Name" : "AnimalCare"
-    }, {
-      "Name" : "Emergency"
-    } ],
-    "Reports" : [ {
-      "CreatedAt" : "2025-03-05T00:38:26.743303",
-      "Title" : "Report 1",
-      "Description" : "Detailed report on progress and expenses part 1"
-    }, {
-      "CreatedAt" : "2025-05-04T00:38:26.743303",
-      "Title" : "Report 2",
-      "Description" : "Detailed report on progress and expenses part 2"
-    } ]
+    "UserEmail": "ihverwork@gmail.com"
   },
-  "UserEmail" : "ihverwork@gmail.com"
-}, {
-  "Fundraising" : {
-    "Title" : "Fundraising Campaign 7",
-    "Description" : "This is a description for campaign 7",
-    "Status" : 1,
-    "CreatedAt" : "2025-03-06T00:38:26.743303",
-    "MonobankFundraising" : {
-      "JarId" : "xNki0XEr37ejDQf3UmCER-rS-Pey7h4"
+  {
+    "Fundraising": {
+      "Title": "Fundraising Campaign 4",
+      "Description": "This is a description for campaign 4",
+      "Status": 1,
+      "CreatedAt": "2025-05-11T00:38:26.743303",
+      "MonobankFundraising": {
+        "JarId": "xNki0XEr37ejDQf3UmCER-rS-Pey7h4"
+      },
+      "Tags": [
+        {
+          "Name": "Support"
+        },
+        {
+          "Name": "Education"
+        },
+        {
+          "Name": "AnimalCare"
+        }
+      ],
+      "Reports": [
+        {
+          "CreatedAt": "2025-03-08T00:38:26.743303",
+          "Title": "Report 1",
+          "Description": "Detailed report on progress and expenses part 1"
+        },
+        {
+          "CreatedAt": "2025-03-23T00:38:26.743303",
+          "Title": "Report 2",
+          "Description": "Detailed report on progress and expenses part 2"
+        },
+        {
+          "CreatedAt": "2025-04-20T00:38:26.743303",
+          "Title": "Report 3",
+          "Description": "Detailed report on progress and expenses part 3"
+        }
+      ]
     },
-    "Tags" : [ {
-      "Name" : "Emergency"
-    }, {
-      "Name" : "Charity"
-    }, {
-      "Name" : "Health"
-    }, {
-      "Name" : "Sports"
-    } ],
-    "Reports" : [ {
-      "CreatedAt" : "2025-04-16T00:38:26.744303",
-      "Title" : "Report 1",
-      "Description" : "Detailed report on progress and expenses part 1"
-    }, {
-      "CreatedAt" : "2025-05-14T00:38:26.744303",
-      "Title" : "Report 2",
-      "Description" : "Detailed report on progress and expenses part 2"
-    } ]
+    "UserEmail": "vladd.golovatyuk@gmail.com"
   },
-  "UserEmail" : "vladd.golovatyuk@gmail.com"
-}, {
-  "Fundraising" : {
-    "Title" : "Fundraising Campaign 7",
-    "Description" : "This is a description for campaign 7",
-    "Status" : 1,
-    "CreatedAt" : "2025-04-05T00:38:26.744303",
-    "MonobankFundraising" : {
-      "JarId" : "dAoaCvnMPV1oSEYTMh3TSTTPCNOa12c"
+  {
+    "Fundraising": {
+      "Title": "Fundraising Campaign 4",
+      "Description": "This is a description for campaign 4",
+      "Status": 3,
+      "CreatedAt": "2025-04-29T00:38:26.743303",
+      "MonobankFundraising": {
+        "JarId": "RN_5G_zcqzQeeE3mEeta6ukfr5SWT8I"
+      },
+      "Tags": [
+        {
+          "Name": "Support"
+        },
+        {
+          "Name": "Military"
+        },
+        {
+          "Name": "Medicine"
+        },
+        {
+          "Name": "Charity"
+        },
+        {
+          "Name": "AnimalCare"
+        }
+      ],
+      "Reports": [
+        {
+          "CreatedAt": "2025-03-22T00:38:26.743303",
+          "Title": "Report 1",
+          "Description": "Detailed report on progress and expenses part 1"
+        },
+        {
+          "CreatedAt": "2025-03-01T00:38:26.743303",
+          "Title": "Report 2",
+          "Description": "Detailed report on progress and expenses part 2"
+        }
+      ]
     },
-    "Tags" : [ {
-      "Name" : "Emergency"
-    }, {
-      "Name" : "Charity"
-    }, {
-      "Name" : "Education"
-    } ],
-    "Reports" : [ {
-      "CreatedAt" : "2025-04-06T00:38:26.744303",
-      "Title" : "Report 1",
-      "Description" : "Detailed report on progress and expenses part 1"
-    }, {
-      "CreatedAt" : "2025-03-05T00:38:26.744303",
-      "Title" : "Report 2",
-      "Description" : "Detailed report on progress and expenses part 2"
-    }, {
-      "CreatedAt" : "2025-05-30T00:38:26.744303",
-      "Title" : "Report 3",
-      "Description" : "Detailed report on progress and expenses part 3"
-    } ]
+    "UserEmail": "ihverwork@gmail.com"
   },
-  "UserEmail" : "ihverwork@gmail.com"
-}, {
-  "Fundraising" : {
-    "Title" : "Fundraising Campaign 8",
-    "Description" : "This is a description for campaign 8",
-    "Status" : 1,
-    "CreatedAt" : "2025-03-24T00:38:26.744303",
-    "MonobankFundraising" : {
-      "JarId" : "fCpr0muj2gVfPBFmwgygMGWj5kiYvbw"
+  {
+    "Fundraising": {
+      "Title": "Fundraising Campaign 5",
+      "Description": "This is a description for campaign 5",
+      "Status": 3,
+      "CreatedAt": "2025-03-23T00:38:26.743303",
+      "MonobankFundraising": {
+        "JarId": "8RiPXg6wcISIrPlwuRGI654P8Fm_XxQ"
+      },
+      "Tags": [
+        {
+          "Name": "Technology"
+        },
+        {
+          "Name": "Medicine"
+        },
+        {
+          "Name": "Military"
+        }
+      ],
+      "Reports": [
+        {
+          "CreatedAt": "2025-05-15T00:38:26.743303",
+          "Title": "Report 1",
+          "Description": "Detailed report on progress and expenses part 1"
+        }
+      ]
     },
-    "Tags" : [ {
-      "Name" : "Military"
-    }, {
-      "Name" : "Medicine"
-    } ],
-    "Reports" : [ {
-      "CreatedAt" : "2025-05-29T00:38:26.744303",
-      "Title" : "Report 1",
-      "Description" : "Detailed report on progress and expenses part 1"
-    }, {
-      "CreatedAt" : "2025-05-13T00:38:26.744303",
-      "Title" : "Report 2",
-      "Description" : "Detailed report on progress and expenses part 2"
-    } ]
+    "UserEmail": "vladd.golovatyuk@gmail.com"
   },
-  "UserEmail" : "vladd.golovatyuk@gmail.com"
-}, {
-  "Fundraising" : {
-    "Title" : "Fundraising Campaign 8",
-    "Description" : "This is a description for campaign 8",
-    "Status" : 1,
-    "CreatedAt" : "2025-03-15T00:38:26.744303",
-    "MonobankFundraising" : {
-      "JarId" : "dAoaCvnMPV1oSEYTMh3TSTTPCNOa12c"
+  {
+    "Fundraising": {
+      "Title": "Fundraising Campaign 5",
+      "Description": "This is a description for campaign 5",
+      "Status": 1,
+      "CreatedAt": "2025-05-25T00:38:26.743303",
+      "MonobankFundraising": {
+        "JarId": "IIpBxNYuC35daeq8ZnYpgJXPnKb6jQE"
+      },
+      "Tags": [
+        {
+          "Name": "Medicine"
+        },
+        {
+          "Name": "Education"
+        }
+      ],
+      "Reports": [
+        {
+          "CreatedAt": "2025-03-21T00:38:26.743303",
+          "Title": "Report 1",
+          "Description": "Detailed report on progress and expenses part 1"
+        }
+      ]
     },
-    "Tags" : [ {
-      "Name" : "Military"
-    }, {
-      "Name" : "Health"
-    }, {
-      "Name" : "Support"
-    }, {
-      "Name" : "Medicine"
-    }, {
-      "Name" : "AnimalCare"
-    } ],
-    "Reports" : [ {
-      "CreatedAt" : "2025-03-08T00:38:26.744303",
-      "Title" : "Report 1",
-      "Description" : "Detailed report on progress and expenses part 1"
-    }, {
-      "CreatedAt" : "2025-04-09T00:38:26.744303",
-      "Title" : "Report 2",
-      "Description" : "Detailed report on progress and expenses part 2"
-    } ]
+    "UserEmail": "ihverwork@gmail.com"
   },
-  "UserEmail" : "ihverwork@gmail.com"
-}, {
-  "Fundraising" : {
-    "Title" : "Fundraising Campaign 9",
-    "Description" : "This is a description for campaign 9",
-    "Status" : 1,
-    "CreatedAt" : "2025-05-07T00:38:26.744303",
-    "MonobankFundraising" : {
-      "JarId" : "VxhMxJ3F6JGk7oqZWF-W4f87HThGSAo"
+  {
+    "Fundraising": {
+      "Title": "Fundraising Campaign 6",
+      "Description": "This is a description for campaign 6",
+      "Status": 1,
+      "CreatedAt": "2025-02-20T00:38:26.743303",
+      "MonobankFundraising": {
+        "JarId": "xNki0XEr37ejDQf3UmCER-rS-Pey7h4"
+      },
+      "Tags": [
+        {
+          "Name": "Emergency"
+        },
+        {
+          "Name": "Education"
+        },
+        {
+          "Name": "Medicine"
+        },
+        {
+          "Name": "Military"
+        },
+        {
+          "Name": "AnimalCare"
+        }
+      ],
+      "Reports": [
+        {
+          "CreatedAt": "2025-04-02T00:38:26.743303",
+          "Title": "Report 1",
+          "Description": "Detailed report on progress and expenses part 1"
+        },
+        {
+          "CreatedAt": "2025-03-22T00:38:26.743303",
+          "Title": "Report 2",
+          "Description": "Detailed report on progress and expenses part 2"
+        },
+        {
+          "CreatedAt": "2025-04-28T00:38:26.743303",
+          "Title": "Report 3",
+          "Description": "Detailed report on progress and expenses part 3"
+        }
+      ]
     },
-    "Tags" : [ {
-      "Name" : "Emergency"
-    }, {
-      "Name" : "Health"
-    }, {
-      "Name" : "Technology"
-    }, {
-      "Name" : "Support"
-    } ],
-    "Reports" : [ {
-      "CreatedAt" : "2025-05-03T00:38:26.744303",
-      "Title" : "Report 1",
-      "Description" : "Detailed report on progress and expenses part 1"
-    } ]
+    "UserEmail": "vladd.golovatyuk@gmail.com"
   },
-  "UserEmail" : "vladd.golovatyuk@gmail.com"
-}, {
-  "Fundraising" : {
-    "Title" : "Fundraising Campaign 9",
-    "Description" : "This is a description for campaign 9",
-    "Status" : 3,
-    "CreatedAt" : "2025-04-10T00:38:26.744303",
-    "MonobankFundraising" : {
-      "JarId" : "RN_5G_zcqzQeeE3mEeta6ukfr5SWT8I"
+  {
+    "Fundraising": {
+      "Title": "Fundraising Campaign 6",
+      "Description": "This is a description for campaign 6",
+      "Status": 1,
+      "CreatedAt": "2025-04-28T00:38:26.743303",
+      "MonobankFundraising": {
+        "JarId": "dAoaCvnMPV1oSEYTMh3TSTTPCNOa12c"
+      },
+      "Tags": [
+        {
+          "Name": "Medicine"
+        },
+        {
+          "Name": "Sports"
+        },
+        {
+          "Name": "Health"
+        },
+        {
+          "Name": "AnimalCare"
+        },
+        {
+          "Name": "Emergency"
+        }
+      ],
+      "Reports": [
+        {
+          "CreatedAt": "2025-03-05T00:38:26.743303",
+          "Title": "Report 1",
+          "Description": "Detailed report on progress and expenses part 1"
+        },
+        {
+          "CreatedAt": "2025-05-04T00:38:26.743303",
+          "Title": "Report 2",
+          "Description": "Detailed report on progress and expenses part 2"
+        }
+      ]
     },
-    "Tags" : [ {
-      "Name" : "Medicine"
-    }, {
-      "Name" : "Military"
-    } ],
-    "Reports" : [ {
-      "CreatedAt" : "2025-03-13T00:38:26.744303",
-      "Title" : "Report 1",
-      "Description" : "Detailed report on progress and expenses part 1"
-    }, {
-      "CreatedAt" : "2025-03-11T00:38:26.744303",
-      "Title" : "Report 2",
-      "Description" : "Detailed report on progress and expenses part 2"
-    }, {
-      "CreatedAt" : "2025-04-22T00:38:26.744303",
-      "Title" : "Report 3",
-      "Description" : "Detailed report on progress and expenses part 3"
-    } ]
+    "UserEmail": "ihverwork@gmail.com"
   },
-  "UserEmail" : "ihverwork@gmail.com"
-}, {
-  "Fundraising" : {
-    "Title" : "Fundraising Campaign 10",
-    "Description" : "This is a description for campaign 10",
-    "Status" : 1,
-    "CreatedAt" : "2025-05-24T00:38:26.744303",
-    "MonobankFundraising" : {
-      "JarId" : "xNki0XEr37ejDQf3UmCER-rS-Pey7h4"
+  {
+    "Fundraising": {
+      "Title": "Fundraising Campaign 7",
+      "Description": "This is a description for campaign 7",
+      "Status": 1,
+      "CreatedAt": "2025-03-06T00:38:26.743303",
+      "MonobankFundraising": {
+        "JarId": "xNki0XEr37ejDQf3UmCER-rS-Pey7h4"
+      },
+      "Tags": [
+        {
+          "Name": "Emergency"
+        },
+        {
+          "Name": "Charity"
+        },
+        {
+          "Name": "Health"
+        },
+        {
+          "Name": "Sports"
+        }
+      ],
+      "Reports": [
+        {
+          "CreatedAt": "2025-04-16T00:38:26.744303",
+          "Title": "Report 1",
+          "Description": "Detailed report on progress and expenses part 1"
+        },
+        {
+          "CreatedAt": "2025-05-14T00:38:26.744303",
+          "Title": "Report 2",
+          "Description": "Detailed report on progress and expenses part 2"
+        }
+      ]
     },
-    "Tags" : [ {
-      "Name" : "AnimalCare"
-    }, {
-      "Name" : "Emergency"
-    }, {
-      "Name" : "Technology"
-    } ],
-    "Reports" : [ {
-      "CreatedAt" : "2025-03-31T00:38:26.744303",
-      "Title" : "Report 1",
-      "Description" : "Detailed report on progress and expenses part 1"
-    }, {
-      "CreatedAt" : "2025-04-24T00:38:26.744303",
-      "Title" : "Report 2",
-      "Description" : "Detailed report on progress and expenses part 2"
-    }, {
-      "CreatedAt" : "2025-05-30T00:38:26.744303",
-      "Title" : "Report 3",
-      "Description" : "Detailed report on progress and expenses part 3"
-    } ]
+    "UserEmail": "tralala@gmail.com"
   },
-  "UserEmail" : "vladd.golovatyuk@gmail.com"
-}, {
-  "Fundraising" : {
-    "Title" : "Fundraising Campaign 10",
-    "Description" : "This is a description for campaign 10",
-    "Status" : 1,
-    "CreatedAt" : "2025-05-10T00:38:26.744303",
-    "MonobankFundraising" : {
-      "JarId" : "RN_5G_zcqzQeeE3mEeta6ukfr5SWT8I"
+  {
+    "Fundraising": {
+      "Title": "Fundraising Campaign 7",
+      "Description": "This is a description for campaign 7",
+      "Status": 1,
+      "CreatedAt": "2025-04-05T00:38:26.744303",
+      "MonobankFundraising": {
+        "JarId": "dAoaCvnMPV1oSEYTMh3TSTTPCNOa12c"
+      },
+      "Tags": [
+        {
+          "Name": "Emergency"
+        },
+        {
+          "Name": "Charity"
+        },
+        {
+          "Name": "Education"
+        }
+      ],
+      "Reports": [
+        {
+          "CreatedAt": "2025-04-06T00:38:26.744303",
+          "Title": "Report 1",
+          "Description": "Detailed report on progress and expenses part 1"
+        },
+        {
+          "CreatedAt": "2025-03-05T00:38:26.744303",
+          "Title": "Report 2",
+          "Description": "Detailed report on progress and expenses part 2"
+        },
+        {
+          "CreatedAt": "2025-05-30T00:38:26.744303",
+          "Title": "Report 3",
+          "Description": "Detailed report on progress and expenses part 3"
+        }
+      ]
     },
-    "Tags" : [ {
-      "Name" : "Health"
-    }, {
-      "Name" : "Charity"
-    }, {
-      "Name" : "Education"
-    }, {
-      "Name" : "Emergency"
-    }, {
-      "Name" : "AnimalCare"
-    } ],
-    "Reports" : [ {
-      "CreatedAt" : "2025-03-12T00:38:26.744303",
-      "Title" : "Report 1",
-      "Description" : "Detailed report on progress and expenses part 1"
-    }, {
-      "CreatedAt" : "2025-04-17T00:38:26.744303",
-      "Title" : "Report 2",
-      "Description" : "Detailed report on progress and expenses part 2"
-    } ]
+    "UserEmail": "ihverwork@gmail.com"
   },
-  "UserEmail" : "ihverwork@gmail.com"
-} ]
+  {
+    "Fundraising": {
+      "Title": "Fundraising Campaign 8",
+      "Description": "This is a description for campaign 8",
+      "Status": 1,
+      "CreatedAt": "2025-03-24T00:38:26.744303",
+      "MonobankFundraising": {
+        "JarId": "fCpr0muj2gVfPBFmwgygMGWj5kiYvbw"
+      },
+      "Tags": [
+        {
+          "Name": "Military"
+        },
+        {
+          "Name": "Medicine"
+        }
+      ],
+      "Reports": [
+        {
+          "CreatedAt": "2025-05-29T00:38:26.744303",
+          "Title": "Report 1",
+          "Description": "Detailed report on progress and expenses part 1"
+        },
+        {
+          "CreatedAt": "2025-05-13T00:38:26.744303",
+          "Title": "Report 2",
+          "Description": "Detailed report on progress and expenses part 2"
+        }
+      ]
+    },
+    "UserEmail": "tralala@gmail.com"
+  },
+  {
+    "Fundraising": {
+      "Title": "Fundraising Campaign 8",
+      "Description": "This is a description for campaign 8",
+      "Status": 1,
+      "CreatedAt": "2025-03-15T00:38:26.744303",
+      "MonobankFundraising": {
+        "JarId": "dAoaCvnMPV1oSEYTMh3TSTTPCNOa12c"
+      },
+      "Tags": [
+        {
+          "Name": "Military"
+        },
+        {
+          "Name": "Health"
+        },
+        {
+          "Name": "Support"
+        },
+        {
+          "Name": "Medicine"
+        },
+        {
+          "Name": "AnimalCare"
+        }
+      ],
+      "Reports": [
+        {
+          "CreatedAt": "2025-03-08T00:38:26.744303",
+          "Title": "Report 1",
+          "Description": "Detailed report on progress and expenses part 1"
+        },
+        {
+          "CreatedAt": "2025-04-09T00:38:26.744303",
+          "Title": "Report 2",
+          "Description": "Detailed report on progress and expenses part 2"
+        }
+      ]
+    },
+    "UserEmail": "croco@gmail.com"
+  },
+  {
+    "Fundraising": {
+      "Title": "Fundraising Campaign 9",
+      "Description": "This is a description for campaign 9",
+      "Status": 1,
+      "CreatedAt": "2025-05-07T00:38:26.744303",
+      "MonobankFundraising": {
+        "JarId": "VxhMxJ3F6JGk7oqZWF-W4f87HThGSAo"
+      },
+      "Tags": [
+        {
+          "Name": "Emergency"
+        },
+        {
+          "Name": "Health"
+        },
+        {
+          "Name": "Technology"
+        },
+        {
+          "Name": "Support"
+        }
+      ],
+      "Reports": [
+        {
+          "CreatedAt": "2025-05-03T00:38:26.744303",
+          "Title": "Report 1",
+          "Description": "Detailed report on progress and expenses part 1"
+        }
+      ]
+    },
+    "UserEmail": "tralala@gmail.com"
+  },
+  {
+    "Fundraising": {
+      "Title": "Fundraising Campaign 9",
+      "Description": "This is a description for campaign 9",
+      "Status": 3,
+      "CreatedAt": "2025-04-10T00:38:26.744303",
+      "MonobankFundraising": {
+        "JarId": "RN_5G_zcqzQeeE3mEeta6ukfr5SWT8I"
+      },
+      "Tags": [
+        {
+          "Name": "Medicine"
+        },
+        {
+          "Name": "Military"
+        }
+      ],
+      "Reports": [
+        {
+          "CreatedAt": "2025-03-13T00:38:26.744303",
+          "Title": "Report 1",
+          "Description": "Detailed report on progress and expenses part 1"
+        },
+        {
+          "CreatedAt": "2025-03-11T00:38:26.744303",
+          "Title": "Report 2",
+          "Description": "Detailed report on progress and expenses part 2"
+        },
+        {
+          "CreatedAt": "2025-04-22T00:38:26.744303",
+          "Title": "Report 3",
+          "Description": "Detailed report on progress and expenses part 3"
+        }
+      ]
+    },
+    "UserEmail": "croco@gmail.com"
+  },
+  {
+    "Fundraising": {
+      "Title": "Fundraising Campaign 10",
+      "Description": "This is a description for campaign 10",
+      "Status": 1,
+      "CreatedAt": "2025-05-24T00:38:26.744303",
+      "MonobankFundraising": {
+        "JarId": "xNki0XEr37ejDQf3UmCER-rS-Pey7h4"
+      },
+      "Tags": [
+        {
+          "Name": "AnimalCare"
+        },
+        {
+          "Name": "Emergency"
+        },
+        {
+          "Name": "Technology"
+        }
+      ],
+      "Reports": [
+        {
+          "CreatedAt": "2025-03-31T00:38:26.744303",
+          "Title": "Report 1",
+          "Description": "Detailed report on progress and expenses part 1"
+        },
+        {
+          "CreatedAt": "2025-04-24T00:38:26.744303",
+          "Title": "Report 2",
+          "Description": "Detailed report on progress and expenses part 2"
+        },
+        {
+          "CreatedAt": "2025-05-30T00:38:26.744303",
+          "Title": "Report 3",
+          "Description": "Detailed report on progress and expenses part 3"
+        }
+      ]
+    },
+    "UserEmail": "tralala@gmail.com"
+  },
+  {
+    "Fundraising": {
+      "Title": "Fundraising Campaign 10",
+      "Description": "This is a description for campaign 10",
+      "Status": 1,
+      "CreatedAt": "2025-05-10T00:38:26.744303",
+      "MonobankFundraising": {
+        "JarId": "RN_5G_zcqzQeeE3mEeta6ukfr5SWT8I"
+      },
+      "Tags": [
+        {
+          "Name": "Health"
+        },
+        {
+          "Name": "Charity"
+        },
+        {
+          "Name": "Education"
+        },
+        {
+          "Name": "Emergency"
+        },
+        {
+          "Name": "AnimalCare"
+        }
+      ],
+      "Reports": [
+        {
+          "CreatedAt": "2025-03-12T00:38:26.744303",
+          "Title": "Report 1",
+          "Description": "Detailed report on progress and expenses part 1"
+        },
+        {
+          "CreatedAt": "2025-04-17T00:38:26.744303",
+          "Title": "Report 2",
+          "Description": "Detailed report on progress and expenses part 2"
+        }
+      ]
+    },
+    "UserEmail": "croco@gmail.com"
+  },
+  {
+    "Fundraising": {
+      "Title": "Portable Power Banks for Soldiers",
+      "Description": "Equipping frontline defenders with durable power banks for critical missions.",
+      "Status": 3,
+      "CreatedAt": "2025-03-15T08:30:00Z",
+      "MonobankFundraising": {
+        "JarId": "fCpr0muj2gVfPBFmwgygMGWj5kiYvbw"
+      },
+      "Tags": [
+        {
+          "Name": "Technology"
+        },
+        {
+          "Name": "Military"
+        },
+        {
+          "Name": "Emergency"
+        }
+      ],
+      "Reports": [
+        {
+          "CreatedAt": "2025-03-20T10:00:00Z",
+          "Title": "Devices Procured",
+          "Description": "20 power banks acquired and tested."
+        }
+      ]
+    },
+    "UserEmail": "tralala@gmail.com"
+  },
+  {
+    "Fundraising": {
+      "Title": "Training Program for Displaced Youth",
+      "Description": "Providing vocational skills to young people affected by the war.",
+      "Status": 1,
+      "CreatedAt": "2025-02-12T14:00:00Z",
+      "MonobankFundraising": {
+        "JarId": "RN_5G_zcqzQeeE3mEeta6ukfr5SWT8I"
+      },
+      "Tags": [
+        {
+          "Name": "Education"
+        },
+        {
+          "Name": "Youth"
+        },
+        {
+          "Name": "Support"
+        }
+      ],
+      "Reports": [
+        {
+          "CreatedAt": "2025-03-01T11:30:00Z",
+          "Title": "Course Setup",
+          "Description": "Partnered with 2 training centers in Kyiv."
+        },
+        {
+          "CreatedAt": "2025-04-01T09:00:00Z",
+          "Title": "First Batch Completed",
+          "Description": "35 students completed the course."
+        }
+      ]
+    },
+    "UserEmail": "tralala@gmail.com"
+  },
+  {
+    "Fundraising": {
+      "Title": "Mobile Medical Tent",
+      "Description": "Raising funds to deploy a mobile medical unit in frontline zones.",
+      "Status": 0,
+      "CreatedAt": "2025-01-18T16:20:00Z",
+      "MonobankFundraising": {
+        "JarId": "VxhMxJ3F6JGk7oqZWF-W4f87HThGSAo"
+      },
+      "Tags": [
+        {
+          "Name": "Medicine"
+        },
+        {
+          "Name": "Emergency"
+        },
+        {
+          "Name": "Field Support"
+        }
+      ],
+      "Reports": [
+        {
+          "CreatedAt": "2025-01-25T13:30:00Z",
+          "Title": "Tent Ordered",
+          "Description": "Medical tent ordered from certified supplier."
+        },
+        {
+          "CreatedAt": "2025-02-05T10:15:00Z",
+          "Title": "On-Site Photos",
+          "Description": "Tent operational near Kharkiv sector."
+        }
+      ]
+    },
+    "UserEmail": "tralala@gmail.com"
+  },
+  {
+    "Fundraising": {
+      "Title": "Field Laptops for Recon Units",
+      "Description": "Funding rugged laptops for data gathering and planning operations.",
+      "Status": 1,
+      "CreatedAt": "2025-02-08T11:00:00Z",
+      "MonobankFundraising": {
+        "JarId": "dAoaCvnMPV1oSEYTMh3TSTTPCNOa12c"
+      },
+      "Tags": [
+        {
+          "Name": "Technology"
+        },
+        {
+          "Name": "Defense"
+        }
+      ],
+      "Reports": [
+        {
+          "CreatedAt": "2025-02-15T14:10:00Z",
+          "Title": "Devices Acquired",
+          "Description": "Three durable laptops delivered to unit Alpha."
+        }
+      ]
+    },
+    "UserEmail": "croco@gmail.com"
+  },
+  {
+    "Fundraising": {
+      "Title": "Water Filtration Units for Shelters",
+      "Description": "Buying compact filtration units for civilian shelters.",
+      "Status": 2,
+      "CreatedAt": "2025-03-01T09:00:00Z",
+      "MonobankFundraising": {
+        "JarId": "IIpBxNYuC35daeq8ZnYpgJXPnKb6jQE"
+      },
+      "Tags": [
+        {
+          "Name": "Emergency"
+        },
+        {
+          "Name": "Civil Defense"
+        },
+        {
+          "Name": "Sanitation"
+        }
+      ],
+      "Reports": [
+        {
+          "CreatedAt": "2025-03-12T15:30:00Z",
+          "Title": "Filters Deployed",
+          "Description": "4 shelters now equipped with filtration systems."
+        },
+        {
+          "CreatedAt": "2025-04-18T12:00:00Z",
+          "Title": "User Feedback",
+          "Description": "Civilians report improved water quality and health."
+        }
+      ]
+    },
+    "UserEmail": "croco@gmail.com"
+  },
+  {
+    "Fundraising": {
+      "Title": "Thermal Imaging for Night Patrols",
+      "Description": "Procurement of thermal scopes to assist night reconnaissance.",
+      "Status": 3,
+      "CreatedAt": "2025-01-05T06:45:00Z",
+      "MonobankFundraising": {
+        "JarId": "E4vT6_pi8by0kngVTFxJi489avt_Qas"
+      },
+      "Tags": [
+        {
+          "Name": "Military"
+        },
+        {
+          "Name": "Night Ops"
+        },
+        {
+          "Name": "Technology"
+        }
+      ],
+      "Reports": [
+        {
+          "CreatedAt": "2025-01-20T10:00:00Z",
+          "Title": "Procurement Complete",
+          "Description": "Thermal scopes handed to units Bravo and Delta."
+        },
+        {
+          "CreatedAt": "2025-02-28T18:20:00Z",
+          "Title": "Usage Report",
+          "Description": "Successful missions aided by the equipment."
+        }
+      ]
+    },
+    "UserEmail": "croco@gmail.com"
+  }
+]

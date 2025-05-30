@@ -19,7 +19,7 @@ public class ReportAttachmentsMockBehavior(
     private readonly string[] _pictureFileNames = Enumerable.Range(1, 7).Select(i => $"{i}.jpg").ToArray();
     private readonly string[] _xlsxFileNames = Enumerable.Range(1, 2).Select(i => $"{i}.xlsx").ToArray();
     private readonly string[] _pdfFileNames = Enumerable.Range(1, 2).Select(i => $"{i}.pdf").ToArray();
-    private Random _random = new(217);
+    private readonly Random _random = new(217);
 
     protected override async Task MockData()
     {
@@ -53,7 +53,6 @@ public class ReportAttachmentsMockBehavior(
     private List<ReportAttachment> GetRandomAttachments(Guid reportId, string directory)
     {
         var attachments = new List<ReportAttachment>();
-        _random = new Random();
 
         // Decide how many attachments to generate (1–3)
         int count = _random.Next(1, 4);

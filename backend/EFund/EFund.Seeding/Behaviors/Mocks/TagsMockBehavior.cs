@@ -15,12 +15,12 @@ public class TagsMockBehavior(
     : BaseMockBehavior(appDataConfig, generalConfig)
 {
     private readonly IRepository<Tag> _tagRepository = tagRepository;
-    
+
     protected override async Task MockData()
     {
         var json = await File.ReadAllTextAsync($"{DataFolder}Fundraisings.json");
-        var fundraisings = JsonSerializer.Deserialize<FundraisingMockDTO[]>(
-            json) ?? throw new InvalidOperationException("Failed to deserialize Fundraisings data.");
+        var fundraisings = JsonSerializer.Deserialize<FundraisingMockDTO[]>(json)
+                           ?? throw new InvalidOperationException("Failed to deserialize Fundraisings data.");
 
         var tags = fundraisings
             .SelectMany(f => f.Fundraising.Tags)
@@ -34,7 +34,7 @@ public class TagsMockBehavior(
         var tagsToAdd = tags
             .Where(t => !tagsFromDb.Contains(t.Name))
             .ToList();
-        
+
         if (tagsToAdd.Count > 0)
             await _tagRepository.InsertManyAsync(tagsToAdd);
     }

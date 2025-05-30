@@ -113,11 +113,7 @@ public class FundraisingReportService : IFundraisingReportService
         if (files.Any(f => !_appDataConfig.AllowedFiles.ContainsKey(f.ContentType)))
             return new IncorrectParametersErrorDTO("Some files have invalid format");
 
-        var directory = Path.Combine(_appDataConfig.WebRootPath,
-            _appDataConfig.UploadsDirectory,
-            _appDataConfig.ReportsDirectory,
-            report.Id.ToString(),
-            _appDataConfig.AttachmentsDirectory);
+        var directory = _appDataConfig.GetReportAttachmentDirectoryPath(reportId);
 
         if (!Directory.Exists(directory))
             Directory.CreateDirectory(directory);
@@ -134,7 +130,7 @@ public class FundraisingReportService : IFundraisingReportService
             {
                 FundraisingReportId = reportId,
                 Name = name,
-                FilePath = Path.Combine(directory, $"{name}{_appDataConfig.AllowedFiles[file.ContentType]}")
+                FilePath = _appDataConfig.GetReportAttachmentFilePath(directory, name, file.ContentType)
             };
 
             attachments.Add(attachment, file);

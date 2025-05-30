@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 namespace EFund.Seeding.Behaviors.Mocks;
 
 [DependsOn([typeof(UsersMockBehavior), typeof(TagsMockBehavior)])]
-public class FundraisingsMocksBehavior(
+public class FundraisingsMockBehavior(
     AppDataConfig appDataConfig,
     GeneralConfig generalConfig,
     IRepository<Fundraising> fundraisingRepository,

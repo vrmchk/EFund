@@ -178,7 +178,7 @@ public class FundraisingService : IFundraisingService
         if (fundraising.AvatarPath != null && File.Exists(fundraising.AvatarPath))
             File.Delete(fundraising.AvatarPath);
 
-        var directory = Path.Combine(_appDataConfig.UserAvatarDirectoryPath, fundraising.Id.ToString());
+        var directory = Path.Combine(_appDataConfig.FundraisingAvatarDirectoryPath, fundraising.Id.ToString());
 
         if (!Directory.Exists(directory))
             Directory.CreateDirectory(directory);

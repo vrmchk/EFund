@@ -4,14 +4,14 @@ namespace EFund.Seeding.Behaviors.Abstractions;
 
 public abstract class BaseSeedingBehavior : ISeedingBehavior
 {
-    private readonly AppDataConfig _appDataConfig;
+    protected readonly AppDataConfig AppDataConfig;
 
     protected BaseSeedingBehavior(AppDataConfig appDataConfig)
     {
-        _appDataConfig = appDataConfig;
+        AppDataConfig = appDataConfig;
     }
 
-    protected string DataFolder => _appDataConfig.SeedingDataPath;
+    protected string DataFolder => AppDataConfig.SeedingDataPath;
 
     public abstract Task SeedAsync();
 }

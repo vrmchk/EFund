@@ -5,28 +5,30 @@ using EFund.Common.Models.DTO.Error;
 using EFund.Common.Models.DTO.FundraisingReview;
 using EFund.DAL.Entities;
 using EFund.DAL.Repositories.Interfaces;
+using EFund.Hangfire.Abstractions;
+using EFund.Hangfire.JobArgs;
+using EFund.Hangfire.Jobs;
 using LanguageExt;
 using Microsoft.EntityFrameworkCore;
-using static LanguageExt.Prelude;
 
 namespace EFund.BLL.Services;
 
 public class FundraisingReviewService(
     IRepository<Fundraising> fundraisingRepository,
     IRepository<FundraisingReview> reviewRepository,
-    IMapper mapper)
+    IMapper mapper,
+    IHangfireService hangfireService)
     : IFundraisingReviewService
 {
     private readonly IRepository<Fundraising> _fundraisingRepository = fundraisingRepository;
     private readonly IRepository<FundraisingReview> _reviewRepository = reviewRepository;
     private readonly IMapper _mapper = mapper;
+    private readonly IHangfireService _hangfireService = hangfireService;
 
     public async Task<Either<ErrorDTO, FundraisingReviewDTO>> AddReviewAsync(Guid reviewedBy,
         CreateFundraisingReviewDTO dto)
     {
-        var fundraising = await _fundraisingRepository
-            .Include(f => f.User)
-            .FirstOrDefaultAsync(f => f.Id == dto.FundraisingId);
+        var fundraising = await _fundraisingRepository.FirstOrDefaultAsync(f => f.Id == dto.FundraisingId);
 
         if (fundraising == null)
             return new NotFoundErrorDTO("Fundraising with this id does not exist");
@@ -39,7 +41,6 @@ public class FundraisingReviewService(
 
         fundraising.Status = FundraisingStatus.Reviewed;
         fundraising.ReviewedAt = DateTimeOffset.UtcNow;
-        fundraising.User.Rating += dto.RatingChange;
         await _fundraisingRepository.UpdateAsync(fundraising);
 
         var review = _mapper.Map<FundraisingReview>(dto);
@@ -47,7 +48,18 @@ public class FundraisingReviewService(
 
         await _reviewRepository.InsertAsync(review);
 
+        UpdateUserRating(fundraising.UserId, dto.RatingChange);
+
         return _mapper.Map<FundraisingReviewDTO>(review);
+    }
+
+    private void UpdateUserRating(Guid userId, decimal ratingChange)
+    {
+        _hangfireService.Enqueue<UpdateUserRatingJob, UpdateUserRatingJobArgs>(new UpdateUserRatingJobArgs
+        {
+            UserId = userId,
+            RatingChange = ratingChange
+        });
     }
 
     public async Task<Either<ErrorDTO, List<FundraisingReviewDTO>>> GetAllAsync(Guid? fundraisingId, Guid? reviewId)
@@ -77,16 +89,12 @@ public class FundraisingReviewService(
     
     public async Task<Either<ErrorDTO, FundraisingReviewDTO>> UpdateAsync(Guid id, UpdateFundraisingReviewDTO dto)
     {
-        var review = await _reviewRepository
-            .Include(r => r.Fundraising)
-            .ThenInclude(f => f.User)
-            .FirstOrDefaultAsync(r => r.Id == id);
-
+        var review = await _reviewRepository.Include(r => r.Fundraising).FirstOrDefaultAsync(r => r.Id == id);
         if (review == null)
             return new NotFoundErrorDTO("Review with this id does not exist");
 
-        review.Fundraising.User.Rating -= review.RatingChange; // Remove old rating change
-        review.Fundraising.User.Rating += dto.RatingChange; // Apply new rating change
+        UpdateUserRating(review.Fundraising.UserId, -review.RatingChange);
+        UpdateUserRating(review.Fundraising.UserId, dto.RatingChange);
 
         _mapper.Map(dto, review);
 

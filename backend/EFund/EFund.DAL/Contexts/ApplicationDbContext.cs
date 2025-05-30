@@ -46,6 +46,19 @@ public partial class ApplicationDbContext : IdentityDbContext<User, IdentityRole
                 .HasForeignKey(c => c.ReviewedBy)
                 .OnDelete(DeleteBehavior.Restrict); // ✅ Optional reviewer
         });
+
+        builder.Entity<FundraisingReview>(cfg =>
+        {
+            cfg.HasOne(c => c.Fundraising)
+                .WithMany(f => f.Reviews)
+                .HasForeignKey(c => c.FundraisingId)
+                .OnDelete(DeleteBehavior.Restrict); // 🔐 Avoid unintended cascade
+
+            cfg.HasOne(c => c.ReviwedByUser)
+                .WithMany()
+                .HasForeignKey(c => c.ReviewedBy)
+                .OnDelete(DeleteBehavior.Restrict); // ✅ Safe
+        });
     }
 
     partial void OnModelCreatingPartial(ModelBuilder builder);

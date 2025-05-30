@@ -35,7 +35,7 @@ public class ComplaintController : ControllerBase
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = Policies.Shared)]
     [SwaggerOperation(Summary = "Get complaint by Id", Description = "Returns a complaint by its Id.")]
     [SwaggerResponse(200, "Complaint found", typeof(ComplaintDTO))]
-    [SwaggerResponse(404, "Complaint not found", typeof(ErrorDTO))]
+    [SwaggerResponse(400, "Complaint not found", typeof(ErrorDTO))]
     public async Task<IActionResult> GetComplaintById(Guid id)
     {
         var result = await _complaintService.GetByIdAsync(id);

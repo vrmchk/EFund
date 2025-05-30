@@ -43,7 +43,7 @@ public class FundraisingService : IFundraisingService
     public async Task<Either<ErrorDTO, PagedListDTO<FundraisingDTO>>> GetAllAsync(Guid userId, PaginationDTO pagination,
         string apiUrl)
     {
-        var fundraisings = await IncludeRelations(_fundraisingRepository)
+        var fundraisings = await IncludeRelationsForList(_fundraisingRepository)
             .Where(f => f.UserId == userId)
             .ToPagedListAsync(pagination.Page, pagination.PageSize);
 
@@ -54,7 +54,7 @@ public class FundraisingService : IFundraisingService
         PaginationDTO pagination,
         string apiUrl)
     {
-        var queryable = IncludeRelations(_fundraisingRepository);
+        var queryable = IncludeRelationsForList(_fundraisingRepository);
 
         if (dto.Statuses.Count > 0)
             queryable = queryable.Where(f => dto.Statuses.Contains(f.Status));
@@ -74,7 +74,7 @@ public class FundraisingService : IFundraisingService
 
     public async Task<Either<ErrorDTO, FundraisingDTO>> GetByIdAsync(Guid id, string apiUrl)
     {
-        var fundraising = await IncludeRelations(_fundraisingRepository)
+        var fundraising = await IncludeRelationsForSingle(_fundraisingRepository)
             .FirstOrDefaultAsync(f => f.Id == id);
 
         if (fundraising == null)
@@ -98,7 +98,7 @@ public class FundraisingService : IFundraisingService
     public async Task<Either<ErrorDTO, FundraisingDTO>> UpdateAsync(Guid id, Guid userId, UpdateFundraisingDTO dto,
         string apiUrl)
     {
-        var fundraising = await IncludeRelations(_fundraisingRepository)
+        var fundraising = await IncludeRelationsForSingle(_fundraisingRepository)
             .FirstOrDefaultAsync(f => f.Id == id && f.UserId == userId);
 
         if (fundraising == null)
@@ -115,7 +115,7 @@ public class FundraisingService : IFundraisingService
     public async Task<Either<ErrorDTO, FundraisingDTO>> UpdateStatusAsync(Guid id, Guid userId,
         UpdateFundraisingStatusDTO dto, string apiUrl)
     {
-        var fundraising = await IncludeRelations(_fundraisingRepository)
+        var fundraising = await IncludeRelationsForSingle(_fundraisingRepository)
             .FirstOrDefaultAsync(f => f.Id == id && f.UserId == userId);
 
         if (fundraising == null)
@@ -269,12 +269,18 @@ public class FundraisingService : IFundraisingService
         );
     }
 
-    private IQueryable<Fundraising> IncludeRelations(IQueryable<Fundraising> queryable)
+    private IQueryable<Fundraising> IncludeRelationsForList(IQueryable<Fundraising> queryable)
     {
         return queryable
             .Include(f => f.User)
             .Include(f => f.Tags)
-            .Include(f => f.MonobankFundraising)
+            .Include(f => f.MonobankFundraising);
+    }
+
+    private IQueryable<Fundraising> IncludeRelationsForSingle(IQueryable<Fundraising> queryable)
+    {
+        return IncludeRelationsForList(queryable)
+            .Include(f => f.Reviews)
             .Include(f => f.Reports)
             .ThenInclude(r => r.Attachments);
     }

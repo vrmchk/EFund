@@ -97,6 +97,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IViolationService, ViolationService>();
 builder.Services.AddScoped<IComplaintService, ComplaintService>();
 builder.Services.AddScoped<INotificationService, NotificationService>();
+builder.Services.AddScoped<IFundraisingReviewService, FundraisingReviewService>();
 
 //ApiClients
 builder.Services.AddHttpClient(monobankConfig.HttpClientName,

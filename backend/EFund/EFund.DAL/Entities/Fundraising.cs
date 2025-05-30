@@ -26,4 +26,5 @@ public class Fundraising : BaseEntity<Guid>
     public List<Tag> Tags { get; set; } = [];
     public List<FundraisingReport> Reports { get; set; } = [];
     public List<Complaint> Complaints { get; set; } = [];
+    public List<FundraisingReview> Reviews { get; set; } = [];
 }

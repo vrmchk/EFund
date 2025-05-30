@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EFund.Seeding.Behaviors;
 
-public class BadgesSeedingBehaviour(
+public class BadgesSeedingBehavior(
     AppDataConfig appDataConfig,
     IRepository<Badge> badgeRepository)
     : BaseSeedingBehavior(appDataConfig)

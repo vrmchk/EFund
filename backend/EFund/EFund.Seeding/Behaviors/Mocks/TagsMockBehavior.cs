@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EFund.Seeding.Behaviors.Mocks;
 
-public class TagsMockBehaviour(
+public class TagsMockBehavior(
     AppDataConfig appDataConfig,
     GeneralConfig generalConfig,
     IRepository<Tag> tagRepository)

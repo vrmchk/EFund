@@ -1,5 +1,7 @@
 using EFund.BLL.Services.Interfaces;
+using EFund.Common.Models.DTO.Error;
 using EFund.Common.Models.DTO.Violation;
+using EFund.WebAPI.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -26,5 +28,18 @@ public class ViolationController : ControllerBase
     {
         var result = await _violationService.GetGroupedViolationsAsync(withDeleted);
         return Ok(result);
+    }
+    
+    [HttpGet("{violationId}")]
+    [SwaggerOperation(
+        Summary = "Get violation by Id",
+        Description = "Returns an extended violation by its Id."
+    )]
+    [SwaggerResponse(200, "Extended violation details", typeof(ViolationDTO))]
+    [SwaggerResponse(400, "Invalid violation Id", typeof(ErrorDTO))]
+    public async Task<IActionResult> GetViolationById(Guid violationId)
+    {
+        var result = await _violationService.GetByIdAsync(violationId);
+        return result.ToActionResult();
     }
 }

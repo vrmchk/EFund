@@ -1,22 +1,25 @@
-Group,Title
-Fraudulent Activity,Fake identity
-Fraudulent Activity,Fake illness
-Fraudulent Activity,Misused funds
-Hate Speech or Extremism,Religious discrimination
-Hate Speech or Extremism,Terrorism-related content
-Harassment or Abuse,Bullying
-Harassment or Abuse,Stalking
-Harassment or Abuse,Personal attacks
-Graphic or Offensive Media,Pornographic imagery
-Graphic or Offensive Media,Violent imagery
-Misinformation,False medical claims
-Misinformation,Fake emergency claims
-Privacy Violations,Publishing others’ data without consent
-Platform Abuse,Spamming
-Platform Abuse,Fake reports
-Platform Abuse,Multiple accounts
-Illegal Campaigns,Weapons fundraising
-Illegal Campaigns,Drugs or contraband
-Illegal Campaigns,Criminal activity fundraising
-EU Sanctions Violations,Support for blacklisted individuals
-EU Sanctions Violations,Support for sanctioned organizations
+Group,Title,RatingImpact
+Fraudulent Activity,Fake identity,-1
+Fraudulent Activity,Fake illness,-1
+Fraudulent Activity,Misused funds,-1
+Fraudulent Activity,Falsified documentation,-1
+Hate Speech or Extremism,Religious discrimination,-1
+Hate Speech or Extremism,Terrorism-related content,-1.5
+Harassment or Abuse,Bullying,-0.5
+Harassment or Abuse,Stalking,-0.5
+Harassment or Abuse,Personal attacks,-0.5
+Graphic or Offensive Media,Pornographic imagery,-0.5
+Graphic or Offensive Media,Violent imagery,-0.5
+Misinformation,False medical claims,-0.5
+Misinformation,Fake emergency claims,-0.5
+Misinformation,Fabricated endorsements,-0.5
+Privacy Violations,Publishing others’ data without consent,-0.5
+Privacy Violations,Leaking sensitive financial information,-0.5
+Platform Abuse,Spamming,-0.5
+Platform Abuse,Fake reports,-0.5
+Platform Abuse,Multiple accounts,-0.5
+Platform Abuse,Automated activity (bots),-0.5
+Illegal Campaigns,Drugs or contraband,-1.5
+Illegal Campaigns,Criminal activity fundraising,-1.5
+Sanctions Violations,Support for blacklisted individuals,-1
+Sanctions Violations,Support for sanctioned organizations,-1

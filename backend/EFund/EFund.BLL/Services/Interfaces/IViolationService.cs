@@ -1,11 +1,11 @@
 using EFund.Common.Models.DTO.Violation;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using EFund.Common.Models.DTO.Error;
+using LanguageExt;
 
-namespace EFund.BLL.Services.Interfaces
+namespace EFund.BLL.Services.Interfaces;
+
+public interface IViolationService
 {
-    public interface IViolationService
-    {
-        Task<List<ViolationGroupDTO>> GetGroupedViolationsAsync(bool withDeleted);
-    }
-} 
+    Task<List<ViolationGroupDTO>> GetGroupedViolationsAsync(bool withDeleted);
+    Task<Either<ErrorDTO, ViolationExtendedDTO>> GetByIdAsync(Guid id);
+}

@@ -44,6 +44,7 @@ public class ViolationsSeedingBehavior(
             {
                 Title = v.Title,
                 ViolationGroupId = groupsByTitle[v.Group],
+                RatingImpact = v.RatingImpact
             }));
 
         await _violationRepository.InsertManyAsync(violationsToAdd);

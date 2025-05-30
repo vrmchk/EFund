@@ -10,8 +10,3 @@ public class NotificationDTO
     public bool IsRead { get; set; }
     public string Message { get; set; } = null!;
 }
-
-public class BatchSetNotificationIsReadDTO
-{
-    public List<Guid> NotificationIds { get; set; } = [];
-}

@@ -47,9 +47,9 @@ public class UserService : IUserService
         _logger = logger;
     }
 
-    public async Task<Either<ErrorDTO, UserDTO>> GetByIdAsync(Guid id, string apiUrl)
+    public async Task<Either<ErrorDTO, UserDTO>> GetByIdAsync(Guid id, string apiUrl, bool withNotifications)
     {
-        var user = await IncludeRelations(_userManager.Users).FirstOrDefaultAsync(u => u.Id == id);
+        var user = await IncludeRelations(_userManager.Users, withNotifications).FirstOrDefaultAsync(u => u.Id == id);
         if (user is null)
             return new NotFoundErrorDTO("User with this id does not exist");
 
@@ -277,7 +277,7 @@ public class UserService : IUserService
         string apiUrl,
         Guid providerId)
     {
-        var queryable = IncludeRelations(_userManager.Users.Where(u => u.Id != providerId));
+        var queryable = IncludeRelations(_userManager.Users.Where(u => u.Id != providerId), withNotifications: false);
 
         if (!string.IsNullOrEmpty(dto.Query))
             queryable = queryable.Where(u => u.DisplayName.ToLower().Contains(dto.Query.ToLower()) || u.Email!.Contains(dto.Query));
@@ -304,11 +304,15 @@ public class UserService : IUserService
         return dto;
     }
 
-    private IQueryable<User> IncludeRelations(IQueryable<User> queryable)
+    private IQueryable<User> IncludeRelations(IQueryable<User> queryable, bool withNotifications)
     {
-        return queryable
+        IQueryable<User> result = queryable
             .Include(u => u.UserMonobanks)
-            .Include(u => u.Badges)
-            .Include(u => u.Notifications.Where(n => !n.IsRead));
+            .Include(u => u.Badges);
+
+        if (withNotifications)
+            result = result.Include(u => u.Notifications.Where(n => !n.IsRead));
+
+        return result;
     }
 }

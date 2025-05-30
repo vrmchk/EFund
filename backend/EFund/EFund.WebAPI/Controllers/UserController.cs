@@ -37,7 +37,7 @@ public class UserController : ControllerBase
     [SwaggerResponse(StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> GetMe()
     {
-        var result = await _userService.GetByIdAsync(HttpContext.GetUserId(), HttpContext.GetApiUrl());
+        var result = await _userService.GetByIdAsync(HttpContext.GetUserId(), HttpContext.GetApiUrl(), withNotifications: true);
         return result.ToActionResult();
     }
 
@@ -46,7 +46,7 @@ public class UserController : ControllerBase
     [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ErrorDTO))]
     public async Task<IActionResult> GetById(Guid id)
     {
-        var result = await _userService.GetByIdAsync(id, HttpContext.GetApiUrl());
+        var result = await _userService.GetByIdAsync(id, HttpContext.GetApiUrl(), withNotifications: false);
         return result.ToActionResult();
     }
 

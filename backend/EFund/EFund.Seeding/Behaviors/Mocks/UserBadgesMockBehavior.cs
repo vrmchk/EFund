@@ -29,10 +29,16 @@ public class UserBadgesMockBehavior(
 
     protected override async Task MockData()
     {
-        var users = await _userManager.Users.Where(u => _userBadges.Keys.Contains(u.Email!)).ToListAsync();
+        var users = await _userManager.Users
+            .Where(u => _userBadges.Keys.Contains(u.Email!))
+            .Include(u => u.Badges)
+            .ToListAsync();
 
         foreach (var user in users)
         {
+            if (user.Badges.Count > 0)
+                continue;
+
             var badgeTypesToAssign = _userBadges[user.Email!];
             var badges = await _badgeRepository.Where(b => badgeTypesToAssign.Contains(b.Type)).ToListAsync();
             user.Badges = badges;

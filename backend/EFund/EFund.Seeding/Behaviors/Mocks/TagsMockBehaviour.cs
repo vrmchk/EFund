@@ -25,6 +25,7 @@ public class TagsMockBehaviour(
         var tags = fundraisings
             .SelectMany(f => f.Fundraising.Tags)
             .DistinctBy(t => t.Name)
+            .Select(t => new Tag { Name = t.Name.ToLower() })
             .ToList();
 
         var tagNames = tags.Select(t => t.Name).ToList();

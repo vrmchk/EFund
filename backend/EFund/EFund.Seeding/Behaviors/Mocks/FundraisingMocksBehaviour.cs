@@ -34,7 +34,7 @@ public class FundraisingsMocksBehaviour(
         var tagNames = fundraisings
             .SelectMany(f => f.Fundraising.Tags)
             .DistinctBy(t => t.Name)
-            .Select(t => t.Name)
+            .Select(t => t.Name.ToLower())
             .ToList();
 
         var tagsFromDb = await _tagRepository

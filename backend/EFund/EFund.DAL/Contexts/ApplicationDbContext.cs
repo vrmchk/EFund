@@ -29,22 +29,22 @@ public partial class ApplicationDbContext : IdentityDbContext<User, IdentityRole
             cfg.HasOne(c => c.Fundraising)
                 .WithMany(f => f.Complaints)
                 .HasForeignKey(c => c.FundraisingId)
-                .OnDelete(DeleteBehavior.Restrict); // 🔐 Avoid unintended cascade
+                .OnDelete(DeleteBehavior.Restrict);
 
             cfg.HasOne(c => c.RequestedByUser)
                 .WithMany()
                 .HasForeignKey(c => c.RequestedBy)
-                .OnDelete(DeleteBehavior.Restrict); // ✅ Safe
+                .OnDelete(DeleteBehavior.Restrict);
 
             cfg.HasOne(c => c.RequestedForUser)
                 .WithMany()
                 .HasForeignKey(c => c.RequestedFor)
-                .OnDelete(DeleteBehavior.Restrict); // ✅ Avoid cascade cycles
+                .OnDelete(DeleteBehavior.Restrict);
 
             cfg.HasOne(c => c.ReviewedByUser)
                 .WithMany()
                 .HasForeignKey(c => c.ReviewedBy)
-                .OnDelete(DeleteBehavior.Restrict); // ✅ Optional reviewer
+                .OnDelete(DeleteBehavior.Restrict);
         });
 
         builder.Entity<FundraisingReview>(cfg =>
@@ -52,12 +52,12 @@ public partial class ApplicationDbContext : IdentityDbContext<User, IdentityRole
             cfg.HasOne(c => c.Fundraising)
                 .WithMany(f => f.Reviews)
                 .HasForeignKey(c => c.FundraisingId)
-                .OnDelete(DeleteBehavior.Restrict); // 🔐 Avoid unintended cascade
+                .OnDelete(DeleteBehavior.Restrict);
 
             cfg.HasOne(c => c.ReviwedByUser)
                 .WithMany()
                 .HasForeignKey(c => c.ReviewedBy)
-                .OnDelete(DeleteBehavior.Restrict); // ✅ Safe
+                .OnDelete(DeleteBehavior.Restrict);
         });
     }
 

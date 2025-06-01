@@ -53,11 +53,8 @@ public class ReportAttachmentsMockBehavior(
     private List<ReportAttachment> GetRandomAttachments(Guid reportId, string directory)
     {
         var attachments = new List<ReportAttachment>();
-
-        // Decide how many attachments to generate (1–3)
-        int count = _random.Next(1, 4);
-
-        // Shuffle file pools to ensure variation
+        var count = _random.Next(1, 4);
+        
         var shuffledPictures = _pictureFileNames.OrderBy(_ => _random.Next()).ToList();
         var shuffledPdfs = _pdfFileNames.OrderBy(_ => _random.Next()).ToList();
         var shuffledExcels = _xlsxFileNames.OrderBy(_ => _random.Next()).ToList();
@@ -65,9 +62,8 @@ public class ReportAttachmentsMockBehavior(
         for (int i = 0; i < count; i++)
         {
             string fileName;
-
-            // 70% chance for picture, 15% pdf, 15% xlsx
-            int roll = _random.Next(100);
+            
+            var roll = _random.Next(100);
             if (roll < 70 && shuffledPictures.Count > 0)
             {
                 fileName = shuffledPictures[0];
@@ -83,14 +79,13 @@ public class ReportAttachmentsMockBehavior(
                 fileName = shuffledExcels[0];
                 shuffledExcels.RemoveAt(0);
             }
-            else if (shuffledPictures.Count > 0) // fallback to pictures
+            else if (shuffledPictures.Count > 0)
             {
                 fileName = shuffledPictures[0];
                 shuffledPictures.RemoveAt(0);
             }
             else
             {
-                // fallback to any available file
                 fileName = _pictureFileNames.Concat(_pdfFileNames).Concat(_xlsxFileNames).OrderBy(_ => _random.Next()).First();
             }
 

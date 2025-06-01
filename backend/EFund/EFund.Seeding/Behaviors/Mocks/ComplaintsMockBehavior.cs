@@ -61,14 +61,13 @@ public class ComplaintsMockBehavior(
         List<User> requestedForUsers)
     {
         var complaints = new List<Complaint>();
-        int complaintCount = _random.Next(1, 4); // 1 to 3 complaints
+        int complaintCount = _random.Next(1, 4);
 
         for (int i = 0; i < complaintCount; i++)
         {
             bool includeComment = _random.NextDouble() < 0.8;
             bool includeViolations = _random.NextDouble() < 0.7;
 
-            // Force at least one: comment or violation must exist
             if (!includeComment && !includeViolations)
             {
                 if (_random.NextDouble() < 0.5)
@@ -80,7 +79,7 @@ public class ComplaintsMockBehavior(
             var selectedViolations = includeViolations
                 ? violations
                     .OrderBy(_ => _random.Next())
-                    .Take(_random.Next(1, 3)) // 1–2 violations
+                    .Take(_random.Next(1, 3))
                     .ToList()
                 : [];
 

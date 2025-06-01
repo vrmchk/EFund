@@ -48,7 +48,7 @@ public class NotificationsMockBehavior(
     private List<Notification> GetRandomNotifications(User user)
     {
         var notifications = new List<Notification>();
-        var notificationCount = _random.Next(1, 6); // Randomly generate between 1 and 5 notifications
+        var notificationCount = _random.Next(1, 6);
         for (int i = 0; i < notificationCount; i++)
         {
             var notification = new Notification

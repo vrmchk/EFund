@@ -39,12 +39,7 @@ public class ComplaintService(
 
     public async Task<PagedListDTO<ComplaintDTO>> SearchAsync(SearchComplaintsDTO dto, PaginationDTO pagination)
     {
-        var query = _complaintRepository
-            .Include(c => c.Violations)
-            .Include(c => c.RequestedByUser)
-            .Include(c => c.RequestedForUser)
-            .Include(c => c.ReviewedByUser)
-            .AsQueryable();
+        var query = IncludeRelations(_complaintRepository);
 
         if (dto.Status.HasValue)
             query = query.Where(c => c.Status == dto.Status);
@@ -64,7 +59,7 @@ public class ComplaintService(
 
     public async Task<Either<ErrorDTO, ComplaintDTO>> GetByIdAsync(Guid id)
     {
-        var complaint = await _complaintRepository.Include(c => c.Violations).FirstOrDefaultAsync(c => c.Id == id);
+        var complaint = await IncludeRelations(_complaintRepository).FirstOrDefaultAsync(c => c.Id == id);
         if (complaint == null)
             return new NotFoundErrorDTO("Complaint not found");
 
@@ -249,5 +244,14 @@ public class ComplaintService(
             {
                 UserId = complaint.RequestedBy
             });
+    }
+
+    private IQueryable<Complaint> IncludeRelations(IQueryable<Complaint> query)
+    {
+        return query
+            .Include(c => c.Violations)
+            .Include(c => c.RequestedByUser)
+            .Include(c => c.RequestedForUser)
+            .Include(c => c.ReviewedByUser);
     }
 }

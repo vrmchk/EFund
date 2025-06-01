@@ -1,7 +1,9 @@
 using AutoMapper;
+using EFund.BLL.Extensions;
 using EFund.BLL.Services.Interfaces;
 using EFund.Common.Enums;
 using EFund.Common.Models.Configs;
+using EFund.Common.Models.DTO.Common;
 using EFund.Common.Models.DTO.Complaint;
 using EFund.Common.Models.DTO.Error;
 using EFund.DAL.Entities;
@@ -35,9 +37,14 @@ public class ComplaintService(
     private readonly IEmailSender _emailSender = emailSender;
     private readonly CallbackUrisConfig _callbackUrisConfig = callbackUrisConfig;
 
-    public async Task<List<ComplaintDTO>> SearchAsync(SearchComplaintsDTO dto)
+    public async Task<PagedListDTO<ComplaintDTO>> SearchAsync(SearchComplaintsDTO dto, PaginationDTO pagination)
     {
-        var query = _complaintRepository.Include(c => c.Violations).AsQueryable();
+        var query = _complaintRepository
+            .Include(c => c.Violations)
+            .Include(c => c.RequestedByUser)
+            .Include(c => c.RequestedForUser)
+            .Include(c => c.ReviewedByUser)
+            .AsQueryable();
 
         if (dto.Status.HasValue)
             query = query.Where(c => c.Status == dto.Status);
@@ -48,9 +55,11 @@ public class ComplaintService(
         if (dto.ReviewedBy.HasValue)
             query = query.Where(c => c.ReviewedBy == dto.ReviewedBy);
 
-        var complaints = await query.ToListAsync();
+        var complaints = await query
+            .OrderByDescending(c => c.RequestedAt)
+            .ToPagedListAsync(pagination.Page, pagination.PageSize);
 
-        return _mapper.Map<List<ComplaintDTO>>(complaints);
+        return _mapper.Map<PagedListDTO<ComplaintDTO>>(complaints);
     }
 
     public async Task<Either<ErrorDTO, ComplaintDTO>> GetByIdAsync(Guid id)
@@ -122,6 +131,25 @@ public class ComplaintService(
                 return None;
             },
             Left: error => Task.FromResult<Option<ErrorDTO>>(error));
+    }
+
+    public async Task<ComplaintTotalsDTO> GetTotalsAsync()
+    {
+        var statuses = Enum.GetValues<ComplaintStatus>();
+        var totals = await _complaintRepository
+            .GroupBy(c => c.Status)
+            .Select(g => new
+            {
+                Status = g.Key,
+                Count = g.Count()
+            }).ToListAsync();
+
+        return new ComplaintTotalsDTO
+        {
+            TotalsByStatus = statuses.ToDictionary(
+                status => status,
+                status => totals.FirstOrDefault(t => t.Status == status)?.Count ?? 0)
+        };
     }
 
     private async Task<Either<ErrorDTO, Complaint>> GetComplaintForReview(Guid complaintId)

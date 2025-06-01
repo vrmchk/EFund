@@ -6,6 +6,9 @@ namespace EFund.DAL.Entities;
 
 public class Complaint : BaseEntity<Guid>
 {
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public int Number { get; set; }
+
     public ComplaintStatus Status { get; set; }
     public string? Comment { get; set; }
     public DateTimeOffset RequestedAt { get; set; }

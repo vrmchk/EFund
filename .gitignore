@@ -411,3 +411,5 @@ FodyWeavers.xsd
 .DS_Store
 .env
 npm-debug.log
+/backend/EFund/EFund.WebAPI/wwwroot/
+appsettings.Development.json

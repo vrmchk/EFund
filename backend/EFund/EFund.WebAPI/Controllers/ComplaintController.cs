@@ -1,7 +1,10 @@
 using EFund.BLL.Services.Interfaces;
 using EFund.Common.Constants;
+using EFund.Common.Models.DTO.Common;
 using EFund.Common.Models.DTO.Complaint;
 using EFund.Common.Models.DTO.Error;
+using EFund.Validation;
+using EFund.Validation.Extensions;
 using EFund.WebAPI.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -15,19 +18,26 @@ namespace EFund.WebAPI.Controllers;
 public class ComplaintController : ControllerBase
 {
     private readonly IComplaintService _complaintService;
+    private readonly IValidatorService _validatorService;
 
-    public ComplaintController(IComplaintService complaintService)
+    public ComplaintController(IComplaintService complaintService, IValidatorService validatorService)
     {
         _complaintService = complaintService;
+        _validatorService = validatorService;
     }
 
     [HttpGet]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = Policies.Admin)]
     [SwaggerOperation(Summary = "Search complaints", Description = "Returns a list of complaints filtered by query parameters.")]
-    [SwaggerResponse(200, "List of complaints", typeof(List<ComplaintDTO>))]
-    public async Task<IActionResult> SearchComplaints([FromQuery] SearchComplaintsDTO dto)
+    [SwaggerResponse(200, "List of complaints", typeof(PagedListDTO<ComplaintDTO>))]
+    [SwaggerResponse(400, "Invalid request", typeof(ErrorDTO))]
+    public async Task<IActionResult> SearchComplaints([FromQuery] SearchComplaintsDTO dto, [FromQuery] PaginationDTO pagination)
     {
-        var complaints = await _complaintService.SearchAsync(dto);
+        var validationResult = await _validatorService.ValidateAsync(pagination);
+        if (!validationResult.IsValid)
+            return BadRequest(validationResult.ToErrorDTO());
+
+        var complaints = await _complaintService.SearchAsync(dto, pagination);
         return Ok(complaints);
     }
 
@@ -86,5 +96,15 @@ public class ComplaintController : ControllerBase
     {
         var result = await _complaintService.RequestChangesAsync(dto, HttpContext.GetUserId());
         return result.ToActionResult();
+    }
+    
+    [HttpGet("totals")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = Policies.Admin)]
+    [SwaggerOperation(Summary = "Get total complaints", Description = "Returns the total number of complaints by each status.")]
+    [SwaggerResponse(200, "Total complaints by status", typeof(ComplaintTotalsDTO))]
+    public async Task<IActionResult> GetTotals()
+    {
+        var totals = await _complaintService.GetTotalsAsync();
+        return Ok(totals);
     }
 }

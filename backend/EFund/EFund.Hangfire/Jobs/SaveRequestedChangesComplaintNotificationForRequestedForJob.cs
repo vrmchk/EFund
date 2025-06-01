@@ -1,4 +1,6 @@
+using System.Text.Json;
 using EFund.Common.Enums;
+using EFund.Common.Models.Utility.Notifications;
 using EFund.DAL.Entities;
 using EFund.DAL.Repositories.Interfaces;
 using EFund.Hangfire.Abstractions;
@@ -18,19 +20,14 @@ public class SaveRequestedChangesComplaintNotificationForRequestedForJob(
     public async Task Run(SaveRequestedChangesComplaintNotificationForRequestedForJobArgs data,
         CancellationToken cancellationToken = default)
     {
+        var args = new ComplaintRequestChangesForRequestedForArgs { FundraisingTitle = data.FundraisingTitle, Message = data.Message };
         var notification = new Notification
         {
             UserId = data.UserId,
             Reason = NotificationReason.ComplaintRequestChangesForRequestedFor,
-            Message = data.Message
+            Args = JsonSerializer.Serialize(args)
         };
 
         await _notificationRepository.InsertAsync(notification);
     }
-
-    private string Message(SaveRequestedChangesComplaintNotificationForRequestedForJobArgs data) =>
-        $"""
-         We have temporarily hidden your fundraising campaign {data.FundraisingTitle} after a review by our moderation team.
-         To restore visibility, please address the following: {data.Message}
-         """;
 }

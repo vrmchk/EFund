@@ -8,5 +8,5 @@ public class NotificationDTO
     public Guid UserId { get; set; }
     public NotificationReason Reason { get; set; }
     public bool IsRead { get; set; }
-    public string Message { get; set; } = null!;
+    public object? Args { get; set; }
 }

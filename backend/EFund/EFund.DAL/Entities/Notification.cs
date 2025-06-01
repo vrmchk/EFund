@@ -9,7 +9,7 @@ public class Notification : BaseEntity<Guid>
     public Guid UserId { get; set; }
     public NotificationReason Reason { get; set; }
     public bool IsRead { get; set; }
-    public string Message { get; set; } = null!;
+    public string? Args { get; set; }
     
     [ForeignKey(nameof(UserId))]
     public User User { get; set; } = null!;

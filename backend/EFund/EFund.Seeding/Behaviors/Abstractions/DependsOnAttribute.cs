@@ -1,5 +1,6 @@
 namespace EFund.Seeding.Behaviors.Abstractions;
 
+[AttributeUsage(AttributeTargets.Class)]
 public class DependsOnAttribute : Attribute
 {
     public DependsOnAttribute(Type[] behaviors)

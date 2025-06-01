@@ -1,4 +1,6 @@
+using System.Text.Json;
 using EFund.Common.Enums;
+using EFund.Common.Models.Utility.Notifications;
 using EFund.DAL.Entities;
 using EFund.DAL.Repositories.Interfaces;
 using EFund.Hangfire.Abstractions;
@@ -17,21 +19,14 @@ public class SaveAcceptedComplaintNotificationForRequestedForJob(
 
     public async Task Run(SaveAcceptedComplaintNotificationForRequestedForJobArgs data, CancellationToken cancellationToken = default)
     {
+        var args = new ComplaintAcceptedForRequestedForArgs { FundraisingTitle = data.FundraisingTitle, Violations = data.Violations };
         var notification = new Notification
         {
             UserId = data.UserId,
             Reason = NotificationReason.ComplaintAcceptedForRequestedFor,
-            Message = Message(data)
+            Args = JsonSerializer.Serialize(args),
         };
 
         await _notificationRepository.InsertAsync(notification);
     }
-
-    private string Message(SaveAcceptedComplaintNotificationForRequestedForJobArgs data) =>
-        $"""
-         We are writing to inform you that content associated with your fundraising {data.FundraisingTitle} has been removed following a review by our moderation team.
-         The content was found to be in violation of our Terms of Use, specifically under the categories: {FormatViolations(data.Violations)}
-         """;
-
-    private string FormatViolations(List<string> violations) => string.Join(", ", violations.Select(v => $"\"{v}\""));
 }

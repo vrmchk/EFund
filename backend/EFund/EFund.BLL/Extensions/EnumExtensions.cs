@@ -20,7 +20,7 @@ public static class EnumExtensions
         return value.GetAttribute<DisplayAttribute>()?.Description ?? string.Empty;
     }
 
-    private static TAttribute? GetAttribute<TAttribute>(this Enum value)
+    public static TAttribute? GetAttribute<TAttribute>(this Enum value)
         where TAttribute : Attribute
     {
         var memberInfo = value.GetType().GetMember(value.ToString()).FirstOrDefault();

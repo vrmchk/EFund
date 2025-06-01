@@ -20,8 +20,7 @@ public class SaveComplaintResponseNotificationForRequestedByJob(
         var notification = new Notification
         {
             UserId = data.UserId,
-            Reason = NotificationReason.ComplaintResponseForRequestedBy,
-            Message = "We have reviewed the content you reported and confirmed that it violated our Terms of Use. As a result, the offending content has been successfully removed from the platform"
+            Reason = NotificationReason.ComplaintResponseForRequestedBy
         };
 
         await _notificationRepository.InsertAsync(notification);

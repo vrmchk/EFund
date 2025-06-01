@@ -285,8 +285,11 @@ public class FundraisingService : IFundraisingService
             .ThenInclude(r => r.Attachments);
     }
 
-    private async Task<List<Tag>> GetTags(List<string> tags)
+    private async Task<List<Tag>> GetTags(List<string>? tags)
     {
+        if (tags == null || tags.Count == 0)
+            return [];
+
         tags = tags.Select(t => t.ToLower()).ToList();
         var existingTags = await _tagRepository.Where(t => tags.Contains(t.Name)).ToListAsync();
         var newTags = tags

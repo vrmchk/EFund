@@ -12,9 +12,9 @@ public class UpdateFundraisingDTOValidator : AbstractValidator<UpdateFundraising
             .NotEmpty();
 
         RuleFor(x => x.Tags)
-            .NotEmpty()
-            .CountLessThanOrEqualTo(5)
-            .WithMessage("Fundraising can have up to 5 tags");
+            .NotNull()
+            .CountLessThanOrEqualTo(10)
+            .WithMessage("Fundraising can have up to 10 tags");
 
         RuleForEach(x => x.Tags)
             .NotEmpty();

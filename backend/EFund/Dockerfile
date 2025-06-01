@@ -29,6 +29,7 @@ ARG BUILD_CONFIGURATION=Release
 RUN dotnet publish "EFund.WebAPI.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 COPY EFund.WebAPI/appsettings.json /app/publish/appsettings.json
 COPY EFund.Seeding/Data /app/publish/SeedingData
+COPY EFund.Email/Templates /app/publish/EmailTemplates
 RUN mkdir -p /app/AppData/
 RUN mkdir -p /app/AppData/Logs/
 RUN mkdir -p /app/AppData/Uploads/
@@ -37,7 +38,6 @@ RUN mkdir -p /app/AppData/Default/
 RUN mkdir -p /app/AppData/Fundraisings/
 RUN mkdir -p /app/AppData/Reports/
 RUN mkdir -p /app/AppData/Attachments/
-RUN mkdir -p /app/Templates/
 
 FROM base AS final
 WORKDIR /app

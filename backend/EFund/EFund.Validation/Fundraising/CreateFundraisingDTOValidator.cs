@@ -16,8 +16,8 @@ public class CreateFundraisingDTOValidator : AbstractValidator<CreateFundraising
 
         RuleFor(x => x.Tags)
             .NotNull()
-            .CountLessThanOrEqualTo(5)
-            .WithMessage("Fundraising can have up to 5 tags");
+            .CountLessThanOrEqualTo(10)
+            .WithMessage("Fundraising can have up to 10 tags");
 
         RuleForEach(x => x.Tags)
             .NotNull();

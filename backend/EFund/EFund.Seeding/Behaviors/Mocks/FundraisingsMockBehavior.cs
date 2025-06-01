@@ -51,7 +51,7 @@ public class FundraisingsMockBehavior(
                        ?? throw new InvalidOperationException($"User with email {fundraising.UserEmail} not found.");
 
             fundraising.Fundraising.UserId = user.Id;
-            fundraising.Fundraising.Tags = tagsFromDb.Where(t => fundraising.Fundraising.Tags.Any(ft => ft.Name == t.Name)).ToList();
+            fundraising.Fundraising.Tags = tagsFromDb.Where(t => fundraising.Fundraising.Tags.Any(ft => string.Equals(ft.Name, t.Name, StringComparison.CurrentCultureIgnoreCase))).ToList();
 
             if (fundraising.Fundraising.Status == FundraisingStatus.Closed)
             {

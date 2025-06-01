@@ -23,7 +23,6 @@ using EFund.Validation.Auth;
 using EFund.Validation.Extensions;
 using EFund.WebAPI.Extensions;
 using FluentEmail.MailKitSmtp;
-using FluentValidation;
 using Hangfire;
 using HangfireBasicAuthenticationFilter;
 using Microsoft.AspNetCore.Authentication.Google;
@@ -37,6 +36,11 @@ using Serilog;
 var builder = WebApplication.CreateBuilder(args);
 
 //Configs
+DotNetEnv.Env.Load();
+builder.Configuration
+    .AddEnvironmentJsonFile(builder.Environment)
+    .AddEnvironmentVariables();
+
 var appDataConfig = new AppDataConfig();
 var jwtConfig = new JwtConfig();
 var emailConfig = new EmailConfig();

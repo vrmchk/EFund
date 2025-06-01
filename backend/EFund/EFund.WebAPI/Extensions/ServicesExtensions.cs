@@ -21,4 +21,15 @@ public static class ServicesExtensions
         configurationBuilder(builder);
         return services;
     }
+
+    public static IConfigurationBuilder AddEnvironmentJsonFile(this IConfigurationBuilder builder, IWebHostEnvironment environment)
+    {
+        var fileName = environment.IsDevelopment()
+            ? "appsettings.Development.json"
+            : "appsettings.json";
+
+        return builder
+            .SetBasePath(environment.ContentRootPath)
+            .AddJsonFile(fileName, optional: false, reloadOnChange: true);
+    }
 }

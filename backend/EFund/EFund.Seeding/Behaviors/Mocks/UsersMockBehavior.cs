@@ -23,7 +23,7 @@ public class UsersMockBehavior(
             if (await _userManager.FindByEmailAsync(user.Email!) != null)
                 continue;
 
-            await _userManager.CreateAsync(user, "Qwerty.123");
+            await _userManager.CreateAsync(user, GeneralConfig.MockedUsersPassword);
             await _userManager.AddToRoleAsync(user, role);
         }
     }

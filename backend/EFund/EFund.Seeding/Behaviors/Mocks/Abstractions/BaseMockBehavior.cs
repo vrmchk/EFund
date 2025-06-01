@@ -9,11 +9,11 @@ public abstract class BaseMockBehavior(
 )
     : BaseSeedingBehavior(appDataConfig)
 {
-    private readonly GeneralConfig _generalConfig = generalConfig;
+    protected readonly GeneralConfig GeneralConfig = generalConfig;
 
     public override async Task SeedAsync()
     {
-        if (!_generalConfig.IsMockingEnabled)
+        if (!GeneralConfig.IsMockingEnabled)
             return;
 
         await MockData();

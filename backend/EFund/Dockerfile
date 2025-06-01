@@ -27,6 +27,7 @@ WORKDIR "/src/EFund.WebAPI"
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
 RUN dotnet publish "EFund.WebAPI.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+COPY EFund.WebAPI/appsettings.json /app/publish/appsettings.json
 COPY EFund.Seeding/Data /app/publish/SeedingData
 RUN mkdir -p /app/AppData/
 RUN mkdir -p /app/AppData/Logs/

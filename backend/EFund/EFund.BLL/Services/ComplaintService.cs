@@ -143,7 +143,8 @@ public class ComplaintService(
         {
             TotalsByStatus = statuses.ToDictionary(
                 status => status,
-                status => totals.FirstOrDefault(t => t.Status == status)?.Count ?? 0)
+                status => totals.FirstOrDefault(t => t.Status == status)?.Count ?? 0),
+            OverallTotal = totals.Sum(t => t.Count)
         };
     }
 

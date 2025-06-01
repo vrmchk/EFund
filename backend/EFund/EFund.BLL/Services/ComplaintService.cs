@@ -171,7 +171,10 @@ public class ComplaintService(
         complaint.ReviewedAt = DateTimeOffset.UtcNow;
         complaint.ReviewedBy = reviewedBy;
 
-        await _complaintRepository.UpdateAsync(complaint);
+        await _complaintRepository.Where(c => c.Id == complaint.Id).ExecuteUpdateAsync(s => s
+            .SetProperty(c => c.Status, status)
+            .SetProperty(c => c.ReviewedAt, DateTimeOffset.UtcNow)
+            .SetProperty(c => c.ReviewedBy, reviewedBy));
     }
 
     private async Task TriggerPostAcceptActions(ComplaintAcceptDTO dto, Complaint complaint)

@@ -19,4 +19,6 @@ public interface IUserService
     Task<Option<ErrorDTO>> PerformUserActionAsync(UserActionDTO dto);
     Task<Either<ErrorDTO, PagedListDTO<UserExtendedDTO>>> SearchAsync(SearchUserDTO dto, PaginationDTO pagination,
         string apiUrl, Guid providerId);
+    Task<List<UserMinimizedDTO>> SearchMinimizedAsync(SearchUserDTO dto,
+        string apiUrl);
 }

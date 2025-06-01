@@ -66,6 +66,14 @@ public class UserController : ControllerBase
         return result.ToActionResult();
     }
 
+    [HttpGet("search-minimized")]
+    [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(List<UserExtendedDTO>))]
+    public async Task<IActionResult> SearchMinimized([FromQuery] SearchUserDTO dto)
+    {
+        var result = await _userService.SearchMinimizedAsync(dto, HttpContext.GetApiUrl());
+        return Ok(result);
+    }
+
     [HttpPut("me")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = Policies.Shared)]
     [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(UserDTO))]

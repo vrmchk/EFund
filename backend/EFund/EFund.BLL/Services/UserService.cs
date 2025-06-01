@@ -296,6 +296,26 @@ public class UserService : IUserService
         return dtos;
     }
 
+    public async Task<List<UserMinimizedDTO>> SearchMinimizedAsync(SearchUserDTO dto, string apiUrl)
+    {
+        var queryable = _userManager.Users;
+
+        if (!string.IsNullOrEmpty(dto.Query))
+            queryable = queryable.Where(u => u.DisplayName.ToLower().Contains(dto.Query.ToLower()) || u.Email!.Contains(dto.Query));
+
+        var users = await queryable.ToListAsync();
+        var dtos = _mapper.Map<List<UserMinimizedDTO>>(users);
+        var usersWithDtos = users
+            .Zip(dtos, (user, userDto) => (user, userDto));
+
+        foreach (var (user, userDto) in usersWithDtos)
+        {
+            userDto.AvatarUrl = (user.AvatarPath ?? _appDataConfig.DefaultUserAvatarPath).PathToUrl(apiUrl);
+        }
+
+        return dtos;
+    }
+
     private async Task<UserDTO> ToDto(User user, string apiUrl)
     {
         user.AvatarPath = (user.AvatarPath ?? _appDataConfig.DefaultUserAvatarPath).PathToUrl(apiUrl);

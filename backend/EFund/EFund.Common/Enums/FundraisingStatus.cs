@@ -2,10 +2,10 @@ namespace EFund.Common.Enums;
 
 public enum FundraisingStatus
 {
-    Open = 1,
-    Closed = 2,
-    ReadyForReview = 3,
-    Reviewed = 4,
-    Hidden = 5,
-    Deleted = 6
+    Open = 0,
+    Closed = 1,
+    ReadyForReview = 2,
+    Reviewed = 3,
+    Hidden = 4,
+    Deleted = 5
 }

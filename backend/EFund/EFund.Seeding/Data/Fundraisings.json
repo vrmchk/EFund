@@ -30,7 +30,7 @@
     "Fundraising": {
       "Title": "Health Aid for Veterans",
       "Description": "Supporting war veterans with vital medicine and treatments.",
-      "Status": 2,
+      "Status": 1,
       "CreatedAt": "2025-02-20T08:00:00Z",
       "MonobankFundraising": {
         "JarId": "8RiPXg6wcISIrPlwuRGI654P8Fm_XxQ"
@@ -65,7 +65,7 @@
     "Fundraising": {
       "Title": "Athlete Gear Fund",
       "Description": "Raising money to provide gear for underfunded sports programs.",
-      "Status": 1,
+      "Status": 0,
       "CreatedAt": "2025-01-10T07:00:00Z",
       "MonobankFundraising": {
         "JarId": "RlraFcUPRTLazMzRK-UyTQgGozfiILM"
@@ -218,7 +218,7 @@
     "Fundraising": {
       "Title": "Fundraising Campaign 1",
       "Description": "This is a description for campaign 1",
-      "Status": 3,
+      "Status": 1,
       "CreatedAt": "2025-04-23T00:38:26.743303",
       "MonobankFundraising": {
         "JarId": "fCpr0muj2gVfPBFmwgygMGWj5kiYvbw"
@@ -261,7 +261,7 @@
     "Fundraising": {
       "Title": "Fundraising Campaign 1",
       "Description": "This is a description for campaign 1",
-      "Status": 1,
+      "Status": 0,
       "CreatedAt": "2025-03-31T00:38:26.743303",
       "MonobankFundraising": {
         "JarId": "RN_5G_zcqzQeeE3mEeta6ukfr5SWT8I"
@@ -296,7 +296,7 @@
     "Fundraising": {
       "Title": "Fundraising Campaign 2",
       "Description": "This is a description for campaign 2",
-      "Status": 2,
+      "Status": 1,
       "CreatedAt": "2025-02-05T00:38:26.743303",
       "MonobankFundraising": {
         "JarId": "VxhMxJ3F6JGk7oqZWF-W4f87HThGSAo"
@@ -362,7 +362,7 @@
     "Fundraising": {
       "Title": "Fundraising Campaign 3",
       "Description": "This is a description for campaign 3",
-      "Status": 1,
+      "Status": 0,
       "CreatedAt": "2025-03-29T00:38:26.743303",
       "MonobankFundraising": {
         "JarId": "VxhMxJ3F6JGk7oqZWF-W4f87HThGSAo"
@@ -394,7 +394,7 @@
     "Fundraising": {
       "Title": "Fundraising Campaign 3",
       "Description": "This is a description for campaign 3",
-      "Status": 2,
+      "Status": 1,
       "CreatedAt": "2025-05-20T00:38:26.743303",
       "MonobankFundraising": {
         "JarId": "E4vT6_pi8by0kngVTFxJi489avt_Qas"
@@ -430,7 +430,7 @@
     "Fundraising": {
       "Title": "Fundraising Campaign 4",
       "Description": "This is a description for campaign 4",
-      "Status": 1,
+      "Status": 0,
       "CreatedAt": "2025-05-11T00:38:26.743303",
       "MonobankFundraising": {
         "JarId": "xNki0XEr37ejDQf3UmCER-rS-Pey7h4"
@@ -470,7 +470,7 @@
     "Fundraising": {
       "Title": "Fundraising Campaign 4",
       "Description": "This is a description for campaign 4",
-      "Status": 3,
+      "Status": 2,
       "CreatedAt": "2025-04-29T00:38:26.743303",
       "MonobankFundraising": {
         "JarId": "RN_5G_zcqzQeeE3mEeta6ukfr5SWT8I"
@@ -511,7 +511,7 @@
     "Fundraising": {
       "Title": "Fundraising Campaign 5",
       "Description": "This is a description for campaign 5",
-      "Status": 3,
+      "Status": 2,
       "CreatedAt": "2025-03-23T00:38:26.743303",
       "MonobankFundraising": {
         "JarId": "8RiPXg6wcISIrPlwuRGI654P8Fm_XxQ"
@@ -541,7 +541,7 @@
     "Fundraising": {
       "Title": "Fundraising Campaign 5",
       "Description": "This is a description for campaign 5",
-      "Status": 1,
+      "Status": 0,
       "CreatedAt": "2025-05-25T00:38:26.743303",
       "MonobankFundraising": {
         "JarId": "IIpBxNYuC35daeq8ZnYpgJXPnKb6jQE"
@@ -568,7 +568,7 @@
     "Fundraising": {
       "Title": "Fundraising Campaign 6",
       "Description": "This is a description for campaign 6",
-      "Status": 1,
+      "Status": 0,
       "CreatedAt": "2025-02-20T00:38:26.743303",
       "MonobankFundraising": {
         "JarId": "xNki0XEr37ejDQf3UmCER-rS-Pey7h4"
@@ -655,7 +655,7 @@
     "Fundraising": {
       "Title": "Fundraising Campaign 7",
       "Description": "This is a description for campaign 7",
-      "Status": 1,
+      "Status": 0,
       "CreatedAt": "2025-03-06T00:38:26.743303",
       "MonobankFundraising": {
         "JarId": "xNki0XEr37ejDQf3UmCER-rS-Pey7h4"
@@ -693,7 +693,7 @@
     "Fundraising": {
       "Title": "Fundraising Campaign 7",
       "Description": "This is a description for campaign 7",
-      "Status": 1,
+      "Status": 0,
       "CreatedAt": "2025-04-05T00:38:26.744303",
       "MonobankFundraising": {
         "JarId": "dAoaCvnMPV1oSEYTMh3TSTTPCNOa12c"
@@ -765,7 +765,7 @@
     "Fundraising": {
       "Title": "Fundraising Campaign 8",
       "Description": "This is a description for campaign 8",
-      "Status": 1,
+      "Status": 2,
       "CreatedAt": "2025-03-15T00:38:26.744303",
       "MonobankFundraising": {
         "JarId": "dAoaCvnMPV1oSEYTMh3TSTTPCNOa12c"
@@ -806,7 +806,7 @@
     "Fundraising": {
       "Title": "Fundraising Campaign 9",
       "Description": "This is a description for campaign 9",
-      "Status": 1,
+      "Status": 0,
       "CreatedAt": "2025-05-07T00:38:26.744303",
       "MonobankFundraising": {
         "JarId": "VxhMxJ3F6JGk7oqZWF-W4f87HThGSAo"
@@ -839,7 +839,7 @@
     "Fundraising": {
       "Title": "Fundraising Campaign 9",
       "Description": "This is a description for campaign 9",
-      "Status": 3,
+      "Status": 2,
       "CreatedAt": "2025-04-10T00:38:26.744303",
       "MonobankFundraising": {
         "JarId": "RN_5G_zcqzQeeE3mEeta6ukfr5SWT8I"
@@ -916,7 +916,7 @@
     "Fundraising": {
       "Title": "Fundraising Campaign 10",
       "Description": "This is a description for campaign 10",
-      "Status": 1,
+      "Status": 0,
       "CreatedAt": "2025-05-10T00:38:26.744303",
       "MonobankFundraising": {
         "JarId": "RN_5G_zcqzQeeE3mEeta6ukfr5SWT8I"
@@ -957,7 +957,7 @@
     "Fundraising": {
       "Title": "Portable Power Banks for Soldiers",
       "Description": "Equipping frontline defenders with durable power banks for critical missions.",
-      "Status": 3,
+      "Status": 2,
       "CreatedAt": "2025-03-15T08:30:00Z",
       "MonobankFundraising": {
         "JarId": "fCpr0muj2gVfPBFmwgygMGWj5kiYvbw"
@@ -1119,7 +1119,7 @@
     "Fundraising": {
       "Title": "Thermal Imaging for Night Patrols",
       "Description": "Procurement of thermal scopes to assist night reconnaissance.",
-      "Status": 3,
+      "Status": 1,
       "CreatedAt": "2025-01-05T06:45:00Z",
       "MonobankFundraising": {
         "JarId": "E4vT6_pi8by0kngVTFxJi489avt_Qas"

@@ -30,6 +30,7 @@ public class SaveRequestedChangesComplaintNotificationForRequestedForJob(
         {
             UserId = data.UserId,
             Reason = NotificationReason.ComplaintRequestChangesForRequestedFor,
+            CreatedAt = DateTimeOffset.Now,
             Args = JsonSerializer.Serialize(args)
         };
 

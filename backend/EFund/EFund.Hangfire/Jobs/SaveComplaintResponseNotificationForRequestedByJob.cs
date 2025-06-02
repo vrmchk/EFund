@@ -24,6 +24,7 @@ public class SaveComplaintResponseNotificationForRequestedByJob(
         {
             UserId = data.UserId,
             Reason = NotificationReason.ComplaintResponseForRequestedBy,
+            CreatedAt = DateTimeOffset.Now,
             Args = JsonSerializer.Serialize(args)
         };
 

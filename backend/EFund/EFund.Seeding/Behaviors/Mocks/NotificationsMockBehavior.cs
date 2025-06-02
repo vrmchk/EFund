@@ -62,6 +62,7 @@ public class NotificationsMockBehavior(
                 UserId = user.Id,
                 Reason = reason,
                 IsRead = false,
+                CreatedAt = DateTimeOffset.Now,
                 Args = args is not null ? JsonSerializer.Serialize(args) : null
             };
 

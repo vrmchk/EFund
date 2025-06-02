@@ -10,7 +10,12 @@ public class UpdateFundraisingStatusDTOValidator : AbstractValidator<UpdateFundr
     {
         RuleFor(x => x.Status)
             .IsInEnum()
-            .Must(x => x is FundraisingStatus.Closed or FundraisingStatus.ReadyForReview)
+            .Must(x => x
+                is FundraisingStatus.Open
+                or FundraisingStatus.Closed
+                or FundraisingStatus.ReadyForReview
+                or FundraisingStatus.Hidden
+                or FundraisingStatus.Deleted)
             .WithMessage("User is unable to set this status");
     }
 }

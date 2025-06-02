@@ -7,8 +7,12 @@ using EFund.Common.Models.Configs;
 using EFund.Common.Models.DTO.Common;
 using EFund.Common.Models.DTO.Error;
 using EFund.Common.Models.DTO.Fundraising;
+using EFund.Common.Models.Utility.Notifications;
 using EFund.DAL.Entities;
 using EFund.DAL.Repositories.Interfaces;
+using EFund.Hangfire.Abstractions;
+using EFund.Hangfire.JobArgs;
+using EFund.Hangfire.Jobs;
 using LanguageExt;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -24,13 +28,15 @@ public class FundraisingService : IFundraisingService
     private readonly IMonobankService _monobankService;
     private readonly AppDataConfig _appDataConfig;
     private readonly IRepository<Tag> _tagRepository;
+    private readonly IHangfireService _hangfireService;
 
     public FundraisingService(IMapper mapper,
         IRepository<Fundraising> fundraisingRepository,
         IMonobankService monobankService,
         AppDataConfig appDataConfig,
         IRepository<Tag> tagRepository,
-        IRepository<MonobankFundraising> monobankFundraisings)
+        IRepository<MonobankFundraising> monobankFundraisings, 
+        IHangfireService hangfireService)
     {
         _mapper = mapper;
         _fundraisingRepository = fundraisingRepository;
@@ -38,6 +44,7 @@ public class FundraisingService : IFundraisingService
         _appDataConfig = appDataConfig;
         _tagRepository = tagRepository;
         _monobankFundraisings = monobankFundraisings;
+        _hangfireService = hangfireService;
     }
 
     public async Task<Either<ErrorDTO, PagedListDTO<FundraisingDTO>>> GetAllAsync(Guid userId, PaginationDTO pagination,
@@ -120,6 +127,41 @@ public class FundraisingService : IFundraisingService
 
         if (fundraising == null)
             return new NotFoundErrorDTO("Fundraising with this id does not exist");
+
+        _mapper.Map(dto, fundraising);
+        await _fundraisingRepository.UpdateAsync(fundraising);
+
+        return await ToDto(fundraising, apiUrl);
+    }
+
+    public async Task<Either<ErrorDTO, FundraisingDTO>> UpdateStatusByAdminAsync(Guid id, UpdateFundraisingStatusByAdminDTO dto, string apiUrl)
+    {
+        var fundraising = await IncludeRelationsForSingle(_fundraisingRepository)
+            .FirstOrDefaultAsync(f => f.Id == id);
+
+        if (fundraising == null)
+            return new NotFoundErrorDTO("Fundraising with this id does not exist");
+
+        var notificationReason = dto.Status switch
+        {
+            FundraisingStatus.Hidden => NotificationReason.FundraisingHidden,
+            FundraisingStatus.Deleted => NotificationReason.FundraisingDeleted,
+            _ => throw new ArgumentOutOfRangeException(nameof(dto.Status), "Invalid fundraising status")
+        };
+
+        _hangfireService.Enqueue<SaveNotificationJob, SaveNotificationJobArgs>(new SaveNotificationJobArgs
+        {
+            UserId = fundraising.UserId,
+            Reason = notificationReason,
+            Args = new FundraisingStatusChangedArgs
+            {
+                FundraisingTitle = fundraising.Title,
+                FundraisingId = fundraising.Id,
+                Comment = dto.Comment,
+                From = fundraising.Status,
+                To = dto.Status
+            }
+        });
 
         _mapper.Map(dto, fundraising);
         await _fundraisingRepository.UpdateAsync(fundraising);

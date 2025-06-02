@@ -3,6 +3,7 @@ using EFund.BLL.Services.Interfaces;
 using EFund.Common.Enums;
 using EFund.Common.Models.DTO.Error;
 using EFund.Common.Models.DTO.FundraisingReview;
+using EFund.Common.Models.Utility.Notifications;
 using EFund.DAL.Entities;
 using EFund.DAL.Repositories.Interfaces;
 using EFund.Hangfire.Abstractions;
@@ -49,6 +50,19 @@ public class FundraisingReviewService(
         await _reviewRepository.InsertAsync(review);
 
         UpdateUserRating(fundraising.UserId, dto.RatingChange);
+
+        _hangfireService.Enqueue<SaveNotificationJob, SaveNotificationJobArgs>(new SaveNotificationJobArgs
+        {
+            UserId = fundraising.UserId,
+            Reason = NotificationReason.FundraisingReviewed,
+            Args = new FundraisingReviewedArgs
+            {
+                FundraisingId = fundraising.Id,
+                RatingChange = dto.RatingChange,
+                Comment = dto.Comment,
+                FundraisingTitle = fundraising.Title
+            }
+        });
 
         return _mapper.Map<FundraisingReviewDTO>(review);
     }

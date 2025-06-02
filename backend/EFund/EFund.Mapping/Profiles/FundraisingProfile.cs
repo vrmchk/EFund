@@ -32,5 +32,7 @@ public class FundraisingProfile : Profile
         CreateMap<UpdateFundraisingStatusDTO, Fundraising>()
             .ForMember(dest => dest.ClosedAt, opt => opt.MapFrom(src => src.Status == FundraisingStatus.Closed ? DateTimeOffset.Now : (DateTimeOffset?)null))
             .ForMember(dest => dest.ReadyForReviewAt, opt => opt.MapFrom(src => src.Status == FundraisingStatus.ReadyForReview ? DateTimeOffset.Now : (DateTimeOffset?)null));
+
+        CreateMap<UpdateFundraisingStatusByAdminDTO, Fundraising>();
     }
 }

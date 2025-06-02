@@ -27,7 +27,7 @@ public class NotificationsMockBehavior(
 
     private readonly string[] _userEmails = ["ihverwork@gmail.com", "vladd.golovatyuk@gmail.com", "tralala@gmail.com", "croco@gmail.com"];
 
-    private readonly NotificationReason[] _notificationReasons = Enum.GetValues<NotificationReason>();
+    private readonly NotificationReason[] _notificationReasons = Enum.GetValues<NotificationReason>().Where(n => n != NotificationReason.Empty).ToArray();
     private readonly Random _random = new(217);
 
     protected override async Task MockData()
@@ -92,6 +92,29 @@ public class NotificationsMockBehavior(
                 FundraisingTitle = userFundraising.Title,
                 Violations = violations.Select(v => v.Title).ToList(),
                 FundraisingId = userFundraising.Id
+            },
+            NotificationReason.FundraisingHidden => new FundraisingStatusChangedArgs
+            {
+                FundraisingId = userFundraising.Id,
+                FundraisingTitle = userFundraising.Title,
+                Comment = "Fundraising was hidden due to violation of the rules.",
+                From = FundraisingStatus.Open,
+                To = FundraisingStatus.Hidden,
+            },
+            NotificationReason.FundraisingDeleted => new FundraisingStatusChangedArgs
+            {
+                FundraisingId = userFundraising.Id,
+                FundraisingTitle = userFundraising.Title,
+                Comment = "Fundraising was deleted due to violation of the rules.",
+                From = FundraisingStatus.Open,
+                To = FundraisingStatus.Deleted,
+            },
+            NotificationReason.FundraisingReviewed => new FundraisingReviewedArgs
+            {
+                FundraisingId = userFundraising.Id,
+                FundraisingTitle = userFundraising.Title,
+                Comment = "Your fundraising was reviewed.",
+                RatingChange = 0
             },
             _ => null
         };

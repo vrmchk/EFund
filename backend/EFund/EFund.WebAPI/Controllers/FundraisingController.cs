@@ -120,6 +120,27 @@ public class FundraisingController : ControllerBase
         return result.ToActionResult();
     }
 
+    [HttpPut("{id}/status/admin")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = Policies.Admin)]
+    [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(FundraisingDTO))]
+    [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ErrorDTO))]
+    [SwaggerResponse(StatusCodes.Status401Unauthorized)]
+    [SwaggerResponse(StatusCodes.Status403Forbidden)]
+    [SwaggerOperation(
+        Summary = "Update fundraising status (Admin only)",
+        Description = "Allows a regular authenticated admin to update the status of their own fundraising request. " +
+                      "Admins must use a different endpoint with full review submission."
+    )]
+    public async Task<IActionResult> UpdateStatus(Guid id, [FromBody] UpdateFundraisingStatusByAdminDTO dto)
+    {
+        var validationResult = await _validator.ValidateAsync(dto);
+        if (!validationResult.IsValid)
+            return BadRequest(validationResult.ToErrorDTO());
+
+        var result = await _fundraisingService.UpdateStatusByAdminAsync(id, dto, HttpContext.GetApiUrl());
+        return result.ToActionResult();
+    }
+
     [HttpDelete("{id}")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = Policies.Shared)]
     [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(FundraisingDTO))]

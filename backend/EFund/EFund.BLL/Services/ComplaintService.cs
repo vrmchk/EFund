@@ -6,6 +6,7 @@ using EFund.Common.Models.Configs;
 using EFund.Common.Models.DTO.Common;
 using EFund.Common.Models.DTO.Complaint;
 using EFund.Common.Models.DTO.Error;
+using EFund.Common.Models.Utility.Notifications;
 using EFund.DAL.Entities;
 using EFund.DAL.Repositories.Interfaces;
 using EFund.Email.Models;
@@ -203,22 +204,28 @@ public class ComplaintService(
                 RatingChange = dto.RatingChange
             });
 
-        _hangfireService.Enqueue<SaveComplaintResponseNotificationForRequestedByJob, SaveComplaintRepsonseNotificationForRequestedByJobArgs>(
-            new SaveComplaintRepsonseNotificationForRequestedByJobArgs
+        _hangfireService.Enqueue<SaveNotificationJob, SaveNotificationJobArgs>(new SaveNotificationJobArgs
+        {
+            UserId = complaint.RequestedFor,
+            Reason = NotificationReason.ComplaintAcceptedForRequestedFor,
+            Args = new ComplaintAcceptedForRequestedForArgs
             {
-                UserId = complaint.RequestedBy,
-                FundraisingTitle = complaint.Fundraising.Title,
-                FundraisingId = complaint.FundraisingId
-            });
-
-        _hangfireService.Enqueue<SaveAcceptedComplaintNotificationForRequestedForJob, SaveAcceptedComplaintNotificationForRequestedForJobArgs>(
-            new SaveAcceptedComplaintNotificationForRequestedForJobArgs
-            {
-                UserId = complaint.RequestedFor,
                 FundraisingTitle = complaint.Fundraising.Title,
                 FundraisingId = complaint.FundraisingId,
                 Violations = complaint.Violations.Select(v => v.Title).ToList()
-            });
+            }
+        });
+
+        _hangfireService.Enqueue<SaveNotificationJob, SaveNotificationJobArgs>(new SaveNotificationJobArgs
+        {
+            UserId = complaint.RequestedBy,
+            Reason = NotificationReason.ComplaintResponseForRequestedBy,
+            Args = new ComplaintResponseForRequestedByArgs
+            {
+                FundraisingTitle = complaint.Fundraising.Title,
+                FundraisingId = complaint.FundraisingId,
+            }
+        });
     }
 
     private async Task TriggerPostRequestChangesActions(ComplaintRequestChangesDTO dto, Complaint complaint)
@@ -238,22 +245,28 @@ public class ComplaintService(
                 FundraisingStatus = FundraisingStatus.Hidden
             });
 
-        _hangfireService.Enqueue<SaveRequestedChangesComplaintNotificationForRequestedForJob, SaveRequestedChangesComplaintNotificationForRequestedForJobArgs>(
-            new SaveRequestedChangesComplaintNotificationForRequestedForJobArgs
+        _hangfireService.Enqueue<SaveNotificationJob, SaveNotificationJobArgs>(new SaveNotificationJobArgs
+        {
+            UserId = complaint.RequestedFor,
+            Reason = NotificationReason.ComplaintRequestChangesForRequestedFor,
+            Args = new ComplaintRequestChangesForRequestedForArgs
             {
-                UserId = complaint.RequestedFor,
-                Message = dto.Message,
                 FundraisingTitle = complaint.Fundraising.Title,
-                FundraisingId = complaint.FundraisingId
-            });
-        
-        _hangfireService.Enqueue<SaveComplaintResponseNotificationForRequestedByJob, SaveComplaintRepsonseNotificationForRequestedByJobArgs>(
-            new SaveComplaintRepsonseNotificationForRequestedByJobArgs
+                FundraisingId = complaint.FundraisingId,
+                Message = dto.Message
+            }
+        });
+
+        _hangfireService.Enqueue<SaveNotificationJob, SaveNotificationJobArgs>(new SaveNotificationJobArgs
+        {
+            UserId = complaint.RequestedBy,
+            Reason = NotificationReason.ComplaintResponseForRequestedBy,
+            Args = new ComplaintResponseForRequestedByArgs
             {
-                UserId = complaint.RequestedBy,
                 FundraisingTitle = complaint.Fundraising.Title,
-                FundraisingId = complaint.FundraisingId
-            });
+                FundraisingId = complaint.FundraisingId,
+            }
+        });
     }
 
     private IQueryable<Complaint> IncludeRelations(IQueryable<Complaint> query)

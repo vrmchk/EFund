@@ -11,5 +11,11 @@ public enum NotificationReason
     [NotificationArgs(typeof(ComplaintAcceptedForRequestedForArgs))]
     ComplaintAcceptedForRequestedFor,
     [NotificationArgs(typeof(ComplaintRequestChangesForRequestedForArgs))]
-    ComplaintRequestChangesForRequestedFor
+    ComplaintRequestChangesForRequestedFor,
+    [NotificationArgs(typeof(FundraisingStatusChangedArgs))]
+    FundraisingHidden,
+    [NotificationArgs(typeof(FundraisingStatusChangedArgs))]
+    FundraisingDeleted,
+    [NotificationArgs(typeof(FundraisingReviewedArgs))]
+    FundraisingReviewed,
 }

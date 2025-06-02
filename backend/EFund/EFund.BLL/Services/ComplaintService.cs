@@ -206,7 +206,9 @@ public class ComplaintService(
         _hangfireService.Enqueue<SaveComplaintResponseNotificationForRequestedByJob, SaveComplaintRepsonseNotificationForRequestedByJobArgs>(
             new SaveComplaintRepsonseNotificationForRequestedByJobArgs
             {
-                UserId = complaint.RequestedBy
+                UserId = complaint.RequestedBy,
+                FundraisingTitle = complaint.Fundraising.Title,
+                FundraisingId = complaint.FundraisingId
             });
 
         _hangfireService.Enqueue<SaveAcceptedComplaintNotificationForRequestedForJob, SaveAcceptedComplaintNotificationForRequestedForJobArgs>(
@@ -214,6 +216,7 @@ public class ComplaintService(
             {
                 UserId = complaint.RequestedFor,
                 FundraisingTitle = complaint.Fundraising.Title,
+                FundraisingId = complaint.FundraisingId,
                 Violations = complaint.Violations.Select(v => v.Title).ToList()
             });
     }
@@ -240,13 +243,16 @@ public class ComplaintService(
             {
                 UserId = complaint.RequestedFor,
                 Message = dto.Message,
-                FundraisingTitle = complaint.Fundraising.Title
+                FundraisingTitle = complaint.Fundraising.Title,
+                FundraisingId = complaint.FundraisingId
             });
         
         _hangfireService.Enqueue<SaveComplaintResponseNotificationForRequestedByJob, SaveComplaintRepsonseNotificationForRequestedByJobArgs>(
             new SaveComplaintRepsonseNotificationForRequestedByJobArgs
             {
-                UserId = complaint.RequestedBy
+                UserId = complaint.RequestedBy,
+                FundraisingTitle = complaint.Fundraising.Title,
+                FundraisingId = complaint.FundraisingId
             });
     }
 

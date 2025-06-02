@@ -6,5 +6,6 @@ public class SaveRequestedChangesComplaintNotificationForRequestedForJobArgs : I
 {
     public required Guid UserId { get; set; }
     public required string Message { get; set; }
+    public required Guid FundraisingId { get; set; }
     public required string FundraisingTitle { get; set; }
 }

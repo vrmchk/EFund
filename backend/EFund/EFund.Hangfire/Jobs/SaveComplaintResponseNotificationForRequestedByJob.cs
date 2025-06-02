@@ -1,4 +1,6 @@
+using System.Text.Json;
 using EFund.Common.Enums;
+using EFund.Common.Models.Utility.Notifications;
 using EFund.DAL.Entities;
 using EFund.DAL.Repositories.Interfaces;
 using EFund.Hangfire.Abstractions;
@@ -17,10 +19,12 @@ public class SaveComplaintResponseNotificationForRequestedByJob(
 
     public async Task Run(SaveComplaintRepsonseNotificationForRequestedByJobArgs data, CancellationToken cancellationToken = default)
     {
+        var args = new ComplaintResponseForRequestedByArgs { FundraisingTitle = data.FundraisingTitle, FundraisingId = data.FundraisingId };
         var notification = new Notification
         {
             UserId = data.UserId,
-            Reason = NotificationReason.ComplaintResponseForRequestedBy
+            Reason = NotificationReason.ComplaintResponseForRequestedBy,
+            Args = JsonSerializer.Serialize(args)
         };
 
         await _notificationRepository.InsertAsync(notification);

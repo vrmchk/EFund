@@ -6,6 +6,7 @@ namespace EFund.Common.Enums;
 public enum NotificationReason
 {
     Empty,
+    [NotificationArgs(typeof(ComplaintResponseForRequestedByArgs))]
     ComplaintResponseForRequestedBy,
     [NotificationArgs(typeof(ComplaintAcceptedForRequestedForArgs))]
     ComplaintAcceptedForRequestedFor,

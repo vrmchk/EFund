@@ -319,6 +319,7 @@ public class UserService : IUserService
     private async Task<UserDTO> ToDto(User user, string apiUrl)
     {
         user.AvatarPath = (user.AvatarPath ?? _appDataConfig.DefaultUserAvatarPath).PathToUrl(apiUrl);
+        user.Notifications = user.Notifications.OrderByDescending(n => n.CreatedAt).ToList();
         var dto = _mapper.Map<UserDTO>(user);
         dto.IsAdmin = await _userManager.IsInRoleAsync(user, Roles.Admin);
         return dto;
@@ -331,7 +332,7 @@ public class UserService : IUserService
             .Include(u => u.Badges);
 
         if (withNotifications)
-            result = result.Include(u => u.Notifications.Where(n => !n.IsRead));
+            result = result.Include(u => u.Notifications.Where(n => !n.IsRead)).AsSplitQuery();
 
         return result;
     }

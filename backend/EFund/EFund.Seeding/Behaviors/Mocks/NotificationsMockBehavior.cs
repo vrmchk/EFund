@@ -40,21 +40,23 @@ public class NotificationsMockBehavior(
             if (user.Notifications.Count > 0)
                 continue;
 
-            var notifications = GetRandomNotifications(user, fundraisings.Where(f => f.UserId == user.Id).ToList(), violations);
+            var userFundraisings = fundraisings.Where(f => f.UserId == user.Id).ToList();
+            var otherFundraisings = fundraisings.Where(f => f.UserId != user.Id).ToList();
+            var notifications = GetRandomNotifications(user, userFundraisings, otherFundraisings, violations);
 
             user.Notifications.AddRange(notifications);
             await _userManager.UpdateAsync(user);
         }
     }
 
-    private List<Notification> GetRandomNotifications(User user, List<Fundraising> fundraisings, List<Violation> violations)
+    private List<Notification> GetRandomNotifications(User user, List<Fundraising> userFundraisings, List<Fundraising> otherFundraisings, List<Violation> violations)
     {
         var notifications = new List<Notification>();
         var notificationCount = _random.Next(1, 6);
         for (int i = 0; i < notificationCount; i++)
         {
             var reason = PickRandom(_notificationReasons);
-            var args = GetNotificationArgs(reason, PickRandom(fundraisings), PickRandom(violations, 2));
+            var args = GetNotificationArgs(reason, PickRandom(userFundraisings), PickRandom(otherFundraisings), PickRandom(violations, 2));
             var notification = new Notification
             {
                 UserId = user.Id,
@@ -69,19 +71,26 @@ public class NotificationsMockBehavior(
         return notifications;
     }
 
-    private NotificationArgsBase? GetNotificationArgs(NotificationReason reason, Fundraising fundraising, List<Violation> violations)
+    private NotificationArgsBase? GetNotificationArgs(NotificationReason reason, Fundraising userFundraising, Fundraising otherFundraising, List<Violation> violations)
     {
         return reason switch
         {
+            NotificationReason.ComplaintResponseForRequestedBy => new ComplaintResponseForRequestedByArgs
+            {
+                FundraisingTitle = otherFundraising.Title,
+                FundraisingId = otherFundraising.Id
+            },
             NotificationReason.ComplaintRequestChangesForRequestedFor => new ComplaintRequestChangesForRequestedForArgs
             {
                 Message = "Remove inappropriate image from the report of the fundraising.",
-                FundraisingTitle = fundraising.Title
+                FundraisingTitle = userFundraising.Title,
+                FundraisingId = userFundraising.Id
             },
             NotificationReason.ComplaintAcceptedForRequestedFor => new ComplaintAcceptedForRequestedForArgs
             {
-                FundraisingTitle = fundraising.Title,
-                Violations = violations.Select(v => v.Title).ToList()
+                FundraisingTitle = userFundraising.Title,
+                Violations = violations.Select(v => v.Title).ToList(),
+                FundraisingId = userFundraising.Id
             },
             _ => null
         };

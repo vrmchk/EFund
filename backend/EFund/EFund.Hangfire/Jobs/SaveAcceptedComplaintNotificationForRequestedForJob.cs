@@ -17,9 +17,15 @@ public class SaveAcceptedComplaintNotificationForRequestedForJob(
 
     public static string Id => nameof(SaveAcceptedComplaintNotificationForRequestedForJob);
 
-    public async Task Run(SaveAcceptedComplaintNotificationForRequestedForJobArgs data, CancellationToken cancellationToken = default)
+    public async Task Run(SaveAcceptedComplaintNotificationForRequestedForJobArgs data,
+        CancellationToken cancellationToken = default)
     {
-        var args = new ComplaintAcceptedForRequestedForArgs { FundraisingTitle = data.FundraisingTitle, Violations = data.Violations };
+        var args = new ComplaintAcceptedForRequestedForArgs
+        {
+            FundraisingTitle = data.FundraisingTitle,
+            FundraisingId = data.FundraisingId,
+            Violations = data.Violations
+        };
         var notification = new Notification
         {
             UserId = data.UserId,

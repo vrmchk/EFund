@@ -20,7 +20,12 @@ public class SaveRequestedChangesComplaintNotificationForRequestedForJob(
     public async Task Run(SaveRequestedChangesComplaintNotificationForRequestedForJobArgs data,
         CancellationToken cancellationToken = default)
     {
-        var args = new ComplaintRequestChangesForRequestedForArgs { FundraisingTitle = data.FundraisingTitle, Message = data.Message };
+        var args = new ComplaintRequestChangesForRequestedForArgs
+        {
+            FundraisingTitle = data.FundraisingTitle,
+            FundraisingId = data.FundraisingId,
+            Message = data.Message
+        };
         var notification = new Notification
         {
             UserId = data.UserId,

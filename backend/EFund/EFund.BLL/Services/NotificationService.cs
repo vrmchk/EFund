@@ -1,6 +1,7 @@
 using AutoMapper;
 using EFund.BLL.Services.Interfaces;
 using EFund.Common.Models.DTO.Notification;
+using EFund.Common.Models.Utility.Notifications;
 using EFund.DAL.Entities;
 using EFund.DAL.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -18,13 +19,20 @@ public class NotificationService : INotificationService
         _mapper = mapper;
     }
 
-    public async Task<List<NotificationDTO>> GetListAsync(Guid userId, bool withRead)
+    public async Task<List<NotificationDTO>> GetListAsync(Guid userId, bool withRead, Guid? fundraisingId)
     {
         var notifications = await _notificationRepository
             .Where(n => n.UserId == userId && (withRead || !n.IsRead))
+            .OrderByDescending(n => n.CreatedAt)
             .ToListAsync();
 
-        return _mapper.Map<List<NotificationDTO>>(notifications);
+        var dtos = _mapper.Map<List<NotificationDTO>>(notifications);
+        if (fundraisingId.HasValue)
+        {
+            dtos = dtos.Where(n => n.Args is FundraisingNotificationArgsBase args && args.FundraisingId == fundraisingId).ToList();
+        }
+
+        return dtos ;
     }
 
     public async Task SetIsRead(Guid id)

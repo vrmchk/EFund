@@ -28,10 +28,10 @@ public class NotificationController : ControllerBase
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "Shared")]
     [SwaggerOperation(Summary = "Get notifications", Description = "Returns a list of notifications for the current user. Optionally include read notifications.")]
     [SwaggerResponse(200, "List of notifications", typeof(List<NotificationDTO>))]
-    public async Task<IActionResult> GetList([FromQuery] bool withRead = false)
+    public async Task<IActionResult> GetList([FromQuery] bool withRead = false, [FromQuery] Guid? fundraisingId = null)
     {
         var userId = HttpContext.GetUserId();
-        var notifications = await _notificationService.GetListAsync(userId, withRead);
+        var notifications = await _notificationService.GetListAsync(userId, withRead, fundraisingId);
         return Ok(notifications);
     }
 

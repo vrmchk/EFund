@@ -51,7 +51,7 @@ public class FundraisingService : IFundraisingService
         string apiUrl)
     {
         var fundraisings = await IncludeRelationsForList(_fundraisingRepository)
-            .Where(f => f.UserId == userId)
+            .Where(f => f.UserId == userId && f.Status != FundraisingStatus.Deleted)
             .ToPagedListAsync(pagination.Page, pagination.PageSize);
 
         return await ToDto(fundraisings, apiUrl);
@@ -64,7 +64,14 @@ public class FundraisingService : IFundraisingService
         var queryable = IncludeRelationsForList(_fundraisingRepository);
 
         if (dto.Statuses.Count > 0)
+        {
             queryable = queryable.Where(f => dto.Statuses.Contains(f.Status));
+        }
+        else
+        {
+            FundraisingStatus[] excludedStatuses = [FundraisingStatus.Deleted, FundraisingStatus.Hidden];
+            queryable = queryable.Where(f => !excludedStatuses.Contains(f.Status));
+        }
 
         if (!string.IsNullOrEmpty(dto.Title))
             queryable = queryable.Where(f => f.Title.Contains(dto.Title));

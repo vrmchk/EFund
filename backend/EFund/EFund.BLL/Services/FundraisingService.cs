@@ -153,22 +153,26 @@ public class FundraisingService : IFundraisingService
         {
             FundraisingStatus.Hidden => NotificationReason.FundraisingHidden,
             FundraisingStatus.Deleted => NotificationReason.FundraisingDeleted,
+            FundraisingStatus.Open => (NotificationReason?)null,
             _ => throw new ArgumentOutOfRangeException(nameof(dto.Status), "Invalid fundraising status")
         };
 
-        _hangfireService.Enqueue<SaveNotificationJob, SaveNotificationJobArgs>(new SaveNotificationJobArgs
+        if (notificationReason != null)
         {
-            UserId = fundraising.UserId,
-            Reason = notificationReason,
-            Args = new FundraisingStatusChangedArgs
+            _hangfireService.Enqueue<SaveNotificationJob, SaveNotificationJobArgs>(new SaveNotificationJobArgs
             {
-                FundraisingTitle = fundraising.Title,
-                FundraisingId = fundraising.Id,
-                Comment = dto.Comment,
-                From = fundraising.Status,
-                To = dto.Status
-            }
-        });
+                UserId = fundraising.UserId,
+                Reason = notificationReason.Value,
+                Args = new FundraisingStatusChangedArgs
+                {
+                    FundraisingTitle = fundraising.Title,
+                    FundraisingId = fundraising.Id,
+                    Comment = dto.Comment,
+                    From = fundraising.Status,
+                    To = dto.Status
+                }
+            });
+        }
 
         _mapper.Map(dto, fundraising);
         await _fundraisingRepository.UpdateAsync(fundraising);

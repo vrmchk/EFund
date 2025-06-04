@@ -11,7 +11,8 @@ public class UpdateFundraisingStatusByAdminDTOValidator : AbstractValidator<Upda
         RuleFor(x => x.Status)
             .IsInEnum()
             .Must(x => x
-                is FundraisingStatus.Hidden
+                is FundraisingStatus.Open
+                or FundraisingStatus.Hidden
                 or FundraisingStatus.Deleted)
             .WithMessage("User is unable to set this status");
     }

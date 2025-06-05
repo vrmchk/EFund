@@ -20,32 +20,23 @@ using static LanguageExt.Prelude;
 
 namespace EFund.BLL.Services;
 
-public class UserService : IUserService
+public class UserService(
+    IMapper mapper,
+    ILogger<UserService> logger,
+    UserManager<User> userManager,
+    IUserRegistrationService userRegistrationService,
+    IEmailSender emailSender,
+    AppDataConfig appDataConfig,
+    CallbackUrisConfig callbackUrisConfig)
+    : IUserService
 {
-    private readonly IMapper _mapper;
-    private readonly ILogger<UserService> _logger;
-    private readonly UserManager<User> _userManager;
-    private readonly IUserRegistrationService _userRegistrationService;
-    private readonly IEmailSender _emailSender;
-    private readonly AppDataConfig _appDataConfig;
-    private readonly CallbackUrisConfig _callbackUrisConfig;
-
-    public UserService(IMapper mapper,
-        ILogger<UserService> logger,
-        UserManager<User> userManager,
-        IUserRegistrationService userRegistrationService,
-        IEmailSender emailSender,
-        AppDataConfig appDataConfig,
-        CallbackUrisConfig callbackUrisConfig)
-    {
-        _mapper = mapper;
-        _userManager = userManager;
-        _userRegistrationService = userRegistrationService;
-        _emailSender = emailSender;
-        _appDataConfig = appDataConfig;
-        _callbackUrisConfig = callbackUrisConfig;
-        _logger = logger;
-    }
+    private readonly IMapper _mapper = mapper;
+    private readonly ILogger<UserService> _logger = logger;
+    private readonly UserManager<User> _userManager = userManager;
+    private readonly IUserRegistrationService _userRegistrationService = userRegistrationService;
+    private readonly IEmailSender _emailSender = emailSender;
+    private readonly AppDataConfig _appDataConfig = appDataConfig;
+    private readonly CallbackUrisConfig _callbackUrisConfig = callbackUrisConfig;
 
     public async Task<Either<ErrorDTO, UserDTO>> GetByIdAsync(Guid id, string apiUrl, bool withNotifications)
     {

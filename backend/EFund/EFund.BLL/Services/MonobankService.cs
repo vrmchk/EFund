@@ -17,33 +17,23 @@ using static LanguageExt.Prelude;
 
 namespace EFund.BLL.Services;
 
-public class MonobankService : IMonobankService
+public class MonobankService(
+    IMonobankClient monobankClient,
+    UserManager<User> userManager,
+    IRepository<UserMonobank> monobankRepository,
+    IEncryptionService encryptionService,
+    IMapper mapper,
+    MonobankConfig monobankConfig,
+    ICacheService cache)
+    : IMonobankService
 {
-    private readonly IMonobankClient _monobankClient;
-    private readonly UserManager<User> _userManager;
-    private readonly IRepository<UserMonobank> _monobankRepository;
-    private readonly IEncryptionService _encryptionService;
-    private readonly IMapper _mapper;
-    private readonly MonobankConfig _monobankConfig;
-    private readonly ICacheService _cache;
-
-    public MonobankService(
-        IMonobankClient monobankClient,
-        UserManager<User> userManager,
-        IRepository<UserMonobank> monobankRepository,
-        IEncryptionService encryptionService,
-        IMapper mapper,
-        MonobankConfig monobankConfig,
-        ICacheService cache)
-    {
-        _monobankClient = monobankClient;
-        _userManager = userManager;
-        _monobankRepository = monobankRepository;
-        _encryptionService = encryptionService;
-        _mapper = mapper;
-        _monobankConfig = monobankConfig;
-        _cache = cache;
-    }
+    private readonly IMonobankClient _monobankClient = monobankClient;
+    private readonly UserManager<User> _userManager = userManager;
+    private readonly IRepository<UserMonobank> _monobankRepository = monobankRepository;
+    private readonly IEncryptionService _encryptionService = encryptionService;
+    private readonly IMapper _mapper = mapper;
+    private readonly MonobankConfig _monobankConfig = monobankConfig;
+    private readonly ICacheService _cache = cache;
 
     public async Task<Option<ErrorDTO>> AddOrUpdateMonobankTokenAsync(Guid userId, string monobankToken)
     {

@@ -95,7 +95,6 @@ builder.Services.AddScoped<IFundraisingReportService, FundraisingReportService>(
 builder.Services.AddScoped<IFundraisingService, FundraisingService>();
 builder.Services.AddScoped<IMonobankService, MonobankService>();
 builder.Services.AddScoped<ITagService, TagService>();
-builder.Services.AddScoped<IUserCleanerService, UserCleanerService>();
 builder.Services.AddScoped<IUserRegistrationService, UserRegistrationService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IViolationService, ViolationService>();

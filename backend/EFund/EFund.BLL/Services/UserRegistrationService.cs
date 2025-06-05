@@ -10,16 +10,13 @@ using static LanguageExt.Prelude;
 
 namespace EFund.BLL.Services;
 
-public class UserRegistrationService : IUserRegistrationService
+public class UserRegistrationService(
+    IRepository<UserRegistration> userRegistrationRepository,
+    AuthConfig authConfig)
+    : IUserRegistrationService
 {
-    private readonly IRepository<UserRegistration> _userRegistrationRepository;
-    private readonly AuthConfig _authConfig;
-
-    public UserRegistrationService(IRepository<UserRegistration> userRegistrationRepository, AuthConfig authConfig)
-    {
-        _userRegistrationRepository = userRegistrationRepository;
-        _authConfig = authConfig;
-    }
+    private readonly IRepository<UserRegistration> _userRegistrationRepository = userRegistrationRepository;
+    private readonly AuthConfig _authConfig = authConfig;
 
     public async Task<Either<ErrorModel, int>> GenerateEmailConfirmationCodeAsync(Guid userId)
     {

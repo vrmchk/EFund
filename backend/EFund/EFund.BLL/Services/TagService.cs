@@ -10,16 +10,13 @@ using static LanguageExt.Prelude;
 
 namespace EFund.BLL.Services;
 
-public class TagService : ITagService
+public class TagService(
+    IRepository<Tag> repository,
+    IMapper mapper)
+    : ITagService
 {
-    private readonly IRepository<Tag> _repository;
-    private readonly IMapper _mapper;
-
-    public TagService(IRepository<Tag> repository, IMapper mapper)
-    {
-        _repository = repository;
-        _mapper = mapper;
-    }
+    private readonly IRepository<Tag> _repository = repository;
+    private readonly IMapper _mapper = mapper;
 
     public async Task<List<TagDTO>> GetAllAsync()
     {

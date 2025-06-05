@@ -8,16 +8,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EFund.BLL.Services;
 
-public class NotificationService : INotificationService
+public class NotificationService(
+    IRepository<Notification> notificationRepository,
+    IMapper mapper)
+    : INotificationService
 {
-    private readonly IRepository<Notification> _notificationRepository;
-    private readonly IMapper _mapper;
-
-    public NotificationService(IRepository<Notification> notificationRepository, IMapper mapper)
-    {
-        _notificationRepository = notificationRepository;
-        _mapper = mapper;
-    }
+    private readonly IRepository<Notification> _notificationRepository = notificationRepository;
+    private readonly IMapper _mapper = mapper;
 
     public async Task<List<NotificationDTO>> GetListAsync(Guid userId, bool withRead, Guid? fundraisingId)
     {

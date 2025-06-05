@@ -20,32 +20,23 @@ using static LanguageExt.Prelude;
 
 namespace EFund.BLL.Services;
 
-public class FundraisingService : IFundraisingService
+public class FundraisingService(
+    IMapper mapper,
+    IRepository<Fundraising> fundraisingRepository,
+    IMonobankService monobankService,
+    AppDataConfig appDataConfig,
+    IRepository<Tag> tagRepository,
+    IRepository<MonobankFundraising> monobankFundraisings,
+    IHangfireService hangfireService)
+    : IFundraisingService
 {
-    private readonly IMapper _mapper;
-    private readonly IRepository<Fundraising> _fundraisingRepository;
-    private readonly IRepository<MonobankFundraising> _monobankFundraisings;
-    private readonly IMonobankService _monobankService;
-    private readonly AppDataConfig _appDataConfig;
-    private readonly IRepository<Tag> _tagRepository;
-    private readonly IHangfireService _hangfireService;
-
-    public FundraisingService(IMapper mapper,
-        IRepository<Fundraising> fundraisingRepository,
-        IMonobankService monobankService,
-        AppDataConfig appDataConfig,
-        IRepository<Tag> tagRepository,
-        IRepository<MonobankFundraising> monobankFundraisings, 
-        IHangfireService hangfireService)
-    {
-        _mapper = mapper;
-        _fundraisingRepository = fundraisingRepository;
-        _monobankService = monobankService;
-        _appDataConfig = appDataConfig;
-        _tagRepository = tagRepository;
-        _monobankFundraisings = monobankFundraisings;
-        _hangfireService = hangfireService;
-    }
+    private readonly IMapper _mapper = mapper;
+    private readonly IRepository<Fundraising> _fundraisingRepository = fundraisingRepository;
+    private readonly IRepository<MonobankFundraising> _monobankFundraisings = monobankFundraisings;
+    private readonly IMonobankService _monobankService = monobankService;
+    private readonly AppDataConfig _appDataConfig = appDataConfig;
+    private readonly IRepository<Tag> _tagRepository = tagRepository;
+    private readonly IHangfireService _hangfireService = hangfireService;
 
     public async Task<Either<ErrorDTO, PagedListDTO<FundraisingDTO>>> GetAllAsync(Guid userId, PaginationDTO pagination,
         string apiUrl)

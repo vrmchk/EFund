@@ -5,22 +5,17 @@ using EFund.Common.Models.Configs;
 
 namespace EFund.BLL.Services;
 
-public class EncryptionService : IEncryptionService
+public class EncryptionService(
+    EncryptionConfig config)
+    : IEncryptionService
 {
-    private readonly EncryptionConfig _config;
-
     private const int InitializationVectorLength = 16;
-
-    public EncryptionService(EncryptionConfig config)
-    {
-        _config = config;
-    }
 
     public byte[] Encrypt(string value)
     {
         using var aes = Aes.Create();
 
-        aes.Key = Encoding.UTF8.GetBytes(_config.Key);
+        aes.Key = Encoding.UTF8.GetBytes(config.Key);
         aes.GenerateIV();
 
         var encryptor = aes.CreateEncryptor(aes.Key, aes.IV);
@@ -39,7 +34,7 @@ public class EncryptionService : IEncryptionService
     public string Decrypt(byte[] value)
     {
         using var aes = Aes.Create();
-        aes.Key = Encoding.UTF8.GetBytes(_config.Key);
+        aes.Key = Encoding.UTF8.GetBytes(config.Key);
         aes.IV = value.Take(InitializationVectorLength).ToArray();
 
         var decryptor = aes.CreateDecryptor(aes.Key, aes.IV);

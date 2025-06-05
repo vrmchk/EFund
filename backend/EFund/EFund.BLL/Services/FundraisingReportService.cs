@@ -14,26 +14,19 @@ using static LanguageExt.Prelude;
 
 namespace EFund.BLL.Services;
 
-public class FundraisingReportService : IFundraisingReportService
+public class FundraisingReportService(
+    IMapper mapper,
+    IRepository<FundraisingReport> reportRepository,
+    IRepository<Fundraising> fundraisingRepository,
+    IRepository<ReportAttachment> attachmentRepository,
+    AppDataConfig appDataConfig)
+    : IFundraisingReportService
 {
-    private readonly IMapper _mapper;
-    private readonly IRepository<FundraisingReport> _reportRepository;
-    private readonly IRepository<Fundraising> _fundraisingRepository;
-    private readonly IRepository<ReportAttachment> _attachmentRepository;
-    private readonly AppDataConfig _appDataConfig;
-
-    public FundraisingReportService(IMapper mapper,
-        IRepository<FundraisingReport> reportRepository,
-        IRepository<Fundraising> fundraisingRepository,
-        IRepository<ReportAttachment> attachmentRepository,
-        AppDataConfig appDataConfig)
-    {
-        _mapper = mapper;
-        _reportRepository = reportRepository;
-        _fundraisingRepository = fundraisingRepository;
-        _attachmentRepository = attachmentRepository;
-        _appDataConfig = appDataConfig;
-    }
+    private readonly IMapper _mapper = mapper;
+    private readonly IRepository<FundraisingReport> _reportRepository = reportRepository;
+    private readonly IRepository<Fundraising> _fundraisingRepository = fundraisingRepository;
+    private readonly IRepository<ReportAttachment> _attachmentRepository = attachmentRepository;
+    private readonly AppDataConfig _appDataConfig = appDataConfig;
 
     public async Task<Either<ErrorDTO, FundraisingReportDTO>> GetByIdAsync(Guid id, Guid userId, string apiUrl)
     {

@@ -15,6 +15,8 @@ public class UserToUserDTOMappingAction : IMappingAction<User, UserDTO>
             return;
 
         var span = DateTimeOffset.UtcNow - source.CreatedAt;
-        badge.Description += $" {span.Humanize()}";
+        var huminazedSpan = $" {span.Humanize()}";
+        badge.Title += huminazedSpan;
+        badge.Description += huminazedSpan;
     }
 }

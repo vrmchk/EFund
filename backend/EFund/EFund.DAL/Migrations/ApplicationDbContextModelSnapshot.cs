@@ -83,7 +83,7 @@ namespace EFund.DAL.Migrations
                     b.Property<DateTimeOffset>("RequestedAt")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<Guid>("RequestedBy")
+                    b.Property<Guid?>("RequestedBy")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("RequestedFor")
@@ -670,8 +670,7 @@ namespace EFund.DAL.Migrations
                     b.HasOne("EFund.DAL.Entities.User", "RequestedByUser")
                         .WithMany()
                         .HasForeignKey("RequestedBy")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("EFund.DAL.Entities.User", "RequestedForUser")
                         .WithMany()

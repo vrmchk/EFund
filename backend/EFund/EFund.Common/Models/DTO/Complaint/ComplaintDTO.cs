@@ -13,10 +13,10 @@ public class ComplaintDTO
     public DateTimeOffset? ReviewedAt { get; set; }
 
     public Guid FundraisingId { get; set; }
-    public Guid RequestedBy { get; set; }
+    public Guid? RequestedBy { get; set; }
     public Guid RequestedFor { get; set; }
     public Guid? ReviewedBy { get; set; }
-    public string RequestedByUserName { get; set; } = string.Empty;
+    public string? RequestedByUserName { get; set; }
     public string RequestedForUserName { get; set; } = string.Empty;
     public string ReviewedByUserName { get; set; } = string.Empty;
     public List<ViolationDTO> Violations { get; set; } = [];

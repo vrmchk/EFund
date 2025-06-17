@@ -67,7 +67,7 @@ public class ComplaintService(
         return _mapper.Map<ComplaintDTO>(complaint);
     }
 
-    public async Task<Either<ErrorDTO, ComplaintDTO>> AddAsync(Guid requestedBy, CreateComplaintDTO dto)
+    public async Task<Either<ErrorDTO, ComplaintDTO>> AddAsync(Guid? requestedBy, CreateComplaintDTO dto)
     {
         var fundraising = await _fundraisingRepository.FirstOrDefaultAsync(f => f.Id == dto.FundraisingId);
         if (fundraising == null)
@@ -216,16 +216,19 @@ public class ComplaintService(
             }
         });
 
-        _hangfireService.Enqueue<SaveNotificationJob, SaveNotificationJobArgs>(new SaveNotificationJobArgs
+        if (complaint.RequestedBy != null)
         {
-            UserId = complaint.RequestedBy,
-            Reason = NotificationReason.ComplaintResponseForRequestedBy,
-            Args = new ComplaintResponseForRequestedByArgs
+            _hangfireService.Enqueue<SaveNotificationJob, SaveNotificationJobArgs>(new SaveNotificationJobArgs
             {
-                FundraisingTitle = complaint.Fundraising.Title,
-                FundraisingId = complaint.FundraisingId,
-            }
-        });
+                UserId = complaint.RequestedBy.Value,
+                Reason = NotificationReason.ComplaintResponseForRequestedBy,
+                Args = new ComplaintResponseForRequestedByArgs
+                {
+                    FundraisingTitle = complaint.Fundraising.Title,
+                    FundraisingId = complaint.FundraisingId,
+                }
+            });
+        }
     }
 
     private async Task TriggerPostRequestChangesActions(ComplaintRequestChangesDTO dto, Complaint complaint)
@@ -257,16 +260,19 @@ public class ComplaintService(
             }
         });
 
-        _hangfireService.Enqueue<SaveNotificationJob, SaveNotificationJobArgs>(new SaveNotificationJobArgs
+        if (complaint.RequestedBy != null)
         {
-            UserId = complaint.RequestedBy,
-            Reason = NotificationReason.ComplaintResponseForRequestedBy,
-            Args = new ComplaintResponseForRequestedByArgs
+            _hangfireService.Enqueue<SaveNotificationJob, SaveNotificationJobArgs>(new SaveNotificationJobArgs
             {
-                FundraisingTitle = complaint.Fundraising.Title,
-                FundraisingId = complaint.FundraisingId,
-            }
-        });
+                UserId = complaint.RequestedBy.Value,
+                Reason = NotificationReason.ComplaintResponseForRequestedBy,
+                Args = new ComplaintResponseForRequestedByArgs
+                {
+                    FundraisingTitle = complaint.Fundraising.Title,
+                    FundraisingId = complaint.FundraisingId,
+                }
+            });
+        }
     }
 
     private IQueryable<Complaint> IncludeRelations(IQueryable<Complaint> query)

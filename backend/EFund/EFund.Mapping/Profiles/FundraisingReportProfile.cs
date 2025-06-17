@@ -11,7 +11,9 @@ public class FundraisingReportProfile : Profile
         CreateMap<FundraisingReport, FundraisingReportDTO>()
             .ForMember(dest => dest.Attachments, opt => opt.MapAtRuntime());
         
-        CreateMap<CreateFundraisingReportDTO, FundraisingReport>();
+        CreateMap<CreateFundraisingReportDTO, FundraisingReport>()
+            .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(_ => DateTimeOffset.UtcNow));
+
         CreateMap<UpdateFundraisingReportDTO, FundraisingReport>();
     }
 }

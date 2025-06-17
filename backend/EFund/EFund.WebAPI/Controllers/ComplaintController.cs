@@ -53,13 +53,12 @@ public class ComplaintController : ControllerBase
     }
 
     [HttpPost]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = Policies.Shared)]
     [SwaggerOperation(Summary = "Create a complaint", Description = "Creates a new complaint for a fundraising.")]
     [SwaggerResponse(201, "Complaint created", typeof(ComplaintDTO))]
     [SwaggerResponse(400, "Invalid request", typeof(ErrorDTO))]
     public async Task<IActionResult> AddComplaint(CreateComplaintDTO dto)
     {
-        var result = await _complaintService.AddAsync(HttpContext.GetUserId(), dto);
+        var result = await _complaintService.AddAsync(HttpContext.GetUserIdOrNull(), dto);
         return result.Match<IActionResult>(
             Right: complaint => CreatedAtAction(nameof(GetComplaintById), new { id = complaint.Id }, complaint),
             Left: BadRequest);

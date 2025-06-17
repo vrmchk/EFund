@@ -15,7 +15,7 @@ public class Complaint : BaseEntity<Guid>
     public DateTimeOffset? ReviewedAt { get; set; }
 
     public Guid FundraisingId { get; set; }
-    public Guid RequestedBy { get; set; }
+    public Guid? RequestedBy { get; set; }
     public Guid RequestedFor { get; set; }
     public Guid? ReviewedBy { get; set; }
 
@@ -23,7 +23,7 @@ public class Complaint : BaseEntity<Guid>
     public Fundraising Fundraising { get; set; } = null!;
 
     [ForeignKey(nameof(RequestedBy))]
-    public User RequestedByUser { get; set; } = null!;
+    public User? RequestedByUser { get; set; } = null!;
 
     [ForeignKey(nameof(RequestedFor))]
     public User RequestedForUser { get; set; } = null!;
